@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content=""/>
+  <link rel="stylesheet" href="grievance.css" />
+  <title>Write to Management</title>
+  <style>
+  body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.container {
+  min-height: 100vh;
+  width: 100%;
+}
+
+h1, h2 {
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+fieldset {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+legend {
+  font-weight: bold;
+  color: #555;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input, select, textarea {
+  margin-top: 5px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px;
+  background-color: orange;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+    </style>
+</head>
+
+<body > 
+    
+  <div class="" >
+    <h1>Write to Management</h1>
+    <p>Your feedback matters. Share any issue with our products, services, or support, and our management team will address it promptly.</p>
+
+    <h2>Submit Your Grievance</h2>
+    <form id="grievanceForm">
+      <!-- Personal Information -->
+      <fieldset>
+        <legend>Personal Information</legend>
+        <label>Full Name *</label>
+        <input type="text" id="name" required />
+
+        <label>Email ID *</label>
+        <input type="email" id="email" required />
+
+        <label>Phone Number *</label>
+        <input type="tel" id="phone" pattern="[0-9]{10}" required />
+      </fieldset>
+
+      <!-- Grievance Details -->
+      <fieldset>
+        <legend>Grievance Details</legend>
+        <label>Grievance Type *</label>
+        <select id="type" required>
+          <option value="">Select Grievance Type</option>
+          <option value="Product">Product</option>
+          <option value="Service">Service</option>
+          <option value="Support">Support</option>
+        </select>
+
+        <label>Order Number (If Applicable)</label>
+        <input type="text" id="order" />
+
+        <label>Subject *</label>
+        <input type="text" id="subject" required />
+      </fieldset>
+
+      <!-- Additional Information -->
+      <fieldset>
+        <legend>Additional Information</legend>
+        <label>Detailed Description *</label>
+        <textarea id="description" rows="5" minlength="50" maxlength="2000" required></textarea>
+
+        <label>Incident Date (If Applicable)</label>
+        <input type="date" id="date" />
+
+        <label>Attachments (If Applicable)</label>
+        <input type="file" id="attachment" accept=".pdf,.jpg,.jpeg,.png" multiple />
+      </fieldset>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+</body>
+
+</html>
