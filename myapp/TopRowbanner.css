@@ -18,13 +18,33 @@ body {
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  color: #333;
+  color: #f1ecec;
 }
 
 .icon {
   font-size: 16px;
 }
 
+.button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #ff6600;   /* orange background */
+  color: #fff;                 /* white text */
+  text-decoration: none;       /* remove underline */
+  border-radius: 4px;          /* rounded corners */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #e7e7e7;   /* darker orange on hover */
+}
+
+.button:active {
+  background-color: #f9f8f7;   /* even darker when clicked */
+}
 .right-section {
   display: flex;
   align-items: center;
@@ -53,4 +73,16 @@ body {
   width: 20px;
   height: 20px;
   vertical-align: middle;
+}
+
+.whatsapp-chat {
+    background-color: #25D366;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
