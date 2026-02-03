@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horizontal Divs</title>
+  <style>
+    .top-banner {
+      display: flex;              /* enables flexbox */
+      justify-content: space-between; /* pushes left and right apart */
+      align-items: center;        /* vertically aligns content */
+      background-color: #002b5c;  /* dark blue background */
+      color: #fff;
+      padding: 10px 20px;
+    }
+
+    .left-section, .right-section {
+      display: flex;              /* keeps items inside horizontal */
+      align-items: center;
+      gap: 10px;                  /* spacing between items */
+    }
+
+    .management-btn {
+      background-color: orange;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    .right-section a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-banner">
+    <div class="left-section">
+      <span>📞 Have a question? Call us now at +91 918275568</span>
+      <span>✉️ sales@saiscientifics.com</span>
+    </div>
+    <div class="right-section">
+      <button class="management-btn" onclick="window.location.href='pages/grievance.html'">✉️ Write to Management</button>
+      <a class="management-btn" onclick="window.location.href='pages/TrackOrder.html'">Track Order</a>
+      <a href="#">Write Review</a>
+      <a href="#">Chat</a>
+      <a href="#">Blog</a>
+      <a href="#"><img src="android-icon.png" alt="Android" width="20"></a>
+      <a href="#"><img src="apple-icon.png" alt="Apple" width="20"></a>
+    </div>
+  </div>
+</body>
+</html>
