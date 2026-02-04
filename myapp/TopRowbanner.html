@@ -193,6 +193,98 @@
 .see-all:hover {
   background-color: #fff1eb;
 }
+    /* Scrolling Banner */
+    .content-area {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+/* --- Carousel Styling --- */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.slider {
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+.slide.active { display: block; }
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dots-container {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot.active { background: #fff; width: 25px; border-radius: 10px; }
+
+/* --- Promo Grid Styling --- */
+.promo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.promo-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px;
+  padding: 25px;
+  color: #333;
+  height: 180px;
+  overflow: hidden;
+}
+
+.teal { background-color: #e0f2f1; }
+.green { background-color: #e8f5e9; }
+
+.promo-content h3 { font-size: 22px; margin: 10px 0; }
+
+.shop-now-btn, .check-btn {
+  background: #232f3e;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.promo-card img {
+  height: 120%;
+  transform: translateY(10px);
+}
   </style>
 </head>
 <body>
@@ -264,5 +356,46 @@
     <a href="#">See all Categories</a>
   </div>
 </div>
+<!-- scrolling banner -->
+ <main class="content-area">
+  <div class="carousel-container">
+    <div class="slider">
+      <div class="slide active">
+        <img src="https://img.freepik.com/free-vector/office-supplies-sale-banner_23-2148476251.jpg" alt="Banner 1">
+      </div>
+      <div class="slide">
+        <img src="https://img.freepik.com/free-vector/horizontal-banner-template-industrial-tools_23-2148530368.jpg" alt="Banner 2">
+      </div>
+    </div>
+    
+    <div class="dots-container">
+      <span class="dot active" onclick="currentSlide(0)"></span>
+      <span class="dot" onclick="currentSlide(1)"></span>
+      <span class="dot" onclick="currentSlide(2)"></span>
+    </div>
+  </div>
+
+  <div class="promo-grid">
+    <div class="promo-card teal">
+      <div class="promo-content">
+        <small>Starts @ ₹60</small>
+        <h3>Unbeatable Prices<br>Restock Today!</h3>
+        <p>Shipping Within <strong>24 Hr</strong></p>
+        <button class="shop-now-btn">Shop Now</button>
+      </div>
+      <img src="https://img.freepik.com/free-photo/handsome-businessman-working-laptop_23-2148108959.jpg" alt="Worker">
+    </div>
+
+    <div class="promo-card green">
+      <div class="promo-content">
+        <small>IBCREDIT</small>
+        <h3>Procurement<br>made easy</h3>
+        <p>Zero % Interest | Repay in 30 days</p>
+        <button class="check-btn">Check Your Eligibility</button>
+      </div>
+      <img src="https://img.freepik.com/free-photo/young-man-pointing-mobile-phone_23-2148817011.jpg" alt="Credit">
+    </div>
+  </div>
+</main>
 </body>
 </html>
