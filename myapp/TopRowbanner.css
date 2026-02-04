@@ -1,0 +1,30 @@
+.top-banner {
+      display: flex;              /* enables flexbox */
+      justify-content: space-between; /* pushes left and right apart */
+      align-items: center;        /* vertically aligns content */
+      background-color: #427812;  /* dark blue background */
+      color: #fff;
+      padding: 10px 20px;
+    }
+
+    .left-section, .right-section {
+      display: flex;              /* keeps items inside horizontal */
+      align-items: center;
+      gap: 10px;                  /* spacing between items */
+    }
+
+    .management-btn {
+      background-color: orange;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    .right-section a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 14px;
+    }

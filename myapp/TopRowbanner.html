@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sai Scientifics - Header</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --brand-orange: #FF5722;
+      --border-gray: #d1d1d1;
+      --top-banner-bg: #77965c;
+    }
+
+    body { margin: 0; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+
+    /* --- TOP BANNER (Green) --- */
+    .top-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--top-banner-bg);
+      color: #fff;
+      padding: 8px 20px;
+      font-size: 13px;
+    }
+
+    .left-section, .top-right-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .top-banner a {
+      text-decoration: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .management-btn-top {
+      background-color: orange;
+      color: white !important;
+      border: none;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    /* --- MAIN HEADER (White) --- */
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      gap: 20px;
+    }
+
+    .logo-section { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+    
+    .cat-btn { text-align: center; color: #333; cursor: pointer; font-size: 11px; font-weight: 600; }
+    .grid-icon { display: grid; grid-template-columns: repeat(2, 8px); gap: 2px; margin-bottom: 2px; }
+    .grid-icon div { width: 8px; height: 8px; border: 1.5px solid #333; border-radius: 1px; }
+
+    .brand-name { font-size: 24px; font-weight: 800; letter-spacing: -1px; color: #333; text-decoration: none; }
+    .brand-orange-text { color: var(--brand-orange); }
+
+    /* Search Bar */
+    .search-wrapper {
+      display: flex;
+      flex-grow: 1;
+      max-width: 600px;
+      height: 40px;
+      border: 1px solid var(--border-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .search-wrapper input {
+      flex-grow: 1;
+      border: none;
+      padding: 0 12px;
+      font-size: 14px;
+      outline: none;
+    }
+    .search-btn {
+      background: var(--brand-orange);
+      color: white;
+      border: none;
+      padding: 0 15px;
+      cursor: pointer;
+    }
+
+    /* Right Side Navigation */
+    .nav-right { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+
+    .deals-pill {
+      background: linear-gradient(90deg, #ff9800 0%, #ff5722 50%, #e91e63 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .deals-text b { font-size: 11px; display: block; }
+    .deals-text small { font-size: 8px; text-transform: uppercase; }
+
+    .nav-item { display: flex; align-items: center; gap: 5px; color: #333; font-size: 13px; text-decoration: none; }
+
+    .account-box {
+      border: 1px solid #333;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .cart-container { position: relative; cursor: pointer; font-size: 22px; }
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -8px;
+      background: #cc0000;
+      color: white;
+      font-size: 10px;
+      padding: 2px 5px;
+      border-radius: 10px;
+    }
+    /* Category Sidebar */
+    .category-card {
+  width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Soft shadow */
+  overflow: hidden;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  margin: 20px; /* Spacing from the page edge */
+}
+
+.category-list {
+  list-style: none;
+  margin: 0;
+  padding: 15px 0;
+}
+
+.category-list li {
+  display: flex;
+  align-items: center;
+  padding: 12px 25px;
+  font-size: 14.5px;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.category-list li:hover {
+  background-color: #fcf8f5; /* Subtle orange tint on hover */
+  color: #ff5722;
+}
+
+.icon {
+  margin-right: 15px;
+  font-size: 18px;
+  width: 25px;
+  text-align: center;
+}
+
+/* Bottom "See All" Section */
+.see-all {
+  padding: 15px 25px;
+  background-color: #fff9f6; /* Light orange background */
+  border-top: 1px solid #f0f0f0;
+}
+
+.see-all a {
+  text-decoration: none;
+  color: #ff5722;
+  font-weight: 600;
+  font-size: 15px;
+  display: block;
+}
+
+.see-all:hover {
+  background-color: #fff1eb;
+}
+  </style>
+</head>
+<body>
+
+  <div class="top-banner">
+    <div class="left-section">
+      <span>📞 Call: +91 918275568</span>
+      <span>✉️ sales@saiscientifics.com</span>
+    </div>
+    <div class="top-right-section">
+      <a href="grievance.html" class="management-btn-top">Grievance</a>
+      <a href="TrackOrder.html" class="management-btn-top">Track Order</a>
+      <a href="WriteReview.html" class="management-btn-top">Request for Quotes</a>
+      <a href="https://wa.me/918790740446" target="_blank" class="whatsapp-chat">
+        <i class="fab fa-whatsapp"></i> Chat
+      </a>
+      <a href="https://medium.com/@umeshcholleti2219">About Page</a>
+    </div>
+  </div>
+
+  <header class="header-container">
+    <div class="logo-section">
+      <div class="cat-btn">
+        
+      <a href="#" class="brand-name">sai<span class="brand-orange-text">scientifics</span></a>
+    </div>
+
+    <div class="search-wrapper">
+      <input type="text" placeholder="Search Products by title, category, etc..">
+      <button class="search-btn"><i class="fas fa-search"></i></button>
+    </div>
+
+    <div class="nav-right">
+      
+
+      <a href="#" class="nav-item">💳 Buy On Credit</a>
+      <a href="#" class="nav-item">🎧 Help Center</a>
+
+      <div class="categories-dropdown">
+  <div class="cat-btn">
+  
+    </div>
+    
+  </div>
+
+ 
+      <div class="cart-container">
+        🛒<span class="cart-count">7</span>
+      </div>
+    </div>
+  </header>
+<!-- sidebar-->
+ <div class="category-card">
+  <ul class="category-list">
+    <li><span class="icon">🖇️</span> Office Supplies</li>
+    <li><span class="icon">🛒</span> Material Handling and Packaging</li>
+    <li><span class="icon">🌿</span> Agriculture Garden & Landscaping</li>
+    <li><span class="icon">🧹</span> Cleaning</li>
+    <li><span class="icon">🔨</span> Power Tools</li>
+    <li><span class="icon">🛠️</span> Hand Tools</li>
+    <li><span class="icon">🌡️</span> Testing and Measuring Instruments</li>
+    <li><span class="icon">🛋️</span> Furniture, Hospitality and Food Service</li>
+    <li><span class="icon">✋</span> Safety</li>
+    <li><span class="icon">🏗️</span> Hydraulics and Pneumatics</li>
+    <li><span class="icon">🔌</span> Electrical</li>
+    <li><span class="icon">💻</span> IT Security</li>
+  </ul>
+  <div class="see-all">
+    <a href="#">See all Categories</a>
+  </div>
+</div>
+</body>
+</html>
