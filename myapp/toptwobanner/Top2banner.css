@@ -1,0 +1,86 @@
+:root {
+  --primary-orange: #ff5700;
+  --dark-blue: #232f3e;
+}
+
+body { font-family: Arial, sans-serif; margin: 0; }
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  gap: 15px;
+}
+
+/* Left Section */
+.header-left { display: flex; align-items: center; gap: 20px; }
+.categories-btn { text-align: center; cursor: pointer; font-size: 12px; color: #333; }
+.grid-icon { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; width: 16px; margin: 0 auto 4px; }
+.grid-icon span { width: 7px; height: 7px; border: 1.5px solid #333; border-radius: 1px; }
+
+.logo { font-size: 24px; font-weight: bold; letter-spacing: -1px; }
+.brand-dark { color: #333; }
+.brand-orange { color: var(--primary-orange); }
+
+/* Search Bar */
+.header-search {
+  display: flex;
+  flex-grow: 1;
+  max-width: 500px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.header-search input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+.search-btn {
+  background: var(--primary-orange);
+  border: none;
+  padding: 0 15px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Right Section & Special Deals */
+.header-right { display: flex; align-items: center; gap: 15px; font-size: 13px; color: #444; }
+
+.special-deals {
+  background: linear-gradient(to right, #f7941d, #ed1c24, #f06);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 8px;
+}
+.deals-text { display: flex; flex-direction: column; line-height: 1.1; }
+.deals-text small { font-size: 9px; }
+
+/* Icons & Links */
+.nav-link { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+
+.account-dropdown {
+  border: 1px solid #333;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-icon { position: relative; font-size: 24px; cursor: pointer; }
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background: #d0202e;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
