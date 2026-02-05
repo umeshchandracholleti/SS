@@ -45,3 +45,20 @@ function currentSlide(index) {
   clearInterval(autoScroll); // Reset timer on click
   autoScroll = setInterval(nextSlide, 5000);
 }
+
+// Allow manual clicking of dots
+function currentSlide(index) {
+  currentSlideIndex = index;
+  showSlide(index);
+  clearInterval(autoScroll); // Reset timer on click
+  autoScroll = setInterval(nextSlide, 5000);
+}
+
+
+// Allow manual clicking of dots
+function currentSlide(index) {
+  currentSlideIndex = index;
+  showSlide(index);
+  clearInterval(autoScroll); // Reset timer on click
+  autoScroll = setInterval(nextSlide, 5000);
+}
