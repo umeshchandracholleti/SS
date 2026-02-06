@@ -73,7 +73,7 @@ function performSearch() {
 
   // Show message if no results
   if (foundCount === 0) {
-    alert(`No results found for "${query}". Please contact support for further assistance.`);
+    notify(`No results found for "${query}". Please contact support for assistance.`, 'info');
   }
 }
 
@@ -91,20 +91,43 @@ const messageModal = document.getElementById('messageModal');
 const modalOverlay = document.getElementById('modalOverlay');
 const closeBtn = document.getElementById('closeBtn');
 const messageForm = document.getElementById('messageForm');
+const pageBody = document.body;
+const notify = window.showNotice || (() => {});
+
+function setModalState(modal, isOpen) {
+  if (!modal) {
+    return;
+  }
+
+  modal.classList.toggle('show', isOpen);
+  modal.setAttribute('aria-hidden', String(!isOpen));
+  modalOverlay.classList.toggle('show', isOpen);
+  pageBody.style.overflow = isOpen ? 'hidden' : '';
+
+  if (isOpen) {
+    const focusTarget = modal.querySelector('input, select, textarea, button');
+    if (focusTarget) {
+      focusTarget.focus();
+    }
+  }
+}
 
 messageBtn.addEventListener('click', () => {
-  messageModal.classList.add('show');
-  modalOverlay.classList.add('show');
+  setModalState(messageModal, true);
 });
 
 closeBtn.addEventListener('click', () => {
-  messageModal.classList.remove('show');
-  modalOverlay.classList.remove('show');
+  setModalState(messageModal, false);
 });
 
 modalOverlay.addEventListener('click', () => {
-  messageModal.classList.remove('show');
-  modalOverlay.classList.remove('show');
+  setModalState(messageModal, false);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    setModalState(messageModal, false);
+  }
 });
 
 // Message Form Submission
@@ -116,35 +139,29 @@ messageForm.addEventListener('submit', (e) => {
 
   // Validate form
   if (!data.name || !data.email || !data.subject || !data.category || !data.message) {
-    alert('Please fill all fields');
+    notify('Please fill all fields', 'error');
     return;
   }
 
   // Validate email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(data.email)) {
-    alert('Please enter a valid email address');
+    notify('Please enter a valid email address', 'error');
     return;
   }
 
-  // Log data (in real app, send to server)
-  console.log('Support Message:', data);
-
-  // Show success message
-  alert('Thank you for your message! Our team will respond within 1 hour.');
+  notify('Thank you for your message! Our team will respond within 1 hour.', 'success');
 
   // Reset form and close modal
   messageForm.reset();
-  messageModal.classList.remove('show');
-  modalOverlay.classList.remove('show');
+  setModalState(messageModal, false);
 });
 
 // Chat Button (placeholder)
 const chatBtn = document.querySelector('.chat-btn');
 if (chatBtn) {
   chatBtn.addEventListener('click', () => {
-    alert('Chat feature coming soon! Please contact us via email or phone.');
+    notify('Chat feature coming soon! Please contact us via email or phone.', 'info');
   });
 }
 
-console.log('Help Centre script loaded successfully');

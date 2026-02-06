@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buy on Credit - Sai Scientifics</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="BuyOnCredit.css">
 </head>
 <body>
@@ -56,10 +57,10 @@
     </section>
 
     <!-- Application Form Modal -->
-    <div class="modal" id="applicationModal">
+    <div class="modal" id="applicationModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="applicationTitle">
       <div class="modal-content">
-        <span class="close-btn" id="closeBtn">&times;</span>
-        <h2>Credit Application Form</h2>
+        <button type="button" class="close-btn" id="closeBtn" aria-label="Close">&times;</button>
+        <h2 id="applicationTitle">Credit Application Form</h2>
         
         <form id="creditForm" class="credit-form">
           <!-- Personal Information -->
@@ -190,11 +191,11 @@
     </div>
 
     <!-- Success Message -->
-    <div class="modal" id="successModal">
+    <div class="modal" id="successModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="successTitle" aria-describedby="successMessage">
       <div class="modal-content success-modal">
         <i class="fas fa-check-circle"></i>
-        <h2>Application Submitted Successfully!</h2>
-        <p>Your credit application has been submitted. Our team will review it and contact you within 24 hours.</p>
+        <h2 id="successTitle">Application Submitted Successfully!</h2>
+        <p id="successMessage">Your credit application has been submitted. Our team will review it and contact you within 24 hours.</p>
         <p class="reference-id">Reference ID: <strong id="referenceId"></strong></p>
         <button class="submit-btn" onclick="location.href='TopRowbanner.html'">Back to Home</button>
       </div>
@@ -210,6 +211,7 @@
     </div>
   </footer>
 
-  <script src="BuyOnCredit.js"></script>
+  <script src="ui-notify.js" defer></script>
+  <script src="BuyOnCredit.js" defer></script>
 </body>
 </html>

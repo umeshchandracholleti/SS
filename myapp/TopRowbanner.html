@@ -3,119 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sai Scientifics - Header</title>
+  <title>Sai Scientifics - Home</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="TopRowbanner.css">
 </head>
 <body>
+  <a class="skip-link" href="#mainContent">Skip to content</a>
 
   <div class="top-banner">
     <div class="left-section">
-      <a href="tel:+91918275568">📞 Call: +91 918275568</a>
-      <a href="mailto:sales@saiscientifics.com">✉️ sales@saiscientifics.com</a>
+      <a href="tel:+91918275568">Call: +91 918275568</a>
+      <a href="mailto:sales@saiscientifics.com">sales@saiscientifics.com</a>
+      <span class="banner-chip">48h quote turnaround</span>
     </div>
     <div class="top-right-section">
-      <a href="grievance.html" class="management-btn-top">Grievance</a>
-      <a href="TrackOrder.html" class="management-btn-top">Track Order</a>
-      <a href="WriteReview.html" class="management-btn-top">Request for Quotes</a>
-      <a href="https://wa.me/918790740446" target="_blank" class="whatsapp-chat">
+      <a href="grievance.html" class="management-btn-top">Write to Management</a>
+      <a href="TrackOrder.html">Track Order</a>
+      <a href="WriteReview.html">Write Review</a>
+      <a href="https://wa.me/918790740446" target="_blank" rel="noreferrer" class="whatsapp-chat">
         <i class="fab fa-whatsapp"></i> Chat
       </a>
-      <a href="https://medium.com/@umeshcholleti2219">About Page</a>
+      <a href="Requestforquotes.html">Request Quotes</a>
     </div>
   </div>
 
-  <header class="header-container">
-    <div class="logo-section">
-      <div class="cat-btn">
-        
-      <a href="#" class="brand-name">sai<span class="brand-orange-text">scientifics</span></a>
+  <header class="main-header">
+    <div class="brand-block">
+      <a href="TopRowbanner.html" class="brand-name">sai<span class="brand-orange-text">scientifics</span></a>
+      <p>Industrial supplies for growing teams</p>
     </div>
 
-    <div class="search-wrapper">
-      <input type="text" placeholder="Search Products by title, category, etc..">
-      <button class="search-btn"><i class="fas fa-search"></i></button>
-    </div>
+    <form class="search-wrapper" id="searchForm">
+      <label class="visually-hidden" for="siteSearch">Search products</label>
+      <input type="text" id="siteSearch" placeholder="Search products, categories, brands..." autocomplete="off">
+      <button class="search-btn" type="submit"><i class="fas fa-search"></i></button>
+      <div class="search-suggestions" id="searchSuggestions" aria-live="polite"></div>
+    </form>
 
-    <div class="nav-right">
-      
-
-      <a href="BuyOnCredit.html" class="nav-item">💳 Buy On Credit</a>
-      <a href="HelpCentre.html" class="nav-item">🎧 Help Center</a>
-
-      <div class="categories-dropdown">
-  <div class="cat-btn">
-  
-    </div>
-    
-  </div>
-
- 
-      <div class="cart-container">
-        <a href="Cart.html" style="text-decoration: none; color: inherit;">🛒<span class="cart-count">7</span></a>
-      </div>
+    <div class="header-actions">
+      <a href="BuyOnCredit.html" class="action-link">Buy on Credit</a>
+      <a href="HelpCentre.html" class="action-link">Help Centre</a>
+      <a href="Requestforquotes.html" class="primary-btn">Get a Quote</a>
+      <a href="WriteReview.html" class="ghost-btn">Write Review</a>
+      <a href="Cart.html" class="cart-link">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Cart</span>
+        <span class="cart-count" id="cartCount">7</span>
+      </a>
     </div>
   </header>
-<!-- sidebar-->
- <div class="category-card">
-  <ul class="category-list">
-    <li><span class="icon">🖇️</span> Office Supplies</li>
-    <li><span class="icon">🛒</span> Material Handling and Packaging</li>
-    <li><span class="icon">🌿</span> Agriculture Garden & Landscaping</li>
-    <li><span class="icon">🧹</span> Cleaning</li>
-    <li><span class="icon">🔨</span> Power Tools</li>
-    <li><span class="icon">🛠️</span> Hand Tools</li>
-    <li><span class="icon">🌡️</span> Testing and Measuring Instruments</li>
-    <li><span class="icon">🛋️</span> Furniture, Hospitality and Food Service</li>
-    <li><span class="icon">✋</span> Safety</li>
-    <li><span class="icon">🏗️</span> Hydraulics and Pneumatics</li>
-    <li><span class="icon">🔌</span> Electrical</li>
-    <li><span class="icon">💻</span> IT Security</li>
-  </ul>
-  <div class="see-all">
-    <a href="#">See all Categories</a>
-  </div>
-</div>
-<!-- scrolling banner -->
- <main class="content-area">
-  <div class="carousel-container">
-    <div class="slider">
-      <div class="slide active">
-        <img src="https://img.freepik.com/free-vector/office-supplies-sale-banner_23-2148476251.jpg" alt="Banner 1">
-      </div>
-      <div class="slide">
-        <img src="https://img.freepik.com/free-vector/horizontal-banner-template-industrial-tools_23-2148530368.jpg" alt="Banner 2">
-      </div>
-    </div>
-    
-    <div class="dots-container">
-      <span class="dot active" onclick="currentSlide(0)"></span>
-      <span class="dot" onclick="currentSlide(1)"></span>
-    </div>
-  </div>
 
-  <div class="promo-grid">
-    <div class="promo-card teal">
-      <div class="promo-content">
-        <small>Starts @ ₹60</small>
-        <h3>Unbeatable Prices<br>Restock Today!</h3>
-        <p>Shipping Within <strong>24 Hr</strong></p>
-        <button class="shop-now-btn">Shop Now</button>
+  <main class="layout" id="mainContent">
+    <aside class="category-card" aria-label="Categories">
+      <div class="category-header">
+        <h2>Browse categories</h2>
+        <span>25+ product groups</span>
       </div>
-      <img src="https://img.freepik.com/free-photo/handsome-businessman-working-laptop_23-2148108959.jpg" alt="Worker">
-    </div>
+      <ul class="category-list">
+        <li><button type="button" data-category="Office Supplies">Office Supplies</button></li>
+        <li><button type="button" data-category="Material Handling">Material Handling and Packaging</button></li>
+        <li><button type="button" data-category="Agriculture">Agriculture, Garden & Landscaping</button></li>
+        <li><button type="button" data-category="Cleaning">Cleaning</button></li>
+        <li><button type="button" data-category="Power Tools">Power Tools</button></li>
+        <li><button type="button" data-category="Hand Tools">Hand Tools</button></li>
+        <li><button type="button" data-category="Testing">Testing & Measuring</button></li>
+        <li><button type="button" data-category="Furniture">Furniture & Hospitality</button></li>
+        <li><button type="button" data-category="Safety">Safety</button></li>
+        <li><button type="button" data-category="Hydraulics">Hydraulics & Pneumatics</button></li>
+        <li><button type="button" data-category="Electrical">Electrical</button></li>
+        <li><button type="button" data-category="IT Security">IT Security</button></li>
+      </ul>
+      <div class="see-all">
+        <a href="#">See all categories</a>
+      </div>
+    </aside>
 
-    <div class="promo-card green">
-      <div class="promo-content">
-        <small>IBCREDIT</small>
-        <h3>Procurement<br>made easy</h3>
-        <p>Zero % Interest | Repay in 30 days</p>
-        <button class="check-btn">Check Your Eligibility</button>
+    <section class="content-area">
+      <div class="hero-grid">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <p class="pill">Procurement platform</p>
+            <h1>Everything your team needs to move faster</h1>
+            <p>Buy across 10L+ SKUs with bulk pricing, credit options, and dedicated account support.</p>
+            <div class="hero-actions">
+              <a href="Requestforquotes.html" class="primary-btn">Get a quote in 48h</a>
+              <a href="HelpCentre.html" class="secondary-btn">Talk to an expert</a>
+            </div>
+            <div class="hero-metrics">
+              <div>
+                <strong>10L+</strong>
+                <span>Products</span>
+              </div>
+              <div>
+                <strong>24h</strong>
+                <span>Dispatch on essentials</span>
+              </div>
+              <div>
+                <strong>0%</strong>
+                <span>Interest for 30 days</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="carousel-container" aria-label="Featured promotions">
+              <div class="slider">
+                <div class="slide active">
+                  <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop" alt="Warehouse essentials">
+                </div>
+                <div class="slide">
+                  <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=1200&auto=format&fit=crop" alt="Industrial tools">
+                </div>
+              </div>
+              <div class="dots-container">
+                <button class="dot active" data-slide="0" aria-label="Slide 1"></button>
+                <button class="dot" data-slide="1" aria-label="Slide 2"></button>
+              </div>
+            </div>
+            <div class="hero-badges">
+              <span>Trusted by 30k+ teams</span>
+              <span>GST-ready invoicing</span>
+              <span>Dedicated support</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <div class="side-card accent">
+            <h3>Buy on credit</h3>
+            <p>Instant eligibility, repay in 30/60/90 days.</p>
+            <a href="BuyOnCredit.html">Check eligibility</a>
+          </div>
+          <div class="side-card">
+            <h3>Priority dispatch</h3>
+            <p>Essentials ship within 24 hours to 120+ cities.</p>
+            <a href="TrackOrder.html">Track deliveries</a>
+          </div>
+          <div class="side-card">
+            <h3>Dedicated account manager</h3>
+            <p>Get a single point of contact for large orders.</p>
+            <a href="HelpCentre.html">Talk to us</a>
+          </div>
+        </div>
       </div>
-      <img src="https://img.freepik.com/free-photo/young-man-pointing-mobile-phone_23-2148817011.jpg" alt="Credit">
+
+      <div class="promo-grid">
+        <article class="promo-card teal">
+          <div>
+            <small>Starts at INR 60</small>
+            <h3>Unbeatable prices on daily essentials</h3>
+            <p>Bulk discounts + fast dispatch.</p>
+            <button class="chip-btn">Shop essentials</button>
+          </div>
+          <img src="https://images.unsplash.com/photo-1489515217757-5fd1be406fef?q=80&w=600&auto=format&fit=crop" alt="Office supplies">
+        </article>
+
+        <article class="promo-card amber">
+          <div>
+            <small>Special bundles</small>
+            <h3>Power tools for every task</h3>
+            <p>Curated kits for maintenance teams.</p>
+            <button class="chip-btn">Explore tools</button>
+          </div>
+          <img src="https://images.unsplash.com/photo-1505798577917-a65157d3320a?q=80&w=600&auto=format&fit=crop" alt="Power tools">
+        </article>
+      </div>
+
+      <section class="featured-section" aria-label="Featured products">
+        <div class="featured-header">
+          <div>
+            <p class="pill">Featured products</p>
+            <h2>Most requested essentials</h2>
+            <p>Bulk-ready SKUs from verified suppliers.</p>
+          </div>
+          <div class="featured-controls">
+            <button class="featured-btn" type="button" data-action="prev" aria-label="Previous products">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <button class="featured-btn" type="button" data-action="next" aria-label="Next products">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="featured-carousel" data-carousel="featured">
+          <div class="featured-track">
+            <article class="featured-card">
+              <div>
+                <span class="featured-tag">Office</span>
+                <h3>Ergo Task Chair</h3>
+                <p>Premium lumbar support for 10-hour shifts.</p>
+              </div>
+              <button class="chip-btn">View details</button>
+            </article>
+            <article class="featured-card">
+              <div>
+                <span class="featured-tag">Safety</span>
+                <h3>Industrial Gloves Pack</h3>
+                <p>Cut resistance level 5, pack of 12.</p>
+              </div>
+              <button class="chip-btn">View details</button>
+            </article>
+            <article class="featured-card">
+              <div>
+                <span class="featured-tag">Tools</span>
+                <h3>Cordless Drill Kit</h3>
+                <p>18V kit with 2 batteries and case.</p>
+              </div>
+              <button class="chip-btn">View details</button>
+            </article>
+            <article class="featured-card">
+              <div>
+                <span class="featured-tag">Cleaning</span>
+                <h3>Facility Starter Pack</h3>
+                <p>Sanitizers, mops, and refill kits.</p>
+              </div>
+              <button class="chip-btn">View details</button>
+            </article>
+            <article class="featured-card">
+              <div>
+                <span class="featured-tag">Electrical</span>
+                <h3>Power Strip Pro</h3>
+                <p>Surge protected, 8-outlet heavy duty.</p>
+              </div>
+              <button class="chip-btn">View details</button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <div class="trust-row">
+        <div>
+          <h4>Reliable shipping</h4>
+          <p>Fast delivery across India.</p>
+        </div>
+        <div>
+          <h4>Flexible payments</h4>
+          <p>UPI, cards, net banking, credit.</p>
+        </div>
+        <div>
+          <h4>Verified suppliers</h4>
+          <p>Quality checks on every shipment.</p>
+        </div>
+      </div>
+
+      <div class="category-highlight shadow-soft" id="categoryHighlight">
+        <h3>Selected category: <span id="selectedCategory">Office Supplies</span></h3>
+        <p>Browse curated products and bulk deals tailored for your team.</p>
+      </div>
+
+      <div class="collection-grid">
+        <article>
+          <h3>Safety essentials</h3>
+          <p>Helmets, gloves, shoes, and signage.</p>
+          <a href="#">Shop safety</a>
+        </article>
+        <article>
+          <h3>Facility maintenance</h3>
+          <p>Cleaning, sanitation, and hygiene kits.</p>
+          <a href="#">Shop maintenance</a>
+        </article>
+        <article>
+          <h3>Office & furniture</h3>
+          <p>Chairs, desks, storage, and lighting.</p>
+          <a href="#">Shop furniture</a>
+        </article>
+        <article>
+          <h3>Testing instruments</h3>
+          <p>Measurement and calibration tools.</p>
+          <a href="#">Shop instruments</a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>Sai Scientifics</strong>
+      <p>Procurement made simple for growing teams.</p>
     </div>
-  </div>
-</main>
-<script src="TopRowbanner.js"></script>
+    <span>Support: sales@saiscientifics.com</span>
+  </footer>
+
+  <script src="TopRowbanner.js" defer></script>
 </body>
 </html>

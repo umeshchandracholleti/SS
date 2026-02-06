@@ -4,11 +4,15 @@ const sidebar = document.getElementById('sidebar');
 const sidebarClose = document.getElementById('sidebarClose');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
 const cartBadge = document.getElementById('cartBadge');
+const pageBody = document.body;
 
 // Open sidebar
 categoriesBtn.addEventListener('click', () => {
   sidebar.classList.add('active');
   sidebarOverlay.classList.add('active');
+  sidebar.setAttribute('aria-hidden', 'false');
+  categoriesBtn.setAttribute('aria-expanded', 'true');
+  pageBody.style.overflow = 'hidden';
 });
 
 // Close sidebar
@@ -23,7 +27,16 @@ sidebarOverlay.addEventListener('click', () => {
 function closeSidebar() {
   sidebar.classList.remove('active');
   sidebarOverlay.classList.remove('active');
+  sidebar.setAttribute('aria-hidden', 'true');
+  categoriesBtn.setAttribute('aria-expanded', 'false');
+  pageBody.style.overflow = '';
 }
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && sidebar.classList.contains('active')) {
+    closeSidebar();
+  }
+});
 
 // Close sidebar on menu item click
 const sidebarMenuItems = document.querySelectorAll('.sidebar-menu a');

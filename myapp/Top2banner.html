@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sai Scientifics - Secondary Header</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="Top2banner.css">
 </head>
 <body>
   <header class="main-header">
     <!-- Left Section -->
     <div class="header-left">
-      <div class="categories-btn" id="categoriesBtn">
+      <button class="categories-btn" id="categoriesBtn" type="button" aria-controls="sidebar" aria-expanded="false">
         <div class="grid-icon">
           <span></span>
           <span></span>
@@ -19,14 +20,15 @@
           <span></span>
         </div>
         <span>All</span>
-      </div>
+      </button>
       <a href="#" class="logo"><span class="brand-dark">sai</span><span class="brand-orange">scientifics</span></a>
     </div>
 
     <!-- Search Bar -->
     <div class="header-search">
-      <input type="text" placeholder="Search products...">
-      <button class="search-btn"><i class="fas fa-search"></i></button>
+      <label class="visually-hidden" for="top2Search">Search products</label>
+      <input type="text" id="top2Search" placeholder="Search products...">
+      <button class="search-btn" type="button"><i class="fas fa-search"></i></button>
     </div>
 
     <!-- Right Section -->
@@ -41,9 +43,9 @@
   </header>
 
   <!-- Sidebar Modal -->
-  <div class="sidebar" id="sidebar">
+  <div class="sidebar" id="sidebar" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="sidebar-content">
-      <button class="sidebar-close" id="sidebarClose">&times;</button>
+      <button class="sidebar-close" id="sidebarClose" type="button" aria-label="Close">&times;</button>
       <h3>Categories</h3>
       <ul class="sidebar-menu">
         <li><a href="#office">📎 Office Supplies</a></li>
@@ -63,8 +65,8 @@
   </div>
 
   <!-- Sidebar Overlay -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
 
-  <script src="Top2banner.js"></script>
+  <script src="Top2banner.js" defer></script>
 </body>
 </html>

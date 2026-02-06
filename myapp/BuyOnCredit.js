@@ -4,28 +4,54 @@ const applicationModal = document.getElementById('applicationModal');
 const successModal = document.getElementById('successModal');
 const closeBtn = document.getElementById('closeBtn');
 const creditForm = document.getElementById('creditForm');
+const pageBody = document.body;
+const notify = window.showNotice || (() => {});
 
 // Form validation setup
 // eslint-disable-next-line no-unused-vars
 const form = creditForm;
 
+function setModalState(modal, isOpen) {
+  if (!modal) {
+    return;
+  }
+
+  modal.classList.toggle('show', isOpen);
+  modal.setAttribute('aria-hidden', String(!isOpen));
+  pageBody.style.overflow = isOpen ? 'hidden' : '';
+
+  if (isOpen) {
+    const focusTarget = modal.querySelector('input, select, textarea, button');
+    if (focusTarget) {
+      focusTarget.focus();
+    }
+  }
+}
+
 // Open application form modal
 applyBtn.addEventListener('click', () => {
-  applicationModal.classList.add('show');
+  setModalState(applicationModal, true);
 });
 
 // Close application form modal
 closeBtn.addEventListener('click', () => {
-  applicationModal.classList.remove('show');
+  setModalState(applicationModal, false);
 });
 
 // Close modal when clicking outside of it
 window.addEventListener('click', (e) => {
   if (e.target === applicationModal) {
-    applicationModal.classList.remove('show');
+    setModalState(applicationModal, false);
   }
   if (e.target === successModal) {
-    successModal.classList.remove('show');
+    setModalState(successModal, false);
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    setModalState(applicationModal, false);
+    setModalState(successModal, false);
   }
 });
 
@@ -39,12 +65,9 @@ creditForm.addEventListener('submit', (e) => {
 
   // Validate form
   if (!validateForm(data)) {
-    alert('Please fill all required fields correctly');
+    notify('Please fill all required fields correctly', 'error');
     return;
   }
-
-  // Log form data (in real app, send to server)
-  console.log('Credit Application Data:', data);
 
   // Show success modal
   showSuccessModal();
@@ -58,20 +81,20 @@ function validateForm(data) {
   // Check email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(data.email)) {
-    alert('Please enter a valid email address');
+    notify('Please enter a valid email address', 'error');
     return false;
   }
 
   // Check phone format
   if (data.phone.length !== 10 || !/^\d+$/.test(data.phone)) {
-    alert('Please enter a valid 10-digit phone number');
+    notify('Please enter a valid 10-digit phone number', 'error');
     return false;
   }
 
   // Check PAN format
   const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
   if (!panRegex.test(data.panNumber)) {
-    alert('Please enter a valid PAN number (e.g., ABCDE1234F)');
+    notify('Please enter a valid PAN number (e.g., ABCDE1234F)', 'error');
     return false;
   }
 
@@ -79,31 +102,31 @@ function validateForm(data) {
   const dob = new Date(data.dob);
   const age = new Date().getFullYear() - dob.getFullYear();
   if (age < 18) {
-    alert('You must be at least 18 years old to apply');
+    notify('You must be at least 18 years old to apply', 'error');
     return false;
   }
 
   // Check pincode format
   if (data.pincode.length !== 6 || !/^\d+$/.test(data.pincode)) {
-    alert('Please enter a valid 6-digit pincode');
+    notify('Please enter a valid 6-digit pincode', 'error');
     return false;
   }
 
   // Check monthly income
   if (parseFloat(data.monthlyIncome) <= 0) {
-    alert('Please enter a valid monthly income');
+    notify('Please enter a valid monthly income', 'error');
     return false;
   }
 
   // Check credit amount
   if (parseFloat(data.creditAmount) <= 0 || parseFloat(data.creditAmount) > 1000000) {
-    alert('Credit amount should be between ₹0 and ₹10,00,000');
+    notify('Credit amount should be between ₹0 and ₹10,00,000', 'error');
     return false;
   }
 
   // Check terms agreement
   if (!document.getElementById('agreeTerms').checked) {
-    alert('Please agree to terms and conditions');
+    notify('Please agree to terms and conditions', 'error');
     return false;
   }
 
@@ -117,8 +140,8 @@ function showSuccessModal() {
   document.getElementById('referenceId').textContent = referenceId;
 
   // Close application modal and show success modal
-  applicationModal.classList.remove('show');
-  successModal.classList.add('show');
+  setModalState(applicationModal, false);
+  setModalState(successModal, true);
 }
 
 // Generate reference ID
@@ -221,10 +244,7 @@ if (repaymentPeriod) {
               (Math.pow(1 + monthlyRate, months) - 1);
       }
 
-      console.log(`EMI for ₹${amount} over ${months} months at ${annualRate * 100}% p.a.: ₹${emi.toFixed(2)}`);
+      notify(`Estimated EMI: ₹${emi.toFixed(2)} per month`, 'info', { timeout: 3000 });
     }
   });
 }
-
-// Log form state for debugging
-console.log('Buy on Credit form script loaded successfully');

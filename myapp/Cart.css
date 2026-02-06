@@ -13,17 +13,17 @@
 }
 
 body {
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  background: var(--light-gray);
-  color: #333;
+  font-family: inherit;
+  background: var(--brand-sand, #faf7f2);
+  color: var(--brand-ink, #1d2433);
 }
 
 /* ===== Navigation ===== */
 .navbar {
   background: white;
-  border-bottom: 2px solid var(--border-gray);
+  border-bottom: 1px solid var(--brand-border, #e6e7eb);
   padding: 15px 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-tight, 0 4px 12px rgba(17, 24, 39, 0.08));
   position: sticky;
   top: 0;
   z-index: 100;
@@ -73,9 +73,10 @@ body {
 /* ===== Cart Items Section ===== */
 .cart-items-section {
   background: white;
-  border-radius: 10px;
+  border-radius: 18px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-tight, 0 4px 12px rgba(17, 24, 39, 0.08));
+  border: 1px solid var(--brand-border, #e6e7eb);
 }
 
 .cart-header {
@@ -113,15 +114,16 @@ body {
   gap: 15px;
   align-items: center;
   padding: 15px;
-  background: var(--light-gray);
-  border-radius: 8px;
-  border: 2px solid transparent;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid var(--brand-border, #e6e7eb);
   transition: all 0.3s ease;
 }
 
 .cart-item:hover {
   border-color: var(--primary-orange);
-  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-tight, 0 4px 12px rgba(17, 24, 39, 0.08));
 }
 
 .item-image {
@@ -255,9 +257,10 @@ body {
 /* ===== Order Summary ===== */
 .order-summary-section {
   background: white;
-  border-radius: 10px;
+  border-radius: 18px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-tight, 0 4px 12px rgba(17, 24, 39, 0.08));
+  border: 1px solid var(--brand-border, #e6e7eb);
   height: fit-content;
   position: sticky;
   top: 100px;
@@ -639,6 +642,10 @@ legend {
     padding: 15px 10px;
   }
 
+    background: transparent;
+    border: none;
+    padding: 0;
+    line-height: 1;
   .cart-item {
     grid-template-columns: 70px 1fr;
   }

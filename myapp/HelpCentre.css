@@ -12,17 +12,17 @@
 }
 
 body {
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  background: #fff;
-  color: #333;
+  font-family: inherit;
+  background: var(--brand-sand, #faf7f2);
+  color: var(--brand-ink, #1d2433);
 }
 
 /* ===== Navigation ===== */
 .navbar {
   background: #fff;
-  border-bottom: 2px solid var(--border-gray);
+  border-bottom: 1px solid var(--brand-border, #e6e7eb);
   padding: 12px 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-tight, 0 4px 12px rgba(17, 24, 39, 0.08));
 }
 
 .nav-container {
@@ -53,12 +53,13 @@ body {
 
 /* ===== Hero Section ===== */
 .hero-section {
-  background: linear-gradient(135deg, var(--primary-orange) 0%, #e64a0e 100%);
+  background: linear-gradient(135deg, #ff7a3d 0%, var(--primary-orange) 100%);
   color: white;
   padding: 50px 40px;
-  border-radius: 12px;
+  border-radius: 20px;
   text-align: center;
   margin-bottom: 50px;
+  box-shadow: var(--shadow-soft, 0 8px 24px rgba(17, 24, 39, 0.08));
 }
 
 .hero-section h1 {
@@ -121,9 +122,9 @@ body {
 .link-card {
   background: white;
   padding: 30px 20px;
-  border-radius: 10px;
+  border-radius: 16px;
   text-align: center;
-  border: 2px solid var(--border-gray);
+  border: 1px solid var(--brand-border, #e6e7eb);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -179,8 +180,8 @@ body {
 
 .faq-item {
   background: white;
-  border: 2px solid var(--border-gray);
-  border-radius: 8px;
+  border: 1px solid var(--brand-border, #e6e7eb);
+  border-radius: 14px;
   overflow: hidden;
   transition: all 0.3s ease;
 }
@@ -272,8 +273,8 @@ body {
 .contact-card {
   background: white;
   padding: 30px 20px;
-  border-radius: 10px;
-  border: 2px solid var(--border-gray);
+  border-radius: 16px;
+  border: 1px solid var(--brand-border, #e6e7eb);
   transition: all 0.3s ease;
 }
 
@@ -375,6 +376,10 @@ body {
   cursor: pointer;
   color: #aaa;
   transition: color 0.3s ease;
+  background: transparent;
+  border: none;
+  padding: 0;
+  line-height: 1;
 }
 
 .close-btn:hover {

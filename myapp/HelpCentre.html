@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Help Centre - Sai Scientifics</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="HelpCentre.css">
 </head>
 <body>
@@ -20,7 +21,7 @@
   <!-- Main Content -->
   <main class="container">
     <!-- Hero Section -->
-    <section class="hero-section">
+    <section class="hero-section shadow-soft">
       <h1>🎧 Help Centre</h1>
       <p>Find answers to your questions and get support from our team</p>
       
@@ -52,7 +53,7 @@
     </section>
 
     <!-- FAQs Section -->
-    <section class="faq-section">
+    <section class="faq-section shadow-soft">
       <h2>Frequently Asked Questions</h2>
 
       <!-- Orders & Delivery -->
@@ -201,7 +202,7 @@
     </section>
 
     <!-- Contact Support Section -->
-    <section class="contact-section">
+    <section class="contact-section shadow-soft">
       <h2>Still Need Help?</h2>
       <p>Our support team is here to help you 24/7</p>
 
@@ -237,10 +238,10 @@
     </section>
 
     <!-- Message Form Modal -->
-    <div class="modal" id="messageModal">
+    <div class="modal" id="messageModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="messageTitle">
       <div class="modal-content">
-        <span class="close-btn" id="closeBtn">&times;</span>
-        <h2>Send us a Message</h2>
+        <button type="button" class="close-btn" id="closeBtn" aria-label="Close">&times;</button>
+        <h2 id="messageTitle">Send us a Message</h2>
         
         <form id="messageForm" class="message-form">
           <div class="form-group">
@@ -281,7 +282,7 @@
     </div>
 
     <!-- Modal Overlay -->
-    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-overlay" id="modalOverlay" aria-hidden="true"></div>
   </main>
 
   <!-- Footer -->
@@ -289,6 +290,7 @@
     <p>&copy; 2026 Sai Scientifics. All rights reserved.</p>
   </footer>
 
-  <script src="HelpCentre.js"></script>
+  <script src="ui-notify.js" defer></script>
+  <script src="HelpCentre.js" defer></script>
 </body>
 </html>

@@ -25,8 +25,28 @@ const successModal = document.getElementById('successModal');
 const closeCheckout = document.getElementById('closeCheckout');
 const modalOverlay = document.getElementById('modalOverlay');
 const checkoutForm = document.getElementById('checkoutForm');
+const pageBody = document.body;
+const notify = window.showNotice || (() => {});
 
 let discountAmount = 0;
+
+function setModalState(modal, isOpen) {
+  if (!modal) {
+    return;
+  }
+
+  modal.classList.toggle('show', isOpen);
+  modal.setAttribute('aria-hidden', String(!isOpen));
+  modalOverlay.classList.toggle('show', isOpen);
+  pageBody.style.overflow = isOpen ? 'hidden' : '';
+
+  if (isOpen) {
+    const focusTarget = modal.querySelector('input, select, textarea, button');
+    if (focusTarget) {
+      focusTarget.focus();
+    }
+  }
+}
 
 // Initialize cart
 function initCart() {
@@ -140,7 +160,7 @@ applyPromoBtn.addEventListener('click', () => {
   const code = promoInput.value.toUpperCase().trim();
 
   if (!code) {
-    alert('Please enter a promo code');
+    notify('Please enter a promo code', 'error');
     return;
   }
 
@@ -164,35 +184,40 @@ applyPromoBtn.addEventListener('click', () => {
     }
 
     updateSummary();
-    alert(`Promo code "${code}" applied! You saved ₹${discountAmount}`);
+    notify(`Promo code "${code}" applied! You saved ₹${discountAmount}`, 'success');
     promoInput.value = '';
     applyPromoBtn.textContent = '✓ Applied';
     applyPromoBtn.disabled = true;
   } else {
-    alert('Invalid promo code. Try: SAVE10, SAVE20, FLAT500, or WELCOME');
+    notify('Invalid promo code. Try: SAVE10, SAVE20, FLAT500, or WELCOME', 'error');
   }
 });
 
 // Checkout button
 checkoutBtn.addEventListener('click', () => {
   if (cartItems.length === 0) {
-    alert('Your cart is empty');
+    notify('Your cart is empty', 'error');
     return;
   }
 
-  checkoutModal.classList.add('show');
-  modalOverlay.classList.add('show');
+  setModalState(checkoutModal, true);
 });
 
 // Close checkout modal
 closeCheckout.addEventListener('click', () => {
-  checkoutModal.classList.remove('show');
-  modalOverlay.classList.remove('show');
+  setModalState(checkoutModal, false);
 });
 
 modalOverlay.addEventListener('click', () => {
-  checkoutModal.classList.remove('show');
-  modalOverlay.classList.remove('show');
+  setModalState(checkoutModal, false);
+  setModalState(successModal, false);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    setModalState(checkoutModal, false);
+    setModalState(successModal, false);
+  }
 });
 
 // Checkout form submission
@@ -216,19 +241,19 @@ function validateCheckoutForm(data) {
   // Check email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(data.email)) {
-    alert('Please enter a valid email address');
+    notify('Please enter a valid email address', 'error');
     return false;
   }
 
   // Check phone
   if (data.phone.length !== 10 || !/^\d+$/.test(data.phone)) {
-    alert('Please enter a valid 10-digit phone number');
+    notify('Please enter a valid 10-digit phone number', 'error');
     return false;
   }
 
   // Check pincode
   if (data.pincode.length !== 6 || !/^\d+$/.test(data.pincode)) {
-    alert('Please enter a valid 6-digit pincode');
+    notify('Please enter a valid 6-digit pincode', 'error');
     return false;
   }
 
@@ -239,20 +264,12 @@ function validateCheckoutForm(data) {
 function placeOrder(data) {
   const orderId = generateOrderId();
   
-  console.log('Order Data:', {
-    ...data,
-    items: cartItems,
-    summary: {
-      subtotal: calculateSubtotal(),
-      discount: discountAmount,
-      total: parseFloat(totalEl.textContent.replace('₹', '').replace(/,/g, ''))
-    }
-  });
+  notify('Order placed successfully. Check your email for confirmation.', 'success');
 
   // Show success modal
   document.getElementById('orderId').textContent = orderId;
-  checkoutModal.classList.remove('show');
-  successModal.classList.add('show');
+  setModalState(checkoutModal, false);
+  setModalState(successModal, true);
 
   // Clear cart
   cartItems = [];
@@ -290,5 +307,3 @@ if (pincodeInput) {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', initCart);
 
-// Log initialization
-console.log('Cart script loaded successfully');

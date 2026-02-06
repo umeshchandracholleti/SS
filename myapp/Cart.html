@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart - Sai Scientifics</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="Cart.css">
 </head>
 <body>
@@ -114,10 +115,10 @@
   </main>
 
   <!-- Checkout Modal -->
-  <div class="modal" id="checkoutModal">
+  <div class="modal" id="checkoutModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="checkoutTitle">
     <div class="modal-content">
-      <span class="close-btn" id="closeCheckout">&times;</span>
-      <h2>Checkout</h2>
+      <button type="button" class="close-btn" id="closeCheckout" aria-label="Close">&times;</button>
+      <h2 id="checkoutTitle">Checkout</h2>
 
       <form id="checkoutForm">
         <!-- Shipping Address -->
@@ -190,19 +191,20 @@
   </div>
 
   <!-- Success Modal -->
-  <div class="modal" id="successModal">
+  <div class="modal" id="successModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="successTitle" aria-describedby="successMessage">
     <div class="modal-content success-modal">
       <i class="fas fa-check-circle"></i>
-      <h2>Order Placed Successfully!</h2>
-      <p>Thank you for your purchase. Your order has been confirmed.</p>
+      <h2 id="successTitle">Order Placed Successfully!</h2>
+      <p id="successMessage">Thank you for your purchase. Your order has been confirmed.</p>
       <p class="order-id">Order ID: <strong id="orderId"></strong></p>
       <button class="submit-btn" onclick="location.href='TopRowbanner.html'">Continue Shopping</button>
     </div>
   </div>
 
   <!-- Overlay -->
-  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal-overlay" id="modalOverlay" aria-hidden="true"></div>
 
-  <script src="Cart.js"></script>
+  <script src="ui-notify.js" defer></script>
+  <script src="Cart.js" defer></script>
 </body>
 </html>

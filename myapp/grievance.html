@@ -3,68 +3,96 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Write to Management</title>
-  <link rel="stylesheet" href="index.css" />
-
+  <title>Write to Management - Sai Scientifics</title>
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="grievance.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Write to Management</h1>
-    <p>Your feedback matters. Share any issue with our products, services, or support, and our management team will address it promptly.</p>
+  <nav class="navbar">
+    <a href="TopRowbanner.html" class="nav-link">Back to Home</a>
+  </nav>
 
-    <h2>Submit Your Grievance</h2>
-    <form id="grievanceForm">
-      <!-- Personal Information -->
-      <fieldset>
-        <legend>Personal Information</legend>
-        <label for="name">Full Name *</label>
-        <input type="text" id="name" required />
-
-        <label for="email">Email ID *</label>
-        <input type="email" id="email" required />
-
-        <label for="phone">Phone Number *</label>
-        <input type="tel" id="phone" pattern="[0-9]{10}" required />
-      </fieldset>
-
-      <!-- Grievance Details -->
-      <fieldset>
-        <legend>Grievance Details</legend>
-        <label for="type">Grievance Type *</label>
-        <select id="type" required>
-          <option value="">Select Grievance Type</option>
-          <option value="Product">Product</option>
-          <option value="Service">Service</option>
-          <option value="Support">Support</option>
-        </select>
-
-        <label for="order">Order Number (If Applicable)</label>
-        <input type="text" id="order" />
-
-        <label for="subject">Subject *</label>
-        <input type="text" id="subject" required />
-      </fieldset>
-
-      <!-- Additional Information -->
-      <fieldset>
-        <legend>Additional Information</legend>
-        <label for="description">Detailed Description *</label>
-        <textarea id="description" rows="5" minlength="50" maxlength="2000" required></textarea>
-        <small>Please provide a detailed description of your grievance (50–2000 characters)</small>
-
-        <label for="date">Incident Date (If Applicable)</label>
-        <input type="date" id="date" value="2026-02-02" />
-
-        <label for="attachment">Attachments (If Applicable)</label>
-        <input type="file" id="attachment" accept=".pdf,.jpg,.jpeg,.png" multiple />
-      </fieldset>
-
-      <div class="submit-container">
-        <button type="submit">SUBMIT</button>
+  <main class="grievance-page">
+    <header class="grievance-hero">
+      <div>
+        <p class="pill">Management Desk</p>
+        <h1>Write to management</h1>
+        <p>Share issues with our products, services, or support. We respond within 24 hours.</p>
       </div>
-    </form>
-  </div>
+      <div class="hero-card">
+        <h3>What happens next</h3>
+        <ul>
+          <li>Case created with a reference ID</li>
+          <li>Priority review by support team</li>
+          <li>Resolution updates by email or phone</li>
+        </ul>
+      </div>
+    </header>
 
-  <script src="grievance.js"></script>
+    <section class="grievance-form-card">
+      <form id="grievanceForm">
+        <fieldset>
+          <legend>Personal information</legend>
+          <label>
+            Full name *
+            <input type="text" id="name" required />
+          </label>
+          <label>
+            Email ID *
+            <input type="email" id="email" required />
+          </label>
+          <label>
+            Phone number *
+            <input type="tel" id="phone" pattern="[0-9]{10}" required />
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Grievance details</legend>
+          <label>
+            Grievance type *
+            <select id="type" required>
+              <option value="">Select grievance type</option>
+              <option value="Product">Product</option>
+              <option value="Service">Service</option>
+              <option value="Support">Support</option>
+            </select>
+          </label>
+          <label>
+            Order number (optional)
+            <input type="text" id="order" />
+          </label>
+          <label>
+            Subject *
+            <input type="text" id="subject" required />
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Additional information</legend>
+          <label>
+            Detailed description *
+            <textarea id="description" rows="5" minlength="50" maxlength="2000" required></textarea>
+          </label>
+          <small>Provide 50-2000 characters so we can resolve quickly.</small>
+          <label>
+            Incident date (optional)
+            <input type="date" id="date" />
+          </label>
+          <label>
+            Attachments (optional)
+            <input type="file" id="attachment" accept=".pdf,.jpg,.jpeg,.png" multiple />
+          </label>
+        </fieldset>
+
+        <div class="form-footer">
+          <p class="form-status" id="grievanceStatus" role="status"></p>
+          <button type="submit">Submit grievance</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="grievance.js" defer></script>
 </body>
 </html>
