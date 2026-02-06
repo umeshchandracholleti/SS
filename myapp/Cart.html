@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart - Sai Scientifics</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="Cart.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="TopRowbanner.html" class="nav-logo">
+        <i class="fas fa-arrow-left"></i> Back to Shop
+      </a>
+      <h1>🛒 Shopping Cart</h1>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="cart-wrapper">
+      <!-- Cart Items Section -->
+      <section class="cart-items-section">
+        <div class="cart-header">
+          <h2>Cart Items</h2>
+          <span class="item-count" id="itemCount">0 items</span>
+        </div>
+
+        <!-- Sample Cart Items -->
+        <div class="cart-items" id="cartItems">
+          <!-- Items will be added dynamically -->
+        </div>
+
+        <!-- Empty Cart Message -->
+        <div class="empty-cart" id="emptyCart">
+          <i class="fas fa-inbox"></i>
+          <h3>Your cart is empty</h3>
+          <p>Start shopping to add items to your cart</p>
+          <a href="TopRowbanner.html" class="continue-btn">Continue Shopping</a>
+        </div>
+      </section>
+
+      <!-- Order Summary Section -->
+      <aside class="order-summary-section">
+        <div class="order-summary">
+          <h3>Order Summary</h3>
+
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="subtotal">₹0</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Shipping:</span>
+            <span id="shipping">₹0</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Tax:</span>
+            <span id="tax">₹0</span>
+          </div>
+
+          <div class="summary-row discount">
+            <span>Discount:</span>
+            <span id="discount">₹0</span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-row total">
+            <span>Total:</span>
+            <span id="total">₹0</span>
+          </div>
+
+          <!-- Promo Code -->
+          <div class="promo-section">
+            <input type="text" id="promoCode" placeholder="Enter promo code">
+            <button id="applyPromo" class="apply-promo-btn">Apply</button>
+          </div>
+
+          <!-- Checkout Button -->
+          <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+
+          <!-- Payment Options -->
+          <div class="payment-options">
+            <h4>Payment Options</h4>
+            <div class="option">
+              <input type="radio" id="creditCard" name="payment" value="credit-card">
+              <label for="creditCard">💳 Credit/Debit Card</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="upi" name="payment" value="upi">
+              <label for="upi">📱 UPI</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="netBanking" name="payment" value="net-banking">
+              <label for="netBanking">🏦 Net Banking</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="buyCred" name="payment" value="buy-credit">
+              <label for="buyCred">💰 Buy on Credit</label>
+            </div>
+          </div>
+
+          <!-- Continue Shopping -->
+          <a href="TopRowbanner.html" class="continue-link">
+            <i class="fas fa-arrow-left"></i> Continue Shopping
+          </a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Checkout Modal -->
+  <div class="modal" id="checkoutModal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeCheckout">&times;</span>
+      <h2>Checkout</h2>
+
+      <form id="checkoutForm">
+        <!-- Shipping Address -->
+        <fieldset>
+          <legend>Shipping Address</legend>
+
+          <div class="form-group">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" name="fullName" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone *</label>
+              <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address *</label>
+            <textarea id="address" name="address" rows="3" required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">City *</label>
+              <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+              <label for="state">State *</label>
+              <input type="text" id="state" name="state" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pincode">Pincode *</label>
+            <input type="text" id="pincode" name="pincode" pattern="[0-9]{6}" required>
+          </div>
+        </fieldset>
+
+        <!-- Payment Details -->
+        <fieldset>
+          <legend>Payment Details</legend>
+
+          <div class="form-group">
+            <label for="paymentMethod">Payment Method *</label>
+            <select id="paymentMethod" name="paymentMethod" required>
+              <option value="">Select Payment Method</option>
+              <option value="credit-card">Credit Card</option>
+              <option value="debit-card">Debit Card</option>
+              <option value="upi">UPI</option>
+              <option value="net-banking">Net Banking</option>
+              <option value="wallet">Wallet</option>
+            </select>
+          </div>
+
+          <div class="form-group checkbox">
+            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+            <label for="agreeTerms">I agree to the Terms & Conditions and Privacy Policy</label>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="submit-btn">Place Order</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal" id="successModal">
+    <div class="modal-content success-modal">
+      <i class="fas fa-check-circle"></i>
+      <h2>Order Placed Successfully!</h2>
+      <p>Thank you for your purchase. Your order has been confirmed.</p>
+      <p class="order-id">Order ID: <strong id="orderId"></strong></p>
+      <button class="submit-btn" onclick="location.href='TopRowbanner.html'">Continue Shopping</button>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+
+  <script src="Cart.js"></script>
+</body>
+</html>
