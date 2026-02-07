@@ -12,12 +12,15 @@
 - Inventory: `warehouse` for stock locations, `inventory` for item counts, and `inventory_reservation` for live allocations.
 - Orders: `customer_order` as the order header and `order_item` for line items.
 - Payments: `payment` records payment attempts and `payment_event` keeps provider webhook/audit history.
+- Invoices: `invoice` for billing headers and `invoice_item` for line items with stored PDF metadata.
+- Notifications: `notification_outbox` and `notification_attempt` for reliable email/WhatsApp delivery.
 
 ## Design Notes
 - Monetary columns use `NUMERIC(12,2)` to avoid floating point rounding.
 - UUID primary keys provide safe distributed ID generation.
 - `inventory_reservation` supports short-lived holds to prevent overselling.
 - `payment_event` stores raw provider callbacks in `JSONB` for auditing and dispute resolution.
+- `notification_outbox` implements the outbox pattern to keep invoices, email, and WhatsApp in sync.
 
 ## Indexing Strategy
 - Unique indexes on `email`, `sku`, and `order_number` ensure fast lookups.
