@@ -1,9 +1,5 @@
-// Sample cart items (in real app, these would come from backend)
-let cartItems = [
-  { id: 1, name: 'Office Chair', price: 4500, quantity: 1, emoji: '🪑' },
-  { id: 2, name: 'LED Desk Lamp', price: 1200, quantity: 2, emoji: '💡' },
-  { id: 3, name: 'Wireless Keyboard', price: 2800, quantity: 1, emoji: '⌨️' }
-];
+let cartId = localStorage.getItem('cartId');
+let cartItems = [];
 
 const TAX_RATE = 0.18; // 18% tax
 const SHIPPING_COST = 100;
@@ -48,10 +44,45 @@ function setModalState(modal, isOpen) {
   }
 }
 
+async function ensureCart(seed = false) {
+  if (cartId) {
+    return cartId;
+  }
+
+  const cart = await window.apiFetch(`/cart/guest?seed=${seed ? 'true' : 'false'}`, {
+    method: 'POST'
+  });
+  cartId = cart.id;
+  localStorage.setItem('cartId', cartId);
+  return cartId;
+}
+
+async function loadCart() {
+  if (!cartId) {
+    await ensureCart(true);
+  }
+
+  const cart = await window.apiFetch(`/cart/${cartId}`);
+  cartItems = cart.items.map((item) => ({
+    id: item.id,
+    productId: item.product_id,
+    name: item.name,
+    description: item.description,
+    image: item.image_url,
+    price: Number(item.unit_price),
+    quantity: Number(item.quantity)
+  }));
+}
+
 // Initialize cart
-function initCart() {
-  renderCart();
-  updateSummary();
+async function initCart() {
+  try {
+    await loadCart();
+    renderCart();
+    updateSummary();
+  } catch (error) {
+    notify(error.message, 'error');
+  }
 }
 
 // Render cart items
@@ -71,7 +102,7 @@ function renderCart() {
     const cartItem = document.createElement('div');
     cartItem.className = 'cart-item';
     cartItem.innerHTML = `
-      <div class="item-image">${item.emoji}</div>
+      <div class="item-image">${item.image ? `<img src="${item.image}" alt="${item.name}">` : '📦'}</div>
       <div class="item-details">
         <h3>${item.name}</h3>
         <div class="item-price">₹${(item.price * item.quantity).toLocaleString()}</div>
@@ -92,14 +123,23 @@ function renderCart() {
   updateItemCount();
 }
 
+async function updateQuantity(itemId, nextQty) {
+  await window.apiFetch(`/cart/${cartId}/items/${itemId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ quantity: nextQty })
+  });
+  await loadCart();
+  renderCart();
+  updateSummary();
+}
+
 // Increase quantity
 // eslint-disable-next-line no-unused-vars
 function increaseQuantity(itemId) {
   const item = cartItems.find(i => i.id === itemId);
   if (item) {
-    item.quantity++;
-    renderCart();
-    updateSummary();
+    updateQuantity(itemId, item.quantity + 1).catch((error) => notify(error.message, 'error'));
   }
 }
 
@@ -108,23 +148,20 @@ function increaseQuantity(itemId) {
 function decreaseQuantity(itemId) {
   const item = cartItems.find(i => i.id === itemId);
   if (item && item.quantity > 1) {
-    item.quantity--;
-    renderCart();
-    updateSummary();
+    updateQuantity(itemId, item.quantity - 1).catch((error) => notify(error.message, 'error'));
   }
 }
 
 // Remove item
 // eslint-disable-next-line no-unused-vars
 function removeItem(itemId) {
-  cartItems = cartItems.filter(i => i.id !== itemId);
-  renderCart();
-  updateSummary();
-  
-  // Disable checkout if cart is empty
-  if (cartItems.length === 0) {
-    checkoutBtn.disabled = true;
-  }
+  window.apiFetch(`/cart/${cartId}/items/${itemId}`, {
+    method: 'DELETE'
+  }).then(async () => {
+    await loadCart();
+    renderCart();
+    updateSummary();
+  }).catch((error) => notify(error.message, 'error'));
 }
 
 // Update item count
@@ -221,7 +258,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Checkout form submission
-checkoutForm.addEventListener('submit', (e) => {
+checkoutForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const formData = new FormData(checkoutForm);
@@ -233,7 +270,39 @@ checkoutForm.addEventListener('submit', (e) => {
   }
 
   // Create order
-  placeOrder(data);
+  try {
+    const response = await window.apiFetch('/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        cartId: cartId,
+        customerName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        addressLine: data.address,
+        city: data.city,
+        state: data.state,
+        pincode: data.pincode,
+        paymentMethod: data.paymentMethod,
+        discount: discountAmount
+      })
+    });
+
+    notify('Order placed successfully. Check your email for confirmation.', 'success');
+    document.getElementById('orderId').textContent = response.orderNumber;
+    setModalState(checkoutModal, false);
+    setModalState(successModal, true);
+    checkoutForm.reset();
+    applyPromoBtn.disabled = false;
+    applyPromoBtn.textContent = 'Apply';
+    discountAmount = 0;
+
+    localStorage.removeItem('cartId');
+    cartId = null;
+    await initCart();
+  } catch (error) {
+    notify(error.message, 'error');
+  }
 });
 
 // Validate checkout form
@@ -260,33 +329,7 @@ function validateCheckoutForm(data) {
   return true;
 }
 
-// Place order
-function placeOrder(data) {
-  const orderId = generateOrderId();
-  
-  notify('Order placed successfully. Check your email for confirmation.', 'success');
-
-  // Show success modal
-  document.getElementById('orderId').textContent = orderId;
-  setModalState(checkoutModal, false);
-  setModalState(successModal, true);
-
-  // Clear cart
-  cartItems = [];
-  discountAmount = 0;
-  renderCart();
-  updateSummary();
-  checkoutForm.reset();
-  applyPromoBtn.disabled = false;
-  applyPromoBtn.textContent = 'Apply';
-}
-
-// Generate order ID
-function generateOrderId() {
-  const timestamp = Date.now().toString().slice(-8);
-  const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-  return `ORD-${timestamp}-${random}`;
-}
+// Order IDs are generated by the backend.
 
 // Phone input formatting
 const phoneInput = document.getElementById('phone');

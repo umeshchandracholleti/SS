@@ -31,6 +31,16 @@ docker compose run --rm flyway
 
 Flyway defaults are in `Database/flyway.conf`.
 
+## Backend API (Node + Express)
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+API defaults to http://localhost:4000.
+
 ## Scripts
 
 - `npm run dev`: Start Vite dev server

@@ -14,17 +14,7 @@ const summaryLink = document.getElementById('summaryLink');
 
 const steps = Array.from(document.querySelectorAll('.status-step'));
 
-const courierList = ['Blue Dart', 'Delhivery', 'DTDC', 'Ecom Express'];
-const addressList = [
-	'Plot 17, Jubilee Hills, Hyderabad',
-	'12B, Indiranagar, Bengaluru',
-	'Sector 62, Noida',
-	'Andheri East, Mumbai'
-];
-
-function getHash(input) {
-	return input.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-}
+const statusOrder = ['confirmed', 'packed', 'out_for_delivery', 'delivered'];
 
 function formatDate(date) {
 	return date.toLocaleDateString('en-IN', {
@@ -48,7 +38,7 @@ function updateTimeline(stageIndex, timestamps) {
 	statusPill.textContent = statusLabels[stageIndex] || 'Awaiting update';
 }
 
-trackForm.addEventListener('submit', (event) => {
+trackForm.addEventListener('submit', async (event) => {
 	event.preventDefault();
 
 	const orderId = trackForm.orderId.value.trim();
@@ -58,24 +48,40 @@ trackForm.addEventListener('submit', (event) => {
 		return;
 	}
 
-	const hash = getHash(orderId + contact);
-	const stageIndex = hash % 4;
-	const now = new Date();
-	const timestamps = [];
+	try {
+		const response = await window.apiFetch(`/orders/${orderId}/tracking?contact=${encodeURIComponent(contact)}`);
+		const events = response.events || [];
+		let stageIndex = 0;
+		const timestamps = [];
 
-	for (let i = 0; i <= stageIndex; i += 1) {
-		const date = new Date(now);
-		date.setDate(now.getDate() - (stageIndex - i));
-		timestamps[i] = formatDate(date);
+		events.forEach((eventItem) => {
+			const status = eventItem.status || 'confirmed';
+			const index = statusOrder.indexOf(status);
+			if (index >= 0) {
+				stageIndex = Math.max(stageIndex, index);
+				timestamps[index] = formatDate(new Date(eventItem.occurred_at));
+			}
+		});
+
+		updateTimeline(stageIndex, timestamps);
+
+		summaryOrderId.textContent = response.orderNumber;
+		summaryEta.textContent = formatDate(new Date(new Date(response.createdAt).getTime() + (3 - stageIndex) * 24 * 60 * 60 * 1000));
+		summaryAddress.textContent = response.address;
+		summaryCourier.textContent = 'Sai Scientifics Logistics';
+		summaryLink.href = '#';
+
+		trackResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	} catch (error) {
+		statusPill.textContent = 'Order not found';
+		statusConfirmed.textContent = 'Pending';
+		statusPacked.textContent = 'Pending';
+		statusOut.textContent = 'Pending';
+		statusDelivered.textContent = 'Pending';
+		summaryOrderId.textContent = '-';
+		summaryEta.textContent = '-';
+		summaryAddress.textContent = '-';
+		summaryCourier.textContent = '-';
+		summaryLink.href = '#';
 	}
-
-	updateTimeline(stageIndex, timestamps);
-
-	summaryOrderId.textContent = orderId;
-	summaryEta.textContent = formatDate(new Date(now.getTime() + (3 - stageIndex) * 24 * 60 * 60 * 1000));
-	summaryAddress.textContent = addressList[hash % addressList.length];
-	summaryCourier.textContent = courierList[hash % courierList.length];
-	summaryLink.href = '#';
-
-	trackResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });

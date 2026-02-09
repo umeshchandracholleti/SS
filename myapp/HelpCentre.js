@@ -131,7 +131,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Message Form Submission
-messageForm.addEventListener('submit', (e) => {
+messageForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const formData = new FormData(messageForm);
@@ -150,11 +150,25 @@ messageForm.addEventListener('submit', (e) => {
     return;
   }
 
-  notify('Thank you for your message! Our team will respond within 1 hour.', 'success');
+  try {
+    await window.apiFetch('/support/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fullName: data.name,
+        email: data.email,
+        subject: data.subject,
+        category: data.category,
+        message: data.message
+      })
+    });
 
-  // Reset form and close modal
-  messageForm.reset();
-  setModalState(messageModal, false);
+    notify('Thank you for your message! Our team will respond within 1 hour.', 'success');
+    messageForm.reset();
+    setModalState(messageModal, false);
+  } catch (error) {
+    notify(error.message, 'error');
+  }
 });
 
 // Chat Button (placeholder)
