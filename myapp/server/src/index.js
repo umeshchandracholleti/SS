@@ -13,6 +13,7 @@ const reviewRoutes = require('./routes/reviews');
 const supportRoutes = require('./routes/support');
 const grievanceRoutes = require('./routes/grievances');
 const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -39,6 +40,7 @@ app.use('/api', reviewRoutes);
 app.use('/api', supportRoutes);
 app.use('/api', grievanceRoutes);
 app.use('/api', adminRoutes);
+app.use('/api', authRoutes);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;

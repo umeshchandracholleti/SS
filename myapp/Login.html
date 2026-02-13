@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - Sai Scientifics</title>
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-card">
+      <div>
+        <p class="pill">Welcome back</p>
+        <h1>Sign in</h1>
+        <p class="muted">Access your orders, quotes, and saved carts.</p>
+      </div>
+
+      <form id="loginForm" class="auth-form">
+        <label>
+          Email
+          <input type="email" name="email" required>
+        </label>
+        <label>
+          Password
+          <input type="password" name="password" required>
+        </label>
+        <button type="submit" class="primary-btn">Sign in</button>
+        <p class="form-status" id="loginStatus" role="status"></p>
+      </form>
+
+      <p class="muted">New here? <a href="Signup.html">Create an account</a></p>
+    </section>
+  </main>
+
+  <script src="api.js" defer></script>
+  <script src="Login.js" defer></script>
+</body>
+</html>
