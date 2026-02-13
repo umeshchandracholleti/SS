@@ -11,7 +11,6 @@ This folder contains end-to-end documentation for the Sai Scientifics front-end 
 - API wiring for RFQ, credit, cart, orders, tracking, reviews, support, and grievances.
 
 ## What is missing for a finished product
-- Customer-facing authentication and account management.
 - Payment processing integration and webhook handling.
 - Production-ready email/WhatsApp notifications.
 - A unified React experience (if the goal is a single SPA rather than mixed static pages).
@@ -24,6 +23,7 @@ This folder contains end-to-end documentation for the Sai Scientifics front-end 
 - Database setup and migrations: DATABASE.md
 - Testing plan: TESTING.md
 - Deployment plan: DEPLOYMENT.md
+- Production deployment (recommended stack): PROD_DEPLOY.md
 - Release checklist: RELEASE_CHECKLIST.md
 - Security notes: SECURITY.md
 - Admin dashboard: ADMIN.md

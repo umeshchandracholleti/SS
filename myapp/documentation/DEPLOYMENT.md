@@ -1,5 +1,7 @@
 # Deployment Plan
 
+For a provider-specific checklist, see PROD_DEPLOY.md.
+
 ## Frontend
 ### Static pages
 - Host the static HTML pages on a static server (NGINX, S3, Netlify, or similar).
