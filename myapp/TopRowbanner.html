@@ -42,8 +42,14 @@
     </form>
 
     <div class="header-actions">
-      <a href="Login.html" class="action-link">Sign in</a>
-      <a href="Signup.html" class="ghost-btn">Create account</a>
+      <div id="authSection">
+        <a href="Login.html" class="action-link" id="signInLink">Sign in</a>
+        <a href="Signup.html" class="ghost-btn" id="signUpLink">Create account</a>
+      </div>
+      <div id="userSection" style="display: none;">
+        <span class="action-link" id="userName" style="pointer-events: none;"></span>
+        <button type="button" class="ghost-btn" id="logoutBtn">Logout</button>
+      </div>
       <a href="BuyOnCredit.html" class="action-link">Buy on Credit</a>
       <a href="HelpCentre.html" class="action-link">Help Centre</a>
       <a href="Requestforquotes.html" class="primary-btn">Get a Quote</a>
@@ -51,7 +57,7 @@
       <a href="Cart.html" class="cart-link">
         <i class="fas fa-shopping-cart"></i>
         <span>Cart</span>
-        <span class="cart-count" id="cartCount">7</span>
+        <span class="cart-count" id="cartCount">0</span>
       </a>
     </div>
   </header>
@@ -286,6 +292,7 @@
     <span>Support: sales@saiscientifics.com</span>
   </footer>
 
+  <script src="api.js" defer></script>
   <script src="TopRowbanner.js" defer></script>
 </body>
 </html>

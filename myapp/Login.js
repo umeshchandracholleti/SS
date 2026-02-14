@@ -1,9 +1,15 @@
 const loginForm = document.getElementById('loginForm');
 const loginStatus = document.getElementById('loginStatus');
+const submitBtn = loginForm.querySelector('button[type="submit"]');
 
 function setStatus(message, isError) {
   loginStatus.textContent = message;
   loginStatus.style.color = isError ? '#b42318' : '#2d8f5b';
+}
+
+// Check if already logged in
+if (localStorage.getItem('customerToken')) {
+  window.location.href = 'TopRowbanner.html';
 }
 
 loginForm.addEventListener('submit', async (event) => {
@@ -13,23 +19,34 @@ loginForm.addEventListener('submit', async (event) => {
   const formData = new FormData(loginForm);
   const data = Object.fromEntries(formData);
 
+  if (!data.email.trim() || !data.password) {
+    setStatus('Please enter both email and password.', true);
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Signing in...';
+
   try {
     const response = await window.apiFetch('/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: data.email,
+        email: data.email.trim().toLowerCase(),
         password: data.password
       })
     });
 
     localStorage.setItem('customerToken', response.token);
     localStorage.setItem('customerName', response.fullName);
-    setStatus('Signed in successfully.', false);
+    setStatus('✓ Signed in successfully! Redirecting...', false);
+    
     setTimeout(() => {
       window.location.href = 'TopRowbanner.html';
-    }, 800);
+    }, 1000);
   } catch (error) {
-    setStatus(error.message, true);
+    setStatus(error.message || 'Invalid email or password.', true);
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Sign in';
   }
 });

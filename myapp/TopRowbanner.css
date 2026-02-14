@@ -67,13 +67,18 @@ body {
 
 .main-header {
   display: grid;
-  grid-template-columns: minmax(0, 220px) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(180px, 220px) minmax(250px, 1fr) minmax(auto, max-content);
   align-items: center;
-  gap: 20px;
-  padding: 24px;
+  gap: 16px;
+  padding: 20px 24px;
   background: #fff;
   border-bottom: 1px solid var(--brand-border);
   box-shadow: var(--shadow-tight);
+}
+
+.brand-block {
+  min-width: 180px;
+  max-width: 220px;
 }
 
 .brand-block p {
@@ -96,31 +101,62 @@ body {
 .search-wrapper {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 8px;
   border: 1px solid var(--brand-border);
   border-radius: 999px;
-  padding: 8px 8px 8px 14px;
+  padding: 6px 6px 6px 16px;
   background: #fff;
   position: relative;
   box-shadow: inset 0 0 0 1px rgba(255, 90, 0, 0.08);
+  min-width: 250px;
+  max-width: 100%;
+  height: 44px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.search-wrapper:focus-within {
+  border-color: var(--brand-orange);
+  box-shadow: inset 0 0 0 1px rgba(255, 90, 0, 0.2), 0 0 0 3px rgba(255, 90, 0, 0.1);
 }
 
 .search-wrapper input {
   flex: 1;
   border: none;
   outline: none;
-  padding: 6px 12px 6px 0;
+  padding: 8px 8px 8px 0;
   font-size: 14px;
   background: transparent;
+  min-width: 0;
+  color: var(--brand-ink);
+}
+
+.search-wrapper input::placeholder {
+  color: var(--brand-muted);
+  opacity: 0.7;
 }
 
 .search-btn {
   background: var(--brand-orange);
   color: #fff;
   border: none;
-  padding: 10px 18px;
+  padding: 8px 16px;
   border-radius: 999px;
   cursor: pointer;
+  flex-shrink: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.search-btn:hover {
+  background: #e94e00;
+}
+
+.search-btn i {
+  font-size: 14px;
 }
 
 .search-suggestions {
@@ -154,14 +190,45 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 10px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+#authSection,
+#userSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+#userName {
+  color: var(--brand-ink);
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+#logoutBtn {
+  cursor: pointer;
+  background: transparent;
+  white-space: nowrap;
+}
+
+#logoutBtn:hover {
+  border-color: var(--brand-orange);
+  color: var(--brand-orange);
 }
 
 .action-link {
   text-decoration: none;
   font-weight: 600;
   color: var(--brand-ink);
+  white-space: nowrap;
+  font-size: 14px;
+  display: inline-block;
 }
 
 .primary-btn {
@@ -172,6 +239,10 @@ body {
   border-radius: 999px;
   font-weight: 700;
   text-decoration: none;
+  white-space: nowrap;
+  font-size: 14px;
+  display: inline-block;
+  cursor: pointer;
 }
 
 .ghost-btn {
@@ -181,6 +252,11 @@ body {
   text-decoration: none;
   color: var(--brand-ink);
   font-weight: 600;
+  white-space: nowrap;
+  font-size: 14px;
+  display: inline-block;
+  background: transparent;
+  cursor: pointer;
 }
 
 .cart-link {
@@ -193,6 +269,8 @@ body {
   background: var(--accent-sand);
   padding: 8px 12px;
   border-radius: 999px;
+  white-space: nowrap;
+  font-size: 14px;
 }
 
 .cart-count {
@@ -649,6 +727,22 @@ body {
   .hero-card {
     grid-template-columns: 1fr;
   }
+
+  .main-header {
+    grid-template-columns: minmax(180px, 200px) minmax(200px, 1fr) minmax(auto, max-content);
+    gap: 12px;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .action-link,
+  .ghost-btn,
+  .primary-btn {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -674,6 +768,17 @@ body {
 
   .main-header {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .search-wrapper {
+    width: 100%;
+    min-width: 200px;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
   .featured-card {
@@ -685,6 +790,21 @@ body {
   .top-banner {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .search-wrapper {
+    height: 40px;
+    padding: 5px 5px 5px 14px;
+  }
+
+  .search-btn {
+    padding: 6px 14px;
+    height: 30px;
+    font-size: 13px;
+  }
+
+  .search-wrapper input {
+    font-size: 13px;
   }
 
   .header-actions {

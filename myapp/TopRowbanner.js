@@ -1,3 +1,45 @@
+// Auth state management
+function checkAuthState() {
+  const token = localStorage.getItem('customerToken');
+  const userName = localStorage.getItem('customerName');
+  const authSection = document.getElementById('authSection');
+  const userSection = document.getElementById('userSection');
+  const userNameEl = document.getElementById('userName');
+
+  if (token && userName) {
+    authSection.style.display = 'none';
+    userSection.style.display = 'flex';
+    userNameEl.textContent = `Hello, ${userName.split(' ')[0]}`;
+  } else {
+    authSection.style.display = 'flex';
+    userSection.style.display = 'none';
+  }
+}
+
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async () => {
+    const token = localStorage.getItem('customerToken');
+    if (token) {
+      try {
+        await window.apiFetch('/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      } catch (e) {
+        console.warn('Logout request failed:', e);
+      }
+    }
+    localStorage.removeItem('customerToken');
+    localStorage.removeItem('customerName');
+    window.location.reload();
+  });
+}
+
+checkAuthState();
+
 const categoryButtons = document.querySelectorAll('.category-list button');
 const selectedCategory = document.getElementById('selectedCategory');
 const searchForm = document.getElementById('searchForm');
