@@ -187,3 +187,94 @@ if (featuredSection) {
   window.addEventListener('resize', updateFeatured);
   updateFeatured();
 }
+// Deal of the Day Timer
+function startDealTimer() {
+  const dealTimerEl = document.getElementById('dealTimer');
+  if (!dealTimerEl) return;
+
+  function updateTimer() {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
+    const diff = midnight - now;
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    dealTimerEl.textContent = `::`;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+}
+
+startDealTimer();
+
+// Deal Carousel Navigation
+const dealsCarousel = document.querySelector('.deals-carousel');
+if (dealsCarousel) {
+  const dealsTrack = dealsCarousel.querySelector('.deals-track');
+  const leftArrow = dealsCarousel.querySelector('.carousel-arrow.left');
+  const rightArrow = dealsCarousel.querySelector('.carousel-arrow.right');
+
+  if (leftArrow && rightArrow) {
+    leftArrow.addEventListener('click', () => {
+      dealsTrack.scrollBy({
+        left: -280,
+        behavior: 'smooth'
+      });
+    });
+
+    rightArrow.addEventListener('click', () => {
+      dealsTrack.scrollBy({
+        left: 280,
+        behavior: 'smooth'
+      });
+    });
+
+    // Show/hide arrows based on scroll position
+    function updateArrows() {
+      const scrollLeft = dealsTrack.scrollLeft;
+      const maxScroll = dealsTrack.scrollWidth - dealsTrack.clientWidth;
+
+      leftArrow.style.opacity = scrollLeft > 0 ? '1' : '0.3';
+      leftArrow.style.pointerEvents = scrollLeft > 0 ? 'auto' : 'none';
+
+      rightArrow.style.opacity = scrollLeft < maxScroll - 5 ? '1' : '0.3';
+      rightArrow.style.pointerEvents = scrollLeft < maxScroll - 5 ? 'auto' : 'none';
+    }
+
+    dealsTrack.addEventListener('scroll', updateArrows);
+    updateArrows();
+    window.addEventListener('resize', updateArrows);
+  }
+}
+
+// Add to Cart functionality for deal cards
+const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+addToCartButtons.forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.preventDefault();
+    const card = button.closest('.deal-card');
+    const productName = card.querySelector('h3').textContent;
+    
+    // Visual feedback
+    button.innerHTML = '<i class="fas fa-check"></i>';
+    button.style.background = '#22c55e';
+    
+    setTimeout(() => {
+      button.innerHTML = '<i class="fas fa-cart-plus"></i>';
+      button.style.background = '';
+    }, 1500);
+
+    // Update cart count
+    const cartCount = document.getElementById('cartCount');
+    if (cartCount) {
+      const currentCount = parseInt(cartCount.textContent) || 0;
+      cartCount.textContent = currentCount + 1;
+    }
+
+    console.log(`Added "" to cart`);
+  });
+});

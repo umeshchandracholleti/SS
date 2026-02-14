@@ -819,3 +819,508 @@ body {
     flex: 0 0 80vw;
   }
 }
+
+/* Trust Badges Bar */
+.trust-badges-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  background: #fff;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--brand-border);
+  flex-wrap: wrap;
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-ink);
+}
+
+.trust-badge i {
+  color: var(--brand-orange);
+  font-size: 18px;
+}
+
+/* GST Banner */
+.gst-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #fff4e6 0%, #ffe9cc 100%);
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--brand-border);
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.gst-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.gst-content i {
+  font-size: 32px;
+  color: var(--brand-orange);
+}
+
+.gst-content strong {
+  display: block;
+  font-size: 16px;
+  color: var(--brand-ink);
+  margin-bottom: 4px;
+}
+
+.gst-content p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--brand-muted);
+}
+
+.payment-methods {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.payment-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-muted);
+}
+
+.payment-icons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.payment-icons i {
+  font-size: 24px;
+  color: var(--brand-ink);
+  opacity: 0.7;
+}
+
+/* Deal of the Day Section */
+.deals-section {
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 24px;
+}
+
+.deals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.deals-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.deals-title i {
+  color: var(--brand-orange);
+  font-size: 24px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.deals-title h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.deal-timer {
+  background: #fff0e4;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--brand-muted);
+}
+
+.deal-timer strong {
+  color: var(--brand-orange);
+  font-weight: 700;
+}
+
+.view-all-link {
+  color: var(--brand-orange);
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deals-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.deals-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 8px;
+}
+
+.deals-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--brand-border);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: var(--shadow-tight);
+  color: var(--brand-ink);
+  font-size: 16px;
+}
+
+.carousel-arrow:hover {
+  background: #fff;
+}
+
+.carousel-arrow.left {
+  left: -8px;
+}
+
+.carousel-arrow.right {
+  right: -8px;
+}
+
+.deal-card {
+  flex: 0 0 240px;
+  background: #f9f9f9;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--brand-border);
+}
+
+.deal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+
+.deal-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #ff3b3b;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 5;
+}
+
+.deal-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.deal-info {
+  padding: 16px;
+}
+
+.deal-info h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--brand-ink);
+  min-height: 40px;
+}
+
+.deal-pricing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.deal-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--brand-orange);
+}
+
+.deal-original {
+  font-size: 14px;
+  color: var(--brand-muted);
+  text-decoration: line-through;
+}
+
+.deal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deal-stock {
+  font-size: 12px;
+  color: #22c55e;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.add-to-cart-btn {
+  background: var(--brand-orange);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-to-cart-btn:hover {
+  background: #e64e00;
+}
+
+/* Popular Categories Section */
+.popular-categories {
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 24px;
+}
+
+.popular-categories h2 {
+  margin: 0 0 20px;
+  font-size: 24px;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.category-item {
+  background: var(--accent-sand);
+  border-radius: 16px;
+  padding: 24px 16px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--brand-ink);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid transparent;
+}
+
+.category-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+  background: #fff;
+  border-color: var(--brand-orange);
+}
+
+.category-item i {
+  font-size: 36px;
+  color: var(--brand-orange);
+}
+
+.category-item span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* B2B Benefits Section */
+.b2b-benefits {
+  background: linear-gradient(135deg, #fff 0%, var(--accent-sand) 100%);
+  border-radius: 24px;
+  padding: 32px 24px;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 24px;
+}
+
+.b2b-benefits h2 {
+  text-align: center;
+  margin: 0 0 32px;
+  font-size: 28px;
+  color: var(--brand-ink);
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.benefit-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: var(--shadow-tight);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.benefit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+
+.benefit-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--brand-orange) 0%, #ff8c4a 100%);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+}
+
+.benefit-icon i {
+  font-size: 28px;
+  color: #fff;
+}
+
+.benefit-card h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  color: var(--brand-ink);
+}
+
+.benefit-card p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--brand-muted);
+  line-height: 1.6;
+}
+
+/* Enhanced Trust Row */
+.trust-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: var(--shadow-tight);
+  margin-bottom: 24px;
+}
+
+.trust-item {
+  text-align: center;
+  padding: 16px;
+}
+
+.trust-item i {
+  font-size: 40px;
+  color: var(--brand-orange);
+  margin-bottom: 12px;
+}
+
+.trust-item h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: var(--brand-ink);
+}
+
+.trust-item p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--brand-muted);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .gst-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .trust-badges-bar {
+    gap: 16px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .trust-badges-bar {
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .trust-badge {
+    font-size: 11px;
+  }
+
+  .trust-badge i {
+    font-size: 14px;
+  }
+
+  .deals-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .carousel-arrow {
+    display: none;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .b2b-benefits h2 {
+    font-size: 22px;
+  }
+
+  .trust-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

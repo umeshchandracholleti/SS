@@ -14,6 +14,8 @@ This folder contains end-to-end documentation for the Sai Scientifics front-end 
 - Payment processing integration and webhook handling.
 - Production-ready email/WhatsApp notifications.
 - A unified React experience (if the goal is a single SPA rather than mixed static pages).
+- Real product catalog integration (currently using mock data).
+- Trust signals and competitive B2B features.
 
 ## Where to start
 - Setup and local run: SETUP.md
@@ -27,9 +29,11 @@ This folder contains end-to-end documentation for the Sai Scientifics front-end 
 - Release checklist: RELEASE_CHECKLIST.md
 - Security notes: SECURITY.md
 - Admin dashboard: ADMIN.md
+- **Competitive analysis: WEBSITE_COMPARISON.md** ⭐ NEW
 
 ## Ownership and assumptions
 Unless otherwise specified, this documentation assumes:
 - Static HTML and Vite React app both remain supported.
 - PostgreSQL is the primary data store.
-- The backend is not yet implemented and must be built.
+- The backend is implemented with Node.js + Express.
+- Target market is B2B customers (growing teams and businesses).
