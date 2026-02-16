@@ -2,16 +2,16 @@
 
 // Authentication Check
 document.addEventListener('DOMContentLoaded', () => {
-  const token = localStorage.getItem('customerToken');
-  const userName = localStorage.getItem('customerName');
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
   
-  if (!token || !userName) {
+  if (!token || !user.fullName) {
     window.location.href = 'Login.html';
     return;
   }
 
   // Initialize dashboard
-  initializeDashboard(userName);
+  initializeDashboard(user);
   loadCartCount();
   setupNavigation();
   setupLogout();
@@ -19,16 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Initialize Dashboard
-function initializeDashboard(userName) {
+function initializeDashboard(user) {
   // Update user info in header
   const userNameEl = document.getElementById('userName');
   if (userNameEl) {
-    userNameEl.textContent = userName;
+    userNameEl.textContent = user.fullName;
   }
 
   // Update profile info
-  document.getElementById('profileName').textContent = userName;
-  document.getElementById('profileEmail').textContent = localStorage.getItem('customerEmail') || 'user@example.com';
+  document.getElementById('profileName').textContent = user.fullName;
+  document.getElementById('profileEmail').textContent = user.email || 'user@example.com';
 
   // Show user section, hide auth section
   const userSection = document.getElementById('userSection');
@@ -39,11 +39,22 @@ function initializeDashboard(userName) {
 
 // Load Cart Count
 function loadCartCount() {
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const cartCount = document.getElementById('cartCount');
-  if (cartCount) {
-    cartCount.textContent = cart.length;
-  }
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  fetch('http://localhost:4000/api/cart', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then(res => res.json())
+    .then(cart => {
+      const cartCount = document.getElementById('cartCount');
+      if (cartCount) {
+        const count = Array.isArray(cart) ? cart.length : 0;
+        cartCount.textContent = count;
+      }
+    })
+    .catch(err => console.error('Failed to load cart count:', err));
 }
 
 // Navigation Setup
@@ -93,9 +104,8 @@ function setupLogout() {
     if (btn) {
       btn.addEventListener('click', () => {
         if (confirm('Are you sure you want to logout?')) {
-          localStorage.removeItem('customerToken');
-          localStorage.removeItem('customerName');
-          localStorage.removeItem('customerEmail');
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
           window.location.href = 'Login.html';
         }
       });
@@ -138,164 +148,146 @@ function loadDashboardData() {
   loadOverview();
 }
 
-// Mock Orders Data
-const mockOrders = [
-  {
-    id: 'ORD-2026-001',
-    date: '2026-02-10',
-    status: 'delivered',
-    total: 12450,
-    items: [
-      { name: '3M Safety Helmet with Face Shield', qty: 5, price: 2490, image: 'https://via.placeholder.com/80' }
-    ],
-    tracking: 'TRK123456789'
-  },
-  {
-    id: 'ORD-2026-002',
-    date: '2026-02-12',
-    status: 'shipped',
-    total: 8960,
-    items: [
-      { name: 'Bosch Professional Power Drill Kit', qty: 2, price: 4480, image: 'https://via.placeholder.com/80' }
-    ],
-    tracking: 'TRK987654321'
-  },
-  {
-    id: 'ORD-2026-003',
-    date: '2026-02-13',
-    status: 'processing',
-    total: 15680,
-    items: [
-      { name: 'DeWalt Cordless Impact Driver Set', qty: 4, price: 3920, image: 'https://via.placeholder.com/80' }
-    ],
-    tracking: null
-  },
-  {
-    id: 'ORD-2026-004',
-    date: '2026-02-08',
-    status: 'delivered',
-    total: 6780,
-    items: [
-      { name: 'Honeywell N95 Respirator Masks (Box of 50)', qty: 3, price: 2260, image: 'https://via.placeholder.com/80' }
-    ],
-    tracking: 'TRK456789123'
-  },
-  {
-    id: 'ORD-2026-005',
-    date: '2026-02-05',
-    status: 'delivered',
-    total: 3450,
-    items: [
-      { name: 'HP Laserjet Pro Printer', qty: 1, price: 3450, image: 'https://via.placeholder.com/80' }
-    ],
-    tracking: 'TRK789123456'
-  }
-];
+// Mock Orders Data (kept for reference, actual data from API)
+let ordersData = [];
 
 // Load Overview
-function loadOverview() {
-  // Load recent orders
-  const recentOrdersList = document.getElementById('recentOrdersList');
-  if (recentOrdersList) {
-    const recentOrders = mockOrders.slice(0, 3);
-    recentOrdersList.innerHTML = recentOrders.map(order => `
-      <div class="order-item">
-        <div class="order-info">
-          <span class="order-id">${order.id}</span>
-          <span class="order-date">${formatDate(order.date)}</span>
-        </div>
-        <span class="order-status ${order.status}">${capitalizeFirst(order.status)}</span>
-      </div>
-    `).join('');
+async function loadOverview() {
+  try {
+    // Load recent orders from API
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://localhost:4000/api/orders/history', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) throw new Error('Failed to load orders');
+    ordersData = await response.json();
+
+    const recentOrdersList = document.getElementById('recentOrdersList');
+    if (recentOrdersList) {
+      const recentOrders = ordersData.slice(0, 3);
+      if (recentOrders.length === 0) {
+        recentOrdersList.innerHTML = '<p style="text-align: center; color: #999;">No orders yet</p>';
+      } else {
+        recentOrdersList.innerHTML = recentOrders.map(order => `
+          <div class="order-item">
+            <div class="order-info">
+              <span class="order-id">${order.order_number}</span>
+              <span class="order-date">${formatDate(order.created_at)}</span>
+            </div>
+            <span class="order-status ${order.status}">${capitalizeFirst(order.status)}</span>
+          </div>
+        `).join('');
+      }
+    }
+  } catch (error) {
+    console.error('Error loading overview:', error);
   }
 }
 
 // Load All Orders
-function loadOrders() {
+async function loadOrders() {
   const allOrdersList = document.getElementById('allOrdersList');
   if (!allOrdersList) return;
 
-  let currentFilter = 'all';
+  try {
+    // Fetch orders from API
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://localhost:4000/api/orders/history', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
 
-  const renderOrders = (filter = 'all') => {
-    const filtered = filter === 'all' 
-      ? mockOrders 
-      : mockOrders.filter(order => order.status === filter);
+    if (!response.ok) throw new Error('Failed to load orders');
+    const orders = await response.json();
+    ordersData = orders;
 
-    if (filtered.length === 0) {
-      allOrdersList.innerHTML = `
-        <div class="empty-state">
-          <i class="fas fa-box-open"></i>
-          <p>No orders found</p>
-        </div>
-      `;
-      return;
-    }
+    let currentFilter = 'all';
 
-    allOrdersList.innerHTML = filtered.map(order => `
-      <div class="order-card">
-        <div class="order-header">
-          <div class="order-header-left">
-            <div class="order-header-item">
-              <label>Order ID</label>
-              <strong>${order.id}</strong>
-            </div>
-            <div class="order-header-item">
-              <label>Order Date</label>
-              <strong>${formatDate(order.date)}</strong>
-            </div>
-            <div class="order-header-item">
-              <label>Total</label>
-              <strong>₹${order.total.toLocaleString()}</strong>
-            </div>
+    const renderOrders = (filter = 'all') => {
+      const filtered = filter === 'all' 
+        ? orders
+        : orders.filter(order => order.status === filter);
+
+      if (filtered.length === 0) {
+        allOrdersList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <p>No orders found</p>
           </div>
-          <span class="order-status ${order.status}">${capitalizeFirst(order.status)}</span>
-        </div>
-        ${order.items.map(item => `
+        `;
+        return;
+      }
+
+      allOrdersList.innerHTML = filtered.map(order => `
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-header-left">
+              <div class="order-header-item">
+                <label>Order ID</label>
+                <strong>${order.order_number}</strong>
+              </div>
+              <div class="order-header-item">
+                <label>Order Date</label>
+                <strong>${formatDate(order.created_at)}</strong>
+              </div>
+              <div class="order-header-item">
+                <label>Total</label>
+                <strong>₹${order.total_amount.toLocaleString()}</strong>
+              </div>
+            </div>
+            <span class="order-status ${order.status}">${capitalizeFirst(order.status)}</span>
+          </div>
           <div class="order-body">
-            <img src="${item.image}" alt="${item.name}" class="order-product-image">
-            <div class="order-product-details">
-              <div class="order-product-name">${item.name}</div>
-              <div class="order-product-meta">Qty: ${item.qty}</div>
-              <div class="order-product-price">₹${item.price.toLocaleString()}</div>
+            <div class="order-address">
+              <strong>Delivery Address:</strong>
+              <p>${order.delivery_address}, ${order.city}, ${order.state} ${order.pincode}</p>
             </div>
           </div>
-        `).join('')}
-        <div class="order-footer">
-          <div class="order-actions">
-            ${order.tracking ? `
-              <a href="TrackOrder.html?tracking=${order.tracking}" class="secondary-btn">
+          <div class="order-footer">
+            <div class="order-actions">
+              <a href="TrackOrder.html?orderId=${order.id}" class="secondary-btn">
                 <i class="fas fa-shipping-fast"></i> Track Order
               </a>
-            ` : ''}
-            <button class="secondary-btn" onclick="downloadInvoice('${order.id}')">
-              <i class="fas fa-download"></i> Download Invoice
-            </button>
-            ${order.status === 'delivered' ? `
-              <button class="primary-btn" onclick="reorder('${order.id}')">
-                <i class="fas fa-redo"></i> Reorder
+              <button class="secondary-btn" onclick="downloadInvoice('${order.order_number}')">
+                <i class="fas fa-download"></i> Download Invoice
               </button>
-            ` : ''}
+              ${order.status === 'delivered' ? `
+                <button class="primary-btn" onclick="reorder('${order.id}')">
+                  <i class="fas fa-redo"></i> Reorder
+                </button>
+              ` : ''}
+            </div>
           </div>
         </div>
-      </div>
-    `).join('');
-  };
+      `).join('');
+    };
 
-  // Initial render
-  renderOrders();
+    // Initial render
+    renderOrders();
 
-  // Filter buttons
-  const filterButtons = document.querySelectorAll('.filter-btn');
-  filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter = btn.getAttribute('data-filter');
-      renderOrders(currentFilter);
+    // Filter buttons
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.getAttribute('data-filter');
+        renderOrders(currentFilter);
+      });
     });
-  });
-}
+  } catch (error) {
+    console.error('Error loading orders:', error);
+    allOrdersList.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Failed to load orders</p>
+      </div>
+    `;
+  }
 
 // Mock Addresses Data
 const mockAddresses = [

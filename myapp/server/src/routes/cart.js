@@ -1,126 +1,170 @@
 const express = require('express');
 const db = require('../db');
+const { authenticateToken, asyncHandler } = require('../middleware/auth');
+const { ValidationError, NotFoundError } = require('../middleware/errorHandler');
+const logger = require('../utils/logger');
 
 const router = express.Router();
 
-async function getCart(cartId) {
-  const cartResult = await db.query('SELECT id, status FROM cart WHERE id = $1', [cartId]);
-  if (!cartResult.rows.length) {
-    return null;
-  }
-
-  const itemsResult = await db.query(
-    `SELECT ci.id, ci.quantity, ci.unit_price, p.id AS product_id, p.name, p.description, p.image_url
-     FROM cart_item ci
-     JOIN product p ON p.id = ci.product_id
-     WHERE ci.cart_id = $1
-     ORDER BY ci.created_at`,
-    [cartId]
+/**
+ * GET /api/cart
+ * Get current user's cart
+ */
+router.get('/cart', authenticateToken, asyncHandler(async (req, res) => {
+  const result = await db.query(
+    `SELECT c.id, c.product_id, c.quantity, c.added_at,
+            p.name, p.price, p.image_url, c.notes
+     FROM cart c
+     JOIN product p ON p.id = c.product_id
+     WHERE c.customer_id = $1
+     ORDER BY c.added_at DESC`,
+    [req.user.id]
   );
 
-  return {
-    id: cartResult.rows[0].id,
-    status: cartResult.rows[0].status,
-    items: itemsResult.rows
-  };
-}
+  res.json(result.rows);
+}));
 
-router.post('/cart/guest', async (req, res, next) => {
-  try {
-    const { seed } = req.query;
-    const cartResult = await db.query('INSERT INTO cart DEFAULT VALUES RETURNING id');
-    const cartId = cartResult.rows[0].id;
+/**
+ * POST /api/cart/add
+ * Add product to cart
+ */
+router.post('/cart/add', authenticateToken, asyncHandler(async (req, res) => {
+  const { productId, quantity } = req.body;
 
-    if (seed === 'true') {
-      const products = await db.query('SELECT id, price FROM product ORDER BY name LIMIT 3');
-      for (const product of products.rows) {
-        await db.query(
-          'INSERT INTO cart_item (cart_id, product_id, quantity, unit_price) VALUES ($1, $2, $3, $4)',
-          [cartId, product.id, 1, product.price]
-        );
-      }
-    }
-
-    const cart = await getCart(cartId);
-    res.json(cart);
-  } catch (err) {
-    next(err);
+  // Validate input
+  if (!productId || !quantity) {
+    throw new ValidationError('Product ID and quantity required');
   }
-});
 
-router.get('/cart/:id', async (req, res, next) => {
-  try {
-    const cart = await getCart(req.params.id);
-    if (!cart) {
-      return res.status(404).json({ error: 'Cart not found' });
-    }
-    res.json(cart);
-  } catch (err) {
-    next(err);
+  if (quantity < 1 || quantity > 10000) {
+    throw new ValidationError('Quantity must be between 1 and 10000');
   }
-});
 
-router.post('/cart/:id/items', async (req, res, next) => {
-  try {
-    const { productId, quantity } = req.body;
-    if (!productId || !quantity) {
-      return res.status(400).json({ error: 'productId and quantity required' });
-    }
+  // Check if product exists
+  const productResult = await db.query(
+    'SELECT id, name, price FROM product WHERE id = $1 AND is_active = TRUE',
+    [productId]
+  );
 
-    const productResult = await db.query('SELECT price FROM product WHERE id = $1', [productId]);
-    if (!productResult.rows.length) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
+  if (productResult.rows.length === 0) {
+    throw new NotFoundError('Product');
+  }
 
-    const existing = await db.query(
-      'SELECT id, quantity FROM cart_item WHERE cart_id = $1 AND product_id = $2',
-      [req.params.id, productId]
+  const product = productResult.rows[0];
+
+  // Check if already in cart
+  const existingCart = await db.query(
+    'SELECT id, quantity FROM cart WHERE customer_id = $1 AND product_id = $2',
+    [req.user.id, productId]
+  );
+
+  let result;
+  if (existingCart.rows.length > 0) {
+    // Update quantity
+    const newQuantity = existingCart.rows[0].quantity + parseInt(quantity);
+    result = await db.query(
+      'UPDATE cart SET quantity = $1, added_at = NOW() WHERE id = $2 RETURNING id, product_id, quantity',
+      [newQuantity, existingCart.rows[0].id]
     );
-
-    if (existing.rows.length) {
-      const nextQty = existing.rows[0].quantity + Number(quantity);
-      await db.query('UPDATE cart_item SET quantity = $1 WHERE id = $2', [nextQty, existing.rows[0].id]);
-    } else {
-      await db.query(
-        'INSERT INTO cart_item (cart_id, product_id, quantity, unit_price) VALUES ($1, $2, $3, $4)',
-        [req.params.id, productId, Number(quantity), productResult.rows[0].price]
-      );
-    }
-
-    const cart = await getCart(req.params.id);
-    res.json(cart);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.patch('/cart/:id/items/:itemId', async (req, res, next) => {
-  try {
-    const { quantity } = req.body;
-    if (!quantity || Number(quantity) < 1) {
-      return res.status(400).json({ error: 'quantity must be >= 1' });
-    }
-
-    await db.query(
-      'UPDATE cart_item SET quantity = $1 WHERE id = $2 AND cart_id = $3',
-      [Number(quantity), req.params.itemId, req.params.id]
+  } else {
+    // Add new item
+    result = await db.query(
+      'INSERT INTO cart (customer_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING id, product_id, quantity',
+      [req.user.id, productId, quantity]
     );
-
-    const cart = await getCart(req.params.id);
-    res.json(cart);
-  } catch (err) {
-    next(err);
   }
-});
 
-router.delete('/cart/:id/items/:itemId', async (req, res, next) => {
-  try {
-    await db.query('DELETE FROM cart_item WHERE id = $1 AND cart_id = $2', [req.params.itemId, req.params.id]);
-    const cart = await getCart(req.params.id);
-    res.json(cart);
-  } catch (err) {
-    next(err);
+  logger.info('Product added to cart', {
+    customerId: req.user.id,
+    productId,
+    quantity,
+    productName: product.name
+  });
+
+  res.status(201).json({
+    id: result.rows[0].id,
+    productId: result.rows[0].product_id,
+    quantity: result.rows[0].quantity
+  });
+}));
+
+/**
+ * PUT /api/cart/:cartItemId
+ * Update cart item quantity
+ */
+router.put('/cart/:cartItemId', authenticateToken, asyncHandler(async (req, res) => {
+  const { cartItemId } = req.params;
+  const { quantity } = req.body;
+
+  if (!quantity) {
+    throw new ValidationError('Quantity required');
   }
-});
+
+  if (quantity < 1 || quantity > 10000) {
+    throw new ValidationError('Quantity must be between 1 and 10000');
+  }
+
+  // Verify item belongs to user
+  const cartItem = await db.query(
+    'SELECT id FROM cart WHERE id = $1 AND customer_id = $2',
+    [cartItemId, req.user.id]
+  );
+
+  if (cartItem.rows.length === 0) {
+    throw new NotFoundError('Cart item');
+  }
+
+  const result = await db.query(
+    'UPDATE cart SET quantity = $1, added_at = NOW() WHERE id = $2 RETURNING id, product_id, quantity',
+    [quantity, cartItemId]
+  );
+
+  logger.info('Cart item updated', {
+    customerId: req.user.id,
+    cartItemId,
+    newQuantity: quantity
+  });
+
+  res.json({ id: result.rows[0].id, quantity: result.rows[0].quantity });
+}));
+
+/**
+ * DELETE /api/cart/:cartItemId
+ * Remove item from cart
+ */
+router.delete('/cart/:cartItemId', authenticateToken, asyncHandler(async (req, res) => {
+  const { cartItemId } = req.params;
+
+  // Verify item belongs to user
+  const cartItem = await db.query(
+    'SELECT id FROM cart WHERE id = $1 AND customer_id = $2',
+    [cartItemId, req.user.id]
+  );
+
+  if (cartItem.rows.length === 0) {
+    throw new NotFoundError('Cart item');
+  }
+
+  await db.query('DELETE FROM cart WHERE id = $1', [cartItemId]);
+
+  logger.info('Cart item removed', {
+    customerId: req.user.id,
+    cartItemId
+  });
+
+  res.json({ message: 'Item removed from cart' });
+}));
+
+/**
+ * DELETE /api/cart
+ * Clear entire cart
+ */
+router.delete('/cart', authenticateToken, asyncHandler(async (req, res) => {
+  await db.query('DELETE FROM cart WHERE customer_id = $1', [req.user.id]);
+
+  logger.info('Cart cleared', { customerId: req.user.id });
+
+  res.json({ message: 'Cart cleared' });
+}));
 
 module.exports = router;

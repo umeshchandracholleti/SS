@@ -1,4 +1,3 @@
-let cartId = localStorage.getItem('cartId');
 let cartItems = [];
 
 const TAX_RATE = 0.18; // 18% tax
@@ -44,39 +43,49 @@ function setModalState(modal, isOpen) {
   }
 }
 
-async function ensureCart(seed = false) {
-  if (cartId) {
-    return cartId;
-  }
-
-  const cart = await window.apiFetch(`/cart/guest?seed=${seed ? 'true' : 'false'}`, {
-    method: 'POST'
-  });
-  cartId = cart.id;
-  localStorage.setItem('cartId', cartId);
-  return cartId;
+function isAuthenticated() {
+  const token = localStorage.getItem('token');
+  return !!token;
 }
 
 async function loadCart() {
-  if (!cartId) {
-    await ensureCart(true);
+  if (!isAuthenticated()) {
+    cartItems = [];
+    return;
   }
 
-  const cart = await window.apiFetch(`/cart/${cartId}`);
-  cartItems = cart.items.map((item) => ({
-    id: item.id,
-    productId: item.product_id,
-    name: item.name,
-    description: item.description,
-    image: item.image_url,
-    price: Number(item.unit_price),
-    quantity: Number(item.quantity)
-  }));
+  try {
+    const cart = await fetch('http://localhost:4000/api/cart', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    }).then(res => res.json());
+
+    cartItems = cart.map((item) => ({
+      id: item.id,
+      productId: item.product_id,
+      name: item.name,
+      image: item.image_url,
+      price: Number(item.price),
+      quantity: Number(item.quantity)
+    }));
+  } catch (error) {
+    console.error('Failed to load cart:', error);
+    cartItems = [];
+  }
 }
 
 // Initialize cart
 async function initCart() {
   try {
+    if (!isAuthenticated()) {
+      emptyCart.innerHTML = '<p style="text-align: center; padding: 40px;">Please <a href="Login.html">log in</a> to view your cart</p>';
+      emptyCart.classList.add('show');
+      cartItemsContainer.style.display = 'none';
+      checkoutBtn.disabled = true;
+      return;
+    }
+
     await loadCart();
     renderCart();
     updateSummary();
@@ -124,14 +133,24 @@ function renderCart() {
 }
 
 async function updateQuantity(itemId, nextQty) {
-  await window.apiFetch(`/cart/${cartId}/items/${itemId}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ quantity: nextQty })
-  });
-  await loadCart();
-  renderCart();
-  updateSummary();
+  try {
+    await fetch(`http://localhost:4000/api/cart/${itemId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({ quantity: nextQty })
+    }).then(res => {
+      if (!res.ok) throw new Error('Failed to update quantity');
+      return res.json();
+    });
+    await loadCart();
+    renderCart();
+    updateSummary();
+  } catch (error) {
+    notify(error.message, 'error');
+  }
 }
 
 // Increase quantity
@@ -155,9 +174,13 @@ function decreaseQuantity(itemId) {
 // Remove item
 // eslint-disable-next-line no-unused-vars
 function removeItem(itemId) {
-  window.apiFetch(`/cart/${cartId}/items/${itemId}`, {
-    method: 'DELETE'
-  }).then(async () => {
+  fetch(`http://localhost:4000/api/cart/${itemId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+  }).then(async (res) => {
+    if (!res.ok) throw new Error('Failed to remove item');
     await loadCart();
     renderCart();
     updateSummary();
@@ -261,6 +284,11 @@ document.addEventListener('keydown', (e) => {
 checkoutForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  if (!isAuthenticated()) {
+    notify('Please log in to place an order', 'error');
+    return;
+  }
+
   const formData = new FormData(checkoutForm);
   const data = Object.fromEntries(formData);
 
@@ -271,21 +299,22 @@ checkoutForm.addEventListener('submit', async (e) => {
 
   // Create order
   try {
-    const response = await window.apiFetch('/orders', {
+    const response = await fetch('http://localhost:4000/api/orders/create', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
       body: JSON.stringify({
-        cartId: cartId,
-        customerName: data.fullName,
-        email: data.email,
-        phone: data.phone,
         addressLine: data.address,
         city: data.city,
         state: data.state,
         pincode: data.pincode,
-        paymentMethod: data.paymentMethod,
-        discount: discountAmount
+        paymentMethod: data.paymentMethod
       })
+    }).then(res => {
+      if (!res.ok) throw new Error('Failed to create order');
+      return res.json();
     });
 
     notify('Order placed successfully. Check your email for confirmation.', 'success');
@@ -297,9 +326,7 @@ checkoutForm.addEventListener('submit', async (e) => {
     applyPromoBtn.textContent = 'Apply';
     discountAmount = 0;
 
-    localStorage.removeItem('cartId');
-    cartId = null;
-    await initCart();
+    await loadCart();
   } catch (error) {
     notify(error.message, 'error');
   }
