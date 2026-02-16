@@ -288,6 +288,7 @@ async function loadOrders() {
       </div>
     `;
   }
+}
 
 // Mock Addresses Data
 const mockAddresses = [

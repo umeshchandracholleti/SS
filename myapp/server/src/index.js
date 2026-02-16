@@ -25,6 +25,7 @@ const {
 const catalogRoutes = require('./routes/catalog');
 const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/orders');
+const paymentRoutes = require('./routes/payment');
 const rfqRoutes = require('./routes/rfq');
 const creditRoutes = require('./routes/credit');
 const reviewRoutes = require('./routes/reviews');
@@ -89,6 +90,7 @@ app.use('/api', authRoutes);      // Auth routes (no auth required)
 app.use('/api', catalogRoutes);   // Catalog routes (public/protected)
 app.use('/api', cartRoutes);      // Cart routes (protected)
 app.use('/api', orderRoutes);     // Order routes (protected)
+app.use('/api', paymentRoutes);   // Payment routes (Razorpay integration)
 app.use('/api', rfqRoutes);       // RFQ routes (protected)
 app.use('/api', creditRoutes);    // Credit routes (protected)
 app.use('/api', reviewRoutes);    // Review routes (protected)

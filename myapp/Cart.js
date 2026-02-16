@@ -317,16 +317,12 @@ checkoutForm.addEventListener('submit', async (e) => {
       return res.json();
     });
 
-    notify('Order placed successfully. Check your email for confirmation.', 'success');
-    document.getElementById('orderId').textContent = response.orderNumber;
-    setModalState(checkoutModal, false);
-    setModalState(successModal, true);
-    checkoutForm.reset();
-    applyPromoBtn.disabled = false;
-    applyPromoBtn.textContent = 'Apply';
-    discountAmount = 0;
-
-    await loadCart();
+    notify('Order created! Redirecting to payment...', 'success');
+    
+    // Redirect to payment page
+    setTimeout(() => {
+      window.location.href = `Payment.html?orderId=${response.orderId}`;
+    }, 1500);
   } catch (error) {
     notify(error.message, 'error');
   }
