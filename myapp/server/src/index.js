@@ -33,6 +33,7 @@ const supportRoutes = require('./routes/support');
 const grievanceRoutes = require('./routes/grievances');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
+const notificationRoutes = require('./routes/notifications');
 
 // Handle uncaught exceptions and unhandled rejections
 handleUncaughtException();
@@ -97,6 +98,7 @@ app.use('/api', reviewRoutes);    // Review routes (protected)
 app.use('/api', supportRoutes);   // Support routes (public/protected)
 app.use('/api', grievanceRoutes); // Grievance routes (protected)
 app.use('/api', adminRoutes);     // Admin routes (admin only)
+app.use('/api/notifications', notificationRoutes); // Notification routes (Phase 5)
 
 // 404 handler (must be after all routes)
 app.use(notFoundHandler);
