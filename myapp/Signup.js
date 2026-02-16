@@ -13,8 +13,14 @@ function validatePhone(phone) {
 }
 
 function validatePassword(password) {
-  if (password.length < 6) {
-    return 'Password must be at least 6 characters';
+  if (password.length < 8) {
+    return 'Password must be at least 8 characters';
+  }
+  if (!/[A-Z]/.test(password)) {
+    return 'Password must contain at least one uppercase letter';
+  }
+  if (!/[a-z]/.test(password)) {
+    return 'Password must contain at least one lowercase letter';
   }
   if (!/[0-9]/.test(password)) {
     return 'Password must contain at least one number';
@@ -71,8 +77,13 @@ signupForm.addEventListener('submit', async (event) => {
       })
     });
 
+    // Store JWT token and user info
     localStorage.setItem('customerToken', response.token);
-    localStorage.setItem('customerName', response.fullName);
+    localStorage.setItem('customerName', response.user.fullName);
+    localStorage.setItem('customerEmail', response.user.email);
+    localStorage.setItem('customerId', response.user.id);
+    localStorage.setItem('userRole', response.user.role || 'customer');
+    
     setStatus('✓ Account created successfully! Redirecting...', false);
     
     setTimeout(() => {

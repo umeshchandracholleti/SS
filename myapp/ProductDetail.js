@@ -40,6 +40,52 @@ if (logoutBtn) {
 
 checkAuthState();
 
+// Get product ID from URL
+function getProductIdFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('id');
+}
+
+// Load product details from API
+async function loadProductDetails() {
+  const productId = getProductIdFromURL();
+  
+  if (!productId) {
+    console.error('No product ID in URL');
+    return;
+  }
+
+  try {
+    const product = await window.apiFetch(`/catalog/products/${productId}`);
+    
+    // Update page with product data
+    document.querySelector('.product-title').textContent = product.name;
+    document.querySelector('.product-description').textContent = product.description || '';
+    document.querySelector('.product-brand').textContent = product.category_name || 'Sai Scientifics';
+    document.querySelector('.product-price').textContent = `₹${parseFloat(product.price).toLocaleString('en-IN')}`;
+    document.querySelector('.product-original-price').textContent = `₹${Math.round(parseFloat(product.price) * 1.4).toLocaleString('en-IN')}`;
+    
+    // Update images
+    const mainImage = document.getElementById('mainImage');
+    if (product.image_url) {
+      mainImage.src = product.image_url.replace('w=600&h=600', 'w=600&h=600');
+    }
+    
+    // Update category breadcrumb if present
+    const categoryBreadcrumb = document.querySelector('.category-breadcrumb');
+    if (categoryBreadcrumb) {
+      categoryBreadcrumb.textContent = product.category_name || 'Category';
+    }
+    
+    console.log('Product details loaded:', product);
+  } catch (error) {
+    console.error('Failed to load product details:', error);
+  }
+}
+
+// Load product details when page loads
+loadProductDetails();
+
 // Image gallery
 const mainImage = document.getElementById('mainImage');
 const thumbnails = document.querySelectorAll('.thumbnail');

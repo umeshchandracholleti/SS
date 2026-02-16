@@ -37,8 +37,13 @@ loginForm.addEventListener('submit', async (event) => {
       })
     });
 
+    // Store JWT token and user info
     localStorage.setItem('customerToken', response.token);
-    localStorage.setItem('customerName', response.fullName);
+    localStorage.setItem('customerName', response.user.fullName);
+    localStorage.setItem('customerEmail', response.user.email);
+    localStorage.setItem('customerId', response.user.id);
+    localStorage.setItem('userRole', response.user.role || 'customer');
+    
     setStatus('✓ Signed in successfully! Redirecting...', false);
     
     setTimeout(() => {

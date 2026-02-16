@@ -40,8 +40,47 @@ if (logoutBtn) {
 
 checkAuthState();
 
-// Mock product data (simulating Industry Buying's catalog)
-const mockProducts = [
+// Fetch products from backend API
+let allProducts = [];
+let filteredProducts = [];
+
+// Load products from API
+async function loadProductsFromAPI() {
+  try {
+    const products = await window.apiFetch('/catalog/products');
+    
+    // Transform API response to match expected format
+    // API returns: id, name, description, sku, price, image_url, category_name, category_slug
+    allProducts = products.map((product, index) => ({
+      id: product.id,
+      brand: product.category_name || 'Sai Scientifics', // Use category as brand or default
+      name: product.name,
+      price: parseFloat(product.price) || 0,
+      originalPrice: Math.round(parseFloat(product.price) * 1.4), // Estimate: add 40% markup for original price
+      discount: 30, // Default discount percentage (will be calculated from price data)
+      image: product.image_url || 'https://images.unsplash.com/photo-1572806365626-e0a39b593c2f?w=300&h=300&fit=crop',
+      category: product.category_slug || 'general',
+      inStock: true,
+      dispatch24hr: true,
+      rating: 4.5 + (Math.random() * 0.4), // Random rating between 4.5-4.9
+      reviews: Math.floor(Math.random() * 500) + 100 // Random reviews 100-600
+    }));
+    
+    filteredProducts = [...allProducts];
+    renderProducts();
+    renderPagination();
+    buildFilterLists();
+  } catch (error) {
+    console.error('Failed to load products from API:', error);
+    // Fallback to mock data if API fails
+    console.log('Using mock data as fallback');
+    useMockProducts();
+  }
+}
+
+// Fallback to mock products if API fails
+function useMockProducts() {
+  const mockProducts = [
   {
     id: 1,
     brand: '3M',
@@ -211,17 +250,22 @@ const mockProducts = [
     reviews: 167
   }
 ];
-
-// Duplicate products to simulate large catalog
-let allProducts = [];
-for (let i = 0; i < 8; i++) {
-  allProducts = allProducts.concat(mockProducts.map(p => ({ ...p, id: p.id + (i * 100) })));
+  
+  // Duplicate products to simulate large catalog
+  allProducts = [];
+  for (let i = 0; i < 8; i++) {
+    allProducts = allProducts.concat(mockProducts.map(p => ({ ...p, id: p.id + (i * 100) })));
+  }
+  
+  filteredProducts = [...allProducts];
+  renderProducts();
+  renderPagination();
+  buildFilterLists();
 }
 
 // State management
 let currentPage = 1;
 const productsPerPage = 24;
-let filteredProducts = [...allProducts];
 let activeFilters = {
   category: [],
   price: [],
@@ -236,7 +280,7 @@ function renderProductCard(product) {
   const dispatchBadge = product.dispatch24hr ? `<span class="badge dispatch">24hr Dispatch</span>` : '';
   
   return `
-    <article class="product-card" data-id="${product.id}">
+    <article class="product-card" data-id="${product.id}" onclick="if(!event.target.closest('button')) window.location.href='ProductDetail.html?id=${product.id}'" style="cursor: pointer;">
       <div class="product-badges">
         ${discountBadge}
         ${dispatchBadge}
@@ -592,6 +636,62 @@ document.getElementById('brandSearch').addEventListener('input', (e) => {
   });
 });
 
-// Initial render
-renderProducts();
-renderPagination();
+// Build filter lists dynamically from products
+function buildFilterLists() {
+  if (allProducts.length === 0) return;
+  
+  // Extract unique brands
+  const brands = [...new Set(allProducts.map(p => p.brand))].sort();
+  const brandOptions = document.getElementById('brandOptions');
+  if (brandOptions) {
+    brandOptions.innerHTML = brands.map(brand => `
+      <div class="filter-checkbox">
+        <input type="checkbox" name="brand" value="${brand.toLowerCase()}">
+        <span>${brand}</span>
+      </div>
+    `).join('');
+    
+    // Re-attach event listeners for new checkboxes
+    document.querySelectorAll('#brandOptions input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          if (!activeFilters.brand.includes(e.target.value)) {
+            activeFilters.brand.push(e.target.value);
+          }
+        } else {
+          activeFilters.brand = activeFilters.brand.filter(v => v !== e.target.value);
+        }
+        applyFilters();
+      });
+    });
+  }
+  
+  // Extract unique categories
+  const categories = [...new Set(allProducts.map(p => p.category))].sort();
+  const categoryOptions = document.getElementById('categoryOptions');
+  if (categoryOptions) {
+    categoryOptions.innerHTML = categories.map(category => `
+      <div class="filter-checkbox">
+        <input type="checkbox" name="category" value="${category}">
+        <span>${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+      </div>
+    `).join('');
+    
+    // Re-attach event listeners for new checkboxes
+    document.querySelectorAll('#categoryOptions input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          if (!activeFilters.category.includes(e.target.value)) {
+            activeFilters.category.push(e.target.value);
+          }
+        } else {
+          activeFilters.category = activeFilters.category.filter(v => v !== e.target.value);
+        }
+        applyFilters();
+      });
+    });
+  }
+}
+
+// Initial render - load products from API
+loadProductsFromAPI();
