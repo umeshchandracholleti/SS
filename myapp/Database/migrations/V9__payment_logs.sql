@@ -3,8 +3,8 @@
 
 CREATE TABLE IF NOT EXISTS payment_logs (
   id SERIAL PRIMARY KEY,
-  order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-  customer_id INTEGER NOT NULL REFERENCES customer_user(id) ON DELETE CASCADE,
+  order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  customer_id UUID NOT NULL REFERENCES customer_user(id) ON DELETE CASCADE,
   
   -- Razorpay Details
   razorpay_order_id VARCHAR(50) NOT NULL UNIQUE,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS payment_logs (
   razorpay_signature VARCHAR(255),
   
   -- Payment Information
-  amount_paise INTEGER NOT NULL COMMENT 'Amount in paise (divide by 100 for INR)',
+  amount NUMERIC(12, 2) NOT NULL,
   currency VARCHAR(3) DEFAULT 'INR',
   payment_method VARCHAR(50) DEFAULT 'razorpay', -- razorpay, credit_card, upi, etc.
   payment_status VARCHAR(20) NOT NULL DEFAULT 'pending', -- pending, success, failed, refunded
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS payment_logs (
   
   -- Refund Information
   refund_id VARCHAR(50),
-  refund_amount_paise INTEGER DEFAULT 0,
+  refund_amount NUMERIC(12, 2) DEFAULT 0,
   refund_status VARCHAR(20), -- pending, success, failed
   refund_reason VARCHAR(255),
   

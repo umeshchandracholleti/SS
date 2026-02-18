@@ -3,7 +3,7 @@
 
 CREATE TABLE IF NOT EXISTS notification_preferences (
   id SERIAL PRIMARY KEY,
-  customer_id INTEGER NOT NULL UNIQUE REFERENCES customer_user(id) ON DELETE CASCADE,
+  customer_id UUID NOT NULL UNIQUE REFERENCES customer_user(id) ON DELETE CASCADE,
   
   -- Email Preferences
   email_enabled BOOLEAN DEFAULT TRUE,
@@ -53,7 +53,7 @@ CREATE INDEX IF NOT EXISTS idx_notification_preferences_customer_id
 -- Notification history table
 CREATE TABLE IF NOT EXISTS notifications (
   id SERIAL PRIMARY KEY,
-  customer_id INTEGER NOT NULL REFERENCES customer_user(id) ON DELETE CASCADE,
+  customer_id UUID NOT NULL REFERENCES customer_user(id) ON DELETE CASCADE,
   
   -- Notification details
   notification_type VARCHAR(50) NOT NULL, -- 'order', 'shipment', 'delivery', 'promotion', etc.
@@ -132,7 +132,7 @@ CREATE INDEX IF NOT EXISTS idx_notification_templates_type
 -- Newsletter subscribers table
 CREATE TABLE IF NOT EXISTS newsletter_subscribers (
   id SERIAL PRIMARY KEY,
-  customer_id INTEGER UNIQUE REFERENCES customer_user(id) ON DELETE CASCADE,
+  customer_id UUID UNIQUE REFERENCES customer_user(id) ON DELETE CASCADE,
   email VARCHAR(255) NOT NULL UNIQUE,
   
   -- Subscription details
@@ -170,7 +170,7 @@ CREATE INDEX IF NOT EXISTS idx_newsletter_subscribers_status
 -- SMS gateway logs (for audit trail)
 CREATE TABLE IF NOT EXISTS sms_logs (
   id SERIAL PRIMARY KEY,
-  customer_id INTEGER REFERENCES customer_user(id) ON DELETE SET NULL,
+  customer_id UUID REFERENCES customer_user(id) ON DELETE SET NULL,
   
   -- Message details
   phone_number VARCHAR(20) NOT NULL,
@@ -205,7 +205,7 @@ CREATE INDEX IF NOT EXISTS idx_sms_logs_delivery_status
 -- Email gateway logs (for audit trail)
 CREATE TABLE IF NOT EXISTS email_logs (
   id SERIAL PRIMARY KEY,
-  customer_id INTEGER REFERENCES customer_user(id) ON DELETE SET NULL,
+  customer_id UUID REFERENCES customer_user(id) ON DELETE SET NULL,
   
   -- Email details
   recipient_email VARCHAR(255) NOT NULL,

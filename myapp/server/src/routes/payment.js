@@ -6,6 +6,10 @@ const { ValidationError, NotFoundError } = require('../middleware/errorHandler')
 const logger = require('../utils/logger');
 const razorpay = require('../utils/razorpay');
 const emailService = require('../utils/emailService');
+const emailServiceEnhanced = require('../utils/emailServiceEnhanced');
+const smsService = require('../utils/smsServiceTwilio');
+const pdfService = require('../utils/pdfService');
+const notificationPreferences = require('../utils/notificationPreferences');
 
 const router = express.Router();
 
@@ -96,9 +100,14 @@ router.post('/payment/verify', authenticateToken, asyncHandler(async (req, res) 
     throw new ValidationError('Payment signature verification failed');
   }
 
-  // Get order
+  // Get order with complete details
   const orderResult = await db.query(
-    `SELECT id, customer_id, order_number, total_amount FROM orders WHERE id = $1 AND customer_id = $2`,
+    `SELECT o.id, o.customer_id, o.order_number, o.total_amount, o.subtotal, o.gst_amount, 
+            o.shipping_cost, o.delivery_address, o.city, o.state, o.pincode, o.payment_method,
+            c.full_name, c.email, c.phone
+     FROM orders o
+     JOIN customer_user c ON c.id = o.customer_id
+     WHERE o.id = $1 AND o.customer_id = $2`,
     [orderId, req.user.id]
   );
 
@@ -107,6 +116,23 @@ router.post('/payment/verify', authenticateToken, asyncHandler(async (req, res) 
   }
 
   const order = orderResult.rows[0];
+
+  // Get order items with product details
+  const itemsResult = await db.query(
+    `SELECT oi.quantity, oi.unit_price, p.name as product_name, p.sku
+     FROM order_items oi
+     JOIN product p ON p.id = oi.product_id
+     WHERE oi.order_id = $1`,
+    [orderId]
+  );
+
+  const items = itemsResult.rows.map(item => ({
+    productName: item.product_name,
+    sku: item.sku,
+    quantity: item.quantity,
+    unitPrice: parseFloat(item.unit_price),
+    lineTotal: parseFloat(item.unit_price) * item.quantity
+  }));
 
   // Update order status to confirmed
   await db.query(
@@ -138,20 +164,133 @@ router.post('/payment/verify', authenticateToken, asyncHandler(async (req, res) 
     customerId: req.user.id
   });
 
-  // Send confirmation email
+  // ===== PHASE 4+5 INTEGRATION: Auto-trigger notifications =====
+  
+  // Check notification preferences
+  const preferences = await notificationPreferences.getPreferences(req.user.id);
+  
+  // 1. Send enhanced email confirmation with order details
+  if (await notificationPreferences.shouldNotify(req.user.id, 'order_confirmation', 'email')) {
+    try {
+      await emailServiceEnhanced.sendOrderConfirmation(
+        order.email,
+        {
+          orderNumber: order.order_number,
+          orderId: orderId,
+          totalAmount: parseFloat(order.total_amount),
+          subtotal: parseFloat(order.subtotal),
+          gst: parseFloat(order.gst_amount),
+          shipping: parseFloat(order.shipping_cost),
+          items: items,
+          customerName: order.full_name,
+          transactionId: razorpayPaymentId,
+          paymentMethod: order.payment_method,
+          deliveryAddress: {
+            line: order.delivery_address,
+            city: order.city,
+            state: order.state,
+            pincode: order.pincode
+          }
+        }
+      );
+      logger.info('Order confirmation email sent', { orderId, email: order.email });
+    } catch (emailError) {
+      logger.error('Enhanced email sending failed', { orderId, error: emailError.message });
+    }
+  }
+
+  // 2. Send SMS notification if phone number available
+  if (order.phone && await notificationPreferences.shouldNotify(req.user.id, 'order_confirmation', 'sms')) {
+    try {
+      const estimatedDelivery = new Date();
+      estimatedDelivery.setDate(estimatedDelivery.getDate() + 5); // 5 days estimate
+      
+      await smsService.sendOrderConfirmationSMS(
+        order.phone,
+        {
+          orderNumber: order.order_number,
+          totalAmount: parseFloat(order.total_amount).toFixed(2),
+          estimatedDelivery: estimatedDelivery.toLocaleDateString('en-IN', { 
+            day: 'numeric', 
+            month: 'short' 
+          })
+        }
+      );
+      logger.info('Order confirmation SMS sent', { orderId, phone: order.phone });
+    } catch (smsError) {
+      logger.error('SMS sending failed', { orderId, error: smsError.message });
+    }
+  }
+
+  // 3. Generate PDF invoice
   try {
-    await emailService.sendOrderConfirmation(
-      req.user.email,
-      {
-        orderNumber: order.order_number,
-        orderId: orderId,
-        totalAmount: order.total_amount,
-        transactionId: razorpayPaymentId
+    const invoiceData = {
+      orderId: orderId,
+      orderNumber: order.order_number,
+      orderDate: new Date(),
+      customer: {
+        name: order.full_name,
+        email: order.email,
+        phone: order.phone,
+        address: {
+          line: order.delivery_address,
+          city: order.city,
+          state: order.state,
+          pincode: order.pincode
+        }
+      },
+      items: items,
+      subtotal: parseFloat(order.subtotal),
+      gst: parseFloat(order.gst_amount),
+      shipping: parseFloat(order.shipping_cost),
+      total: parseFloat(order.total_amount),
+      payment: {
+        method: order.payment_method,
+        transactionId: razorpayPaymentId,
+        status: 'paid'
       }
+    };
+
+    await pdfService.generateInvoicePDF(invoiceData);
+    logger.info('Invoice PDF generated', { orderId, orderNumber: order.order_number });
+
+    // Email the invoice PDF
+    if (preferences && preferences.email_enabled) {
+      try {
+        const invoicePath = pdfService.getInvoicePath(orderId);
+        await emailServiceEnhanced.sendInvoiceEmail(
+          order.email,
+          {
+            customerName: order.full_name,
+            orderNumber: order.order_number,
+            totalAmount: parseFloat(order.total_amount),
+            invoicePath: invoicePath
+          }
+        );
+        logger.info('Invoice email sent', { orderId });
+      } catch (invoiceEmailError) {
+        logger.error('Invoice email failed', { orderId, error: invoiceEmailError.message });
+      }
+    }
+  } catch (pdfError) {
+    logger.error('PDF invoice generation failed', { orderId, error: pdfError.message });
+  }
+  
+  // Log notification sent to database
+  try {
+    await db.query(
+      `INSERT INTO notifications (customer_id, type, channel, status, metadata)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [
+        req.user.id,
+        'order_confirmation',
+        'email',
+        'sent',
+        JSON.stringify({ orderId, orderNumber: order.order_number })
+      ]
     );
-  } catch (emailError) {
-    logger.error('Email sending failed', { orderId, error: emailError.message });
-    // Continue even if email fails
+  } catch (notifLogError) {
+    logger.error('Failed to log notification', { error: notifLogError.message });
   }
 
   res.json({

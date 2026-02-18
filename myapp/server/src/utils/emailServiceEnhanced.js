@@ -525,6 +525,86 @@ async function sendPromotion(email, promoData) {
 }
 
 /**
+ * Send invoice email with PDF attachment
+ */
+async function sendInvoiceEmail(email, invoiceData) {
+  const { customerName, orderNumber, totalAmount, invoicePath } = invoiceData;
+  
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: #f9f9f9; padding: 20px; border-radius: 8px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .header h1 { margin: 0; font-size: 28px; }
+        .content { background: white; padding: 30px; border-radius: 0 0 8px 8px; }
+        .invoice-box { background: #f5f5f5; padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #667eea; }
+        .button { display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 10px 5px 10px 0; font-weight: bold; }
+        .footer { background: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #999; border-radius: 0 0 8px 8px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>📄 Invoice Ready</h1>
+          <p>Your order invoice is attached</p>
+        </div>
+        
+        <div class="content">
+          <p>Dear <strong>${customerName}</strong>,</p>
+          
+          <p>Thank you for your order! Your invoice is ready and attached to this email.</p>
+          
+          <div class="invoice-box">
+            <p><strong>Order Number:</strong> ${orderNumber}</p>
+            <p><strong>Total Amount:</strong> ₹${totalAmount.toFixed(2)}</p>
+            <p><strong>Invoice Status:</strong> <span style="color: #28a745; font-weight: bold;">PAID</span></p>
+          </div>
+          
+          <p>The invoice PDF is attached to this email. You can also download it from your order history on our website.</p>
+          
+          <p>If you have any questions or need assistance, please contact our support team.</p>
+          
+          <p>Best regards,<br><strong>Sai Scientifics Team</strong></p>
+        </div>
+        
+        <div class="footer">
+          <p>© 2026 Sai Scientifics. All rights reserved.</p>
+          <p>This is an automated message. Please do not reply to this email.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+  
+  try {
+    const mailOptions = {
+      from: process.env.EMAIL_FROM || 'Sai Scientifics <sales@saiscientifics.com>',
+      to: email,
+      subject: `Invoice for Order ${orderNumber}`,
+      html,
+      attachments: [
+        {
+          filename: `invoice-${orderNumber}.pdf`,
+          path: invoicePath
+        }
+      ]
+    };
+    
+    await transporter.sendMail(mailOptions);
+    
+    logger.info(`Invoice email sent to ${email} for order ${orderNumber}`);
+    return { success: true };
+  } catch (error) {
+    logger.error(`Failed to send invoice email: ${error.message}`);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
  * Test email connection
  */
 async function testConnection() {
@@ -544,6 +624,7 @@ module.exports = {
   sendDeliveryNotification,
   sendGrievanceResponse,
   sendPromotion,
+  sendInvoiceEmail,
   testConnection,
   transporter
 };
