@@ -64,8 +64,18 @@ app.use(requestLogger);
 const uploadDir = process.env.UPLOAD_DIR || 'uploads';
 app.use('/uploads', express.static(path.join(__dirname, '..', uploadDir)));
 
-// Health check endpoint with database status
-app.get('/api/health', async (req, res) => {
+// Health check endpoint (simple - doesn't require database)
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    uptime: process.uptime()
+  });
+});
+
+// Database health check endpoint
+app.get('/api/health/db', async (req, res) => {
   try {
     const dbHealth = await db.healthCheck();
     
@@ -76,7 +86,7 @@ app.get('/api/health', async (req, res) => {
       environment: process.env.NODE_ENV || 'development'
     });
   } catch (error) {
-    logger.error('Health check failed', { error: error.message });
+    logger.error('Database health check failed', { error: error.message });
     res.status(503).json({
       status: 'error',
       timestamp: new Date().toISOString(),
