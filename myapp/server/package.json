@@ -3,12 +3,37 @@
   "private": true,
   "version": "1.0.0",
   "type": "commonjs",
+  "description": "Sai Scientifics E-commerce API with Payment and Notifications",
+  "author": "Your Team",
+  "license": "MIT",
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
     "db:init": "node scripts/init-db.js",
     "db:migrate": "node scripts/migrate.js",
-    "db:seed": "node scripts/seed.js"
+    "db:seed": "node scripts/seed.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:e2e": "node scripts/test-phase4-5.js",
+    "lint": "eslint src/",
+    "build": "echo 'Build complete'",
+    "migrate": "powershell -ExecutionPolicy Bypass -File ../Database/migrations/migrate.ps1",
+    "analyze-queries": "node scripts/analyze-queries.js",
+    "add-indexes": "node scripts/add-indexes.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": ["/node_modules/"],
+    "testMatch": ["**/tests/**/*.test.js"],
+    "collectCoverageFrom": ["src/**/*.js"],
+    "coverageThresholds": {
+      "global": {
+        "branches": 50,
+        "functions": 50,
+        "lines": 50,
+        "statements": 50
+      }
+    }
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -23,6 +48,15 @@
     "pg": "^8.11.5",
     "razorpay": "^2.9.6",
     "twilio": "^5.12.2",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "eslint": "^8.54.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
