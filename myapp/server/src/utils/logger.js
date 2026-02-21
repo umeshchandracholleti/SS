@@ -2,10 +2,22 @@
 const path = require('path');
 const fs = require('fs');
 
-// Ensure logs directory exists
-const logsDir = path.join(__dirname, '../../logs');
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
+// Ensure logs directory exists (gracefully handle if it fails)
+let logsDir;
+let fileLoggingEnabled = false;
+
+try {
+  logsDir = path.join(__dirname, '../../logs');
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+  }
+  fileLoggingEnabled = true;
+} catch (error) {
+  // In production/containers, file logging might not be available
+  console.warn('⚠️  File logging disabled: Cannot create logs directory');
+  console.warn(`   Reason: ${error.message}`);
+  console.warn('   Logging to console only');
+  fileLoggingEnabled = false;
 }
 
 const LOG_LEVELS = {
@@ -17,8 +29,11 @@ const LOG_LEVELS = {
 
 class Logger {
   constructor() {
-    this.logFile = path.join(logsDir, 'app.log');
-    this.errorFile = path.join(logsDir, 'error.log');
+    this.fileLoggingEnabled = fileLoggingEnabled;
+    if (fileLoggingEnabled) {
+      this.logFile = path.join(logsDir, 'app.log');
+      this.errorFile = path.join(logsDir, 'error.log');
+    }
   }
 
   _formatMessage(level, message, meta = {}) {
@@ -28,10 +43,13 @@ class Logger {
   }
 
   _writeToFile(filename, message) {
+    if (!this.fileLoggingEnabled) return; // Skip if file logging disabled
+    
     try {
       fs.appendFileSync(filename, message);
     } catch (error) {
-      console.error('Failed to write to log file:', error);
+      // Silently fail - just log to console instead
+      console.error('Failed to write to log file:', error.message);
     }
   }
 
@@ -51,11 +69,13 @@ class Logger {
       console.log(`${colors[level]}${formattedMessage.trim()}${reset}`);
     }
     
-    // Write to file
-    this._writeToFile(this.logFile, formattedMessage);
+    // Write to file (only if file logging enabled)
+    if (this.fileLoggingEnabled && this.logFile) {
+      this._writeToFile(this.logFile, formattedMessage);
+    }
     
-    // Write errors to separate file
-    if (level === LOG_LEVELS.ERROR) {
+    // Write errors to separate file (only if file logging enabled)
+    if (this.fileLoggingEnabled && level === LOG_LEVELS.ERROR && this.errorFile) {
       this._writeToFile(this.errorFile, formattedMessage);
     }
   }
