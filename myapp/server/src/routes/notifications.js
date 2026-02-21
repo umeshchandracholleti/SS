@@ -11,8 +11,8 @@
 
 const express = require('express');
 const router = express.Router();
-const { auth, asyncHandler } = require('../middleware/auth');
-const { ValidationError, AppError } = require('../middleware/errorHandler');
+const { authenticateToken } = require('../middleware/auth');
+const { ValidationError, AppError, asyncHandler } = require('../middleware/errorHandler');
 const logger = require('../utils/logger');
 
 // Import notification services
@@ -31,7 +31,7 @@ const pool = new Pool({
  * GET /api/notifications/preferences
  * Get customer's notification preferences
  */
-router.get('/preferences', auth, asyncHandler(async (req, res) => {
+router.get('/preferences', authenticateToken, asyncHandler(async (req, res) => {
   const customerId = req.userId;
 
   const result = await notificationPreferences.getPreferences(customerId);
@@ -50,7 +50,7 @@ router.get('/preferences', auth, asyncHandler(async (req, res) => {
  * PUT /api/notifications/preferences
  * Update notification preferences
  */
-router.put('/preferences', auth, asyncHandler(async (req, res) => {
+router.put('/preferences', authenticateToken, asyncHandler(async (req, res) => {
   const customerId = req.userId;
   const updates = req.body;
 
@@ -78,7 +78,7 @@ router.put('/preferences', auth, asyncHandler(async (req, res) => {
  * PUT /api/notifications/preferences/all
  * Enable/disable all notifications at once
  */
-router.put('/preferences/all', auth, asyncHandler(async (req, res) => {
+router.put('/preferences/all', authenticateToken, asyncHandler(async (req, res) => {
   const customerId = req.userId;
   const { enabled } = req.body;
 
@@ -103,7 +103,7 @@ router.put('/preferences/all', auth, asyncHandler(async (req, res) => {
  * GET /api/notifications/summary
  * Get notification summary for dashboard
  */
-router.get('/summary', auth, asyncHandler(async (req, res) => {
+router.get('/summary', authenticateToken, asyncHandler(async (req, res) => {
   const customerId = req.userId;
 
   const result = await notificationPreferences.getNotificationSummary(customerId);
@@ -119,7 +119,7 @@ router.get('/summary', auth, asyncHandler(async (req, res) => {
  * POST /api/notifications/send-test
  * Send test notification (email/SMS/WhatsApp)
  */
-router.post('/send-test', auth, asyncHandler(async (req, res) => {
+router.post('/send-test', authenticateToken, asyncHandler(async (req, res) => {
   const customerId = req.userId;
   const { type = 'email' } = req.body; // 'email', 'sms', 'whatsapp'
 
@@ -188,7 +188,7 @@ router.post('/send-test', auth, asyncHandler(async (req, res) => {
  * POST /api/notifications/subscribe
  * Subscribe to newsletter
  */
-router.post('/subscribe', auth, asyncHandler(async (req, res) => {
+router.post('/subscribe', authenticateToken, asyncHandler(async (req, res) => {
   const customerId = req.userId;
 
   const result = await notificationPreferences.updatePreferences(customerId, {
@@ -211,7 +211,7 @@ router.post('/subscribe', auth, asyncHandler(async (req, res) => {
  * POST /api/notifications/unsubscribe
  * Unsubscribe from newsletter
  */
-router.post('/unsubscribe', auth, asyncHandler(async (req, res) => {
+router.post('/unsubscribe', authenticateToken, asyncHandler(async (req, res) => {
   const customerId = req.userId;
 
   const result = await notificationPreferences.updatePreferences(customerId, {
@@ -234,7 +234,7 @@ router.post('/unsubscribe', auth, asyncHandler(async (req, res) => {
  * GET /api/notifications/invoice/:orderId
  * Get invoice (download as PDF or JSON)
  */
-router.get('/invoice/:orderId', auth, asyncHandler(async (req, res) => {
+router.get('/invoice/:orderId', authenticateToken, asyncHandler(async (req, res) => {
   const { orderId } = req.params;
   const customerId = req.userId;
 
@@ -305,7 +305,7 @@ router.get('/invoice/:orderId', auth, asyncHandler(async (req, res) => {
  * POST /api/notifications/send-invoice/:orderId
  * Email invoice to customer
  */
-router.post('/send-invoice/:orderId', auth, asyncHandler(async (req, res) => {
+router.post('/send-invoice/:orderId', authenticateToken, asyncHandler(async (req, res) => {
   const { orderId } = req.params;
   const customerId = req.userId;
 
@@ -349,7 +349,7 @@ router.post('/send-invoice/:orderId', auth, asyncHandler(async (req, res) => {
  * GET /api/notifications/history
  * Get notification history
  */
-router.get('/history', auth, asyncHandler(async (req, res) => {
+router.get('/history', authenticateToken, asyncHandler(async (req, res) => {
   const customerId = req.userId;
   const limit = req.query.limit || 20;
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../db');
-const { authenticateToken, asyncHandler } = require('../middleware/auth');
-const { ValidationError, NotFoundError } = require('../middleware/errorHandler');
+const { authenticateToken } = require('../middleware/auth');
+const { ValidationError, NotFoundError, asyncHandler } = require('../middleware/errorHandler');
 const logger = require('../utils/logger');
 
 const router = express.Router();
