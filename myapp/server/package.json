@@ -17,7 +17,7 @@
     "test:e2e": "node scripts/test-phase4-5.js",
     "lint": "eslint src/",
     "build": "echo 'Build complete'",
-    "migrate": "powershell -ExecutionPolicy Bypass -File ../Database/migrations/migrate.ps1",
+    "migrate": "echo 'Migration skipped in production'",
     "analyze-queries": "node scripts/analyze-queries.js",
     "add-indexes": "node scripts/add-indexes.js"
   },
