@@ -3,13 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Submit your grievances and feedback to Sai Scientifics management. We respond within 24 hours to resolve your concerns.">
+  <meta name="theme-color" content="#ff5a00">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Write to Management - Sai Scientifics">
+  <meta property="og:description" content="Share issues with our products, services, or support. We respond within 24 hours.">
+  <meta property="og:type" content="website">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Write to Management - Sai Scientifics">
+  <meta name="twitter:description" content="Submit your grievances and feedback directly to management.">
+  
   <title>Write to Management - Sai Scientifics</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="base.css" />
   <link rel="stylesheet" href="grievance.css" />
 </head>
 <body>
   <nav class="navbar">
-    <a href="TopRowbanner.html" class="nav-link">Back to Home</a>
+    <a href="TopRowbanner.html" class="nav-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    <div class="nav-right">
+      <a href="HelpCentre.html" class="nav-link"><i class="fas fa-question-circle"></i> Help</a>
+      <a href="Dashboard.html" class="nav-link"><i class="fas fa-user"></i> My Account</a>
+    </div>
   </nav>
 
   <main class="grievance-page">
@@ -87,11 +106,20 @@
 
         <div class="form-footer">
           <p class="form-status" id="grievanceStatus" role="status"></p>
-          <button type="submit">Submit grievance</button>
+          <button type="submit"><i class="fas fa-paper-plane"></i> Submit grievance</button>
         </div>
       </form>
     </section>
   </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>
+      <strong>Sai Scientifics</strong>
+      <p>Procurement made simple for growing teams.</p>
+    </div>
+    <span>Support: sales@saiscientifics.com | +91 918275568</span>
+  </footer>
 
   <script src="api.js" defer></script>
   <script src="grievance.js" defer></script>
