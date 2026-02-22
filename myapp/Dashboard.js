@@ -593,27 +593,57 @@ function capitalizeFirst(str) {
 }
 
 function showNotification(message, type = 'success') {
+  // Get or create notification container
+  let container = document.getElementById('notificationContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'notificationContainer';
+    container.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      max-width: 400px;
+    `;
+    document.body.appendChild(container);
+  }
+  
   // Create notification element
   const notification = document.createElement('div');
+  const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+  const bgColor = type === 'success' ? '#22c55e' : type === 'error' ? '#ef4444' : '#3b82f6';
+  
   notification.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     padding: 1rem 1.5rem;
-    background: ${type === 'success' ? '#22c55e' : '#ef4444'};
+    margin-bottom: 0.75rem;
+    background: ${bgColor};
     color: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 10000;
     animation: slideIn 0.3s ease;
+    font-size: 0.95rem;
   `;
-  notification.textContent = message;
   
-  document.body.appendChild(notification);
+  notification.innerHTML = `
+    <span style="font-size: 1.25rem; font-weight: bold;">${icon}</span>
+    <span style="flex: 1;">${message}</span>
+  `;
   
+  container.appendChild(notification);
+  
+  // Auto remove after 3 seconds
   setTimeout(() => {
     notification.style.animation = 'slideOut 0.3s ease';
-    setTimeout(() => notification.remove(), 300);
+    setTimeout(() => {
+      notification.remove();
+      // Remove container if empty
+      if (container.children.length === 0) {
+        container.remove();
+      }
+    }, 300);
   }, 3000);
 }
 

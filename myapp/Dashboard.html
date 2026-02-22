@@ -3,12 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage your orders, track shipments, and view your account on Sai Scientifics - Your trusted partner for industrial supplies.">
+  <meta name="theme-color" content="#ff5a00">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="My Account - Sai Scientifics">
+  <meta property="og:description" content="Manage your orders, track shipments, and view your account details.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://saiscientifics.com/og-image.jpg">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="My Account - Sai Scientifics">
+  <meta name="twitter:description" content="Manage your orders and account details.">
+  
   <title>My Account - Sai Scientifics</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="Dashboard.css">
+  
+  <style>
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease;
+    }
+    
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #ff5a00;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      margin-top: 1rem;
+      color: #1f2937;
+      font-size: 1rem;
+    }
+    
+    /* Notification Container */
+    #notificationContainer {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      max-width: 400px;
+    }
+  </style>
 </head>
 <body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay" aria-live="polite" aria-busy="true">
+    <div class="spinner" role="status"></div>
+    <p class="loading-text">Loading your dashboard...</p>
+  </div>
+  
+  <!-- Notification Container -->
+  <div id="notificationContainer" aria-live="polite" role="alert"></div>
+  
   <!-- Top Banner -->
   <div class="top-banner">
     <div class="left-section">
@@ -32,9 +108,9 @@
       <p>Industrial supplies for growing teams</p>
     </div>
 
-    <form class="search-wrapper" id="searchForm">
-      <input type="text" id="siteSearch" placeholder="Search products, categories, brands..." autocomplete="off">
-      <button class="search-btn" type="submit"><i class="fas fa-search"></i></button>
+    <form class="search-wrapper" id="searchForm" role="search">
+      <input type="text" id="siteSearch" placeholder="Search products, categories, brands..." autocomplete="off" aria-label="Search products">
+      <button class="search-btn" type="submit" aria-label="Submit search"><i class="fas fa-search"></i></button>
     </form>
 
     <div class="header-actions">
@@ -68,43 +144,43 @@
         </div>
       </div>
 
-      <nav class="dashboard-nav">
-        <button class="nav-item active" data-section="overview">
-          <i class="fas fa-th-large"></i>
+      <nav class="dashboard-nav" role="navigation" aria-label="Dashboard navigation">
+        <button class="nav-item active" data-section="overview" aria-label="Dashboard overview" aria-current="page">
+          <i class="fas fa-th-large" aria-hidden="true"></i>
           <span>Dashboard</span>
         </button>
-        <button class="nav-item" data-section="orders">
-          <i class="fas fa-box"></i>
+        <button class="nav-item" data-section="orders" aria-label="My Orders">
+          <i class="fas fa-box" aria-hidden="true"></i>
           <span>My Orders</span>
-          <span class="badge">3</span>
+          <span class="badge" aria-label="3 new orders">3</span>
         </button>
-        <button class="nav-item" data-section="addresses">
-          <i class="fas fa-map-marker-alt"></i>
+        <button class="nav-item" data-section="addresses" aria-label="Saved Addresses">
+          <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
           <span>Addresses</span>
         </button>
-        <button class="nav-item" data-section="wishlist">
-          <i class="fas fa-heart"></i>
+        <button class="nav-item" data-section="wishlist" aria-label="Wishlist">
+          <i class="fas fa-heart" aria-hidden="true"></i>
           <span>Wishlist</span>
-          <span class="badge">5</span>
+          <span class="badge" aria-label="5 items">5</span>
         </button>
-        <button class="nav-item" data-section="invoices">
-          <i class="fas fa-file-invoice"></i>
+        <button class="nav-item" data-section="invoices" aria-label="GST Invoices">
+          <i class="fas fa-file-invoice" aria-hidden="true"></i>
           <span>GST Invoices</span>
         </button>
-        <button class="nav-item" data-section="rfqs">
-          <i class="fas fa-file-alt"></i>
+        <button class="nav-item" data-section="rfqs" aria-label="Request for Quotes">
+          <i class="fas fa-file-alt" aria-hidden="true"></i>
           <span>My RFQs</span>
         </button>
-        <button class="nav-item" data-section="credit">
-          <i class="fas fa-credit-card"></i>
+        <button class="nav-item" data-section="credit" aria-label="Credit Account">
+          <i class="fas fa-credit-card" aria-hidden="true"></i>
           <span>Credit Account</span>
         </button>
-        <button class="nav-item" data-section="settings">
-          <i class="fas fa-cog"></i>
+        <button class="nav-item" data-section="settings" aria-label="Account Settings">
+          <i class="fas fa-cog" aria-hidden="true"></i>
           <span>Account Settings</span>
         </button>
-        <button class="nav-item" id="sidebarLogout">
-          <i class="fas fa-sign-out-alt"></i>
+        <button class="nav-item" id="sidebarLogout" aria-label="Logout">
+          <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
           <span>Logout</span>
         </button>
       </nav>
@@ -456,5 +532,20 @@
 
   <script src="api.js" defer></script>
   <script src="Dashboard.js" defer></script>
+  
+  <script>
+    // Hide loading overlay once page is fully loaded
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const overlay = document.getElementById('loadingOverlay');
+        if (overlay) {
+          overlay.classList.add('hidden');
+          setTimeout(function() {
+            overlay.style.display = 'none';
+          }, 300);
+        }
+      }, 500);
+    });
+  </script>
 </body>
 </html>
