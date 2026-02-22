@@ -1,5 +1,25 @@
-const API_BASE = window.API_BASE || 'http://localhost:4000/api';
+// Auto-detect API base URL based on environment
+const getApiBase = () => {
+  // Allow manual override via window.API_BASE
+  if (window.API_BASE) return window.API_BASE;
+  
+  // Auto-detect based on hostname
+  const hostname = window.location.hostname;
+  
+  // Production environment (deployed on Render, Vercel, Netlify, etc.)
+  if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+    return 'https://saiscientifics-api.onrender.com/api';
+  }
+  
+  // Development environment
+  return 'http://localhost:4000/api';
+};
+
+const API_BASE = getApiBase();
 window.API_BASE = API_BASE;
+
+// Log the API base for debugging
+console.log('🔗 API Base URL:', API_BASE);
 
 async function apiFetch(path, options = {}) {
   const token = localStorage.getItem('customerToken');

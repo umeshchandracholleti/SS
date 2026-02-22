@@ -2,7 +2,7 @@
 
 // Authentication Check
 document.addEventListener('DOMContentLoaded', () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('customerToken');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   
   if (!token || !user.fullName) {
@@ -39,10 +39,10 @@ function initializeDashboard(user) {
 
 // Load Cart Count
 function loadCartCount() {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('customerToken');
   if (!token) return;
 
-  fetch('http://localhost:4000/api/cart', {
+  fetch(`${window.API_BASE}/cart`, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -104,7 +104,7 @@ function setupLogout() {
     if (btn) {
       btn.addEventListener('click', () => {
         if (confirm('Are you sure you want to logout?')) {
-          localStorage.removeItem('token');
+          localStorage.removeItem('customerToken');
           localStorage.removeItem('user');
           window.location.href = 'Login.html';
         }
@@ -155,8 +155,8 @@ let ordersData = [];
 async function loadOverview() {
   try {
     // Load recent orders from API
-    const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:4000/api/orders/history', {
+    const token = localStorage.getItem('customerToken');
+    const response = await fetch(`${window.API_BASE}/orders/history`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -194,8 +194,8 @@ async function loadOrders() {
 
   try {
     // Fetch orders from API
-    const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:4000/api/orders/history', {
+    const token = localStorage.getItem('customerToken');
+    const response = await fetch(`${window.API_BASE}/orders/history`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

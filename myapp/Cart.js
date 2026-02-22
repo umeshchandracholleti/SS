@@ -44,7 +44,7 @@ function setModalState(modal, isOpen) {
 }
 
 function isAuthenticated() {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('customerToken');
   return !!token;
 }
 
@@ -55,9 +55,9 @@ async function loadCart() {
   }
 
   try {
-    const cart = await fetch('http://localhost:4000/api/cart', {
+    const cart = await fetch(`${window.API_BASE}/cart`, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('customerToken')}`
       }
     }).then(res => res.json());
 
@@ -134,11 +134,11 @@ function renderCart() {
 
 async function updateQuantity(itemId, nextQty) {
   try {
-    await fetch(`http://localhost:4000/api/cart/${itemId}`, {
+    await fetch(`${window.API_BASE}/cart/${itemId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('customerToken')}`
       },
       body: JSON.stringify({ quantity: nextQty })
     }).then(res => {
@@ -174,10 +174,10 @@ function decreaseQuantity(itemId) {
 // Remove item
 // eslint-disable-next-line no-unused-vars
 function removeItem(itemId) {
-  fetch(`http://localhost:4000/api/cart/${itemId}`, {
+  fetch(`${window.API_BASE}/cart/${itemId}`, {
     method: 'DELETE',
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('customerToken')}`
     }
   }).then(async (res) => {
     if (!res.ok) throw new Error('Failed to remove item');
@@ -299,11 +299,11 @@ checkoutForm.addEventListener('submit', async (e) => {
 
   // Create order
   try {
-    const response = await fetch('http://localhost:4000/api/orders/create', {
+    const response = await fetch(`${window.API_BASE}/orders/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('customerToken')}`
       },
       body: JSON.stringify({
         addressLine: data.address,
