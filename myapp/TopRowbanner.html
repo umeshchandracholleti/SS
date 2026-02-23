@@ -3,13 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sai Scientifics - Home</title>
+  <meta name="description" content="Sai Scientifics - Your trusted partner for industrial supplies. Browse 10L+ SKUs with bulk pricing, credit options, and 24h dispatch. Get a quote in 48 hours.">
+  <meta name="theme-color" content="#ff5a00">
+  <meta name="keywords" content="industrial supplies, bulk purchasing, procurement platform, business supplies, GST invoicing">
+  <meta name="author" content="Sai Scientifics">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Sai Scientifics - Industrial Supplies for Growing Teams">
+  <meta property="og:description" content="Browse 10L+ products with bulk pricing, credit options, and 24h dispatch. Get a quote in 48 hours.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://saiscientifics.com/og-image.jpg">
+  <meta property="og:url" content="https://saiscientifics.com">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sai Scientifics - Industrial Supplies">
+  <meta name="twitter:description" content="Browse 10L+ products with bulk pricing, credit options, and 24h dispatch.">
+  <meta name="twitter:image" content="https://saiscientifics.com/og-image.jpg">
+  
+  <title>Sai Scientifics - Home | Industrial Supplies for Growing Teams</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="TopRowbanner.css">
+  
+  <style>
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease;
+    }
+    
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-  <a class="skip-link" href="#mainContent">  Skip to content</a>
+  <div class="loading-overlay" id="loadingOverlay" aria-live="polite" aria-busy="true">
+    <div class="spinner" role="status"></div>
+    <p class="loading-text">Loading...</p>
+  </div>
+
+  <a class="skip-link" href="#mainContent">Skip to content</a>
 
   <div class="top-banner">
     <div class="left-section">
@@ -527,10 +574,32 @@
       <strong>Sai Scientifics</strong>
       <p>Procurement made simple for growing teams.</p>
     </div>
-    <span>Support: sales@saiscientifics.com</span>
+    <div class="footer-contact">
+      <span>Support: sales@saiscientifics.com | +91 918275568</span>
+      <div class="footer-social">
+        <a href="https://wa.me/918790740446" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+        <a href="#" title="Phone"><i class="fas fa-phone"></i></a>
+      </div>
+    </div>
   </footer>
 
   <script src="api.js" defer></script>
   <script src="TopRowbanner.js" defer></script>
+  
+  <script>
+    // Hide loading overlay once page is fully loaded
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const overlay = document.getElementById('loadingOverlay');
+        if (overlay) {
+          overlay.classList.add('hidden');
+          setTimeout(function() {
+            overlay.style.display = 'none';
+          }, 300);
+        }
+      }, 500);
+    });
+  </script>
 </body>
 </html>
