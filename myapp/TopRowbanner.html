@@ -28,6 +28,10 @@
   <link rel="stylesheet" href="TopRowbanner.css">
   
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    
     /* Loading Overlay */
     .loading-overlay {
       position: fixed;
@@ -48,7 +52,105 @@
       opacity: 0;
       pointer-events: none;
     }
+    
+    /* Smooth animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .fade-in-up {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    /* Toast notifications */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #22c55e;
+      color: white;
+      padding: 16px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideInRight 0.3s ease;
+      z-index: 10000;
+    }
+    
+    .toast.error {
+      background: #ef4444;
+    }
+    
+    .toast.info {
+      background: #3b82f6;
+    }
+    
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
   </style>
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX'); // Replace with your GA ID
+  </script>
+  
+  <!-- Facebook Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'YOUR_PIXEL_ID'); // Replace with your Pixel ID
+    fbq('track', 'PageView');
+  </script>
+  
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Sai Scientifics",
+    "url": "https://saiscientifics.com",
+    "logo": "https://saiscientifics.com/logo.png",
+    "description": "Your trusted partner for industrial supplies",
+    "sameAs": [
+      "https://www.facebook.com/SaiScientifics",
+      "https://twitter.com/SaiScientifics",
+      "https://www.linkedin.com/company/sai-scientifics"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-918275568",
+      "contactType": "Customer Support",
+      "email": "sales@saiscientifics.com"
+    }
+  }
+  </script>
 </head>
 <body>
   <div class="loading-overlay" id="loadingOverlay" aria-live="polite" aria-busy="true">
@@ -588,6 +690,70 @@
   <script src="TopRowbanner.js" defer></script>
   
   <script>
+    // Global utility for showing toasts
+    window.showToast = function(message, type = 'success', duration = 3000) {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+      `;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    };
+    
+    // Add to cart functionality
+    window.addToCart = function(productName, productPrice) {
+      const message = `${productName} added to cart - ₹${productPrice}`;
+      window.showToast(message, 'success');
+      
+      // Track event for analytics
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'add_to_cart', {
+          'value': productPrice,
+          'currency': 'INR',
+          'items': [{
+            'item_name': productName,
+            'price': productPrice
+          }]
+        });
+      }
+      
+      // Track with Facebook Pixel
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+          value: productPrice,
+          currency: 'INR'
+        });
+      }
+    };
+    
+    // Scroll reveal animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in-up');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    // Observe all cards for animation
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.deal-card, .featured-card, .category-item, .benefit-card').forEach(el => {
+        observer.observe(el);
+      });
+    });
+    
     // Hide loading overlay once page is fully loaded
     window.addEventListener('load', function() {
       setTimeout(function() {
@@ -600,6 +766,35 @@
         }
       }, 500);
     });
+    
+    // Track page views with custom events
+    document.addEventListener('DOMContentLoaded', function() {
+      // Track view for each category
+      document.querySelectorAll('.category-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+          const categoryName = this.querySelector('span').textContent;
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'view_item_list', {
+              'items': [{'item_name': categoryName}]
+            });
+          }
+        });
+      });
+      
+      // Track deal clicks
+      document.querySelectorAll('.deal-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const productName = this.querySelector('h3').textContent;
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'view_item', {
+              'items': [{'item_name': productName}]
+            });
+          }
+        });
+      });
+    });
   </script>
+  
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1" /></noscript>
 </body>
 </html>
