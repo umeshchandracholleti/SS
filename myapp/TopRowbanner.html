@@ -104,6 +104,287 @@
         opacity: 1;
       }
     }
+    
+    /* Categories Modal Styles */
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      z-index: 10001;
+      max-width: 900px;
+      width: 95%;
+      max-height: 85vh;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .modal.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .modal-content {
+      padding: 32px;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 16px;
+    }
+    
+    .modal-header h2 {
+      margin: 0;
+      font-size: 24px;
+      color: #111;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6b7280;
+      transition: color 0.3s ease;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-close:hover {
+      color: #111;
+    }
+    
+    /* Feature 1: Search & Filter */
+    .search-filter-section {
+      margin-bottom: 24px;
+    }
+    
+    .search-box {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    
+    .search-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      font-size: 16px;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 12px 40px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .search-box input:focus {
+      outline: none;
+      border-color: #ff6b00;
+      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+    }
+    
+    .filter-tabs {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-tab {
+      padding: 10px 16px;
+      border: 1px solid #e5e7eb;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      color: #6b7280;
+    }
+    
+    .filter-tab:hover {
+      border-color: #ff6b00;
+      color: #ff6b00;
+    }
+    
+    .filter-tab.active {
+      background: #ff6b00;
+      color: white;
+      border-color: #ff6b00;
+    }
+    
+    /* Feature 2: Categories Grid with Stats */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .category-card-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .category-card-item:hover {
+      border-color: #ff6b00;
+      box-shadow: 0 8px 16px rgba(255, 107, 0, 0.15);
+      transform: translateY(-4px);
+    }
+    
+    .category-card-item.trending::before {
+      content: '🔥';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 18px;
+    }
+    
+    .category-card-item.bestseller::before {
+      content: '⭐';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 18px;
+    }
+    
+    .category-name {
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    
+    .category-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+    }
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #6b7280;
+    }
+    
+    .stat-item i {
+      color: #ff6b00;
+      width: 16px;
+    }
+    
+    .pricing-tiers {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .tier-badge {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      color: #92400e;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .modal-footer {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 16px;
+      text-align: center;
+    }
+    
+    .info-text {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .primary-btn {
+      display: inline-block;
+      background: #ff6b00;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .primary-btn:hover {
+      background: #e64e00;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+    }
+    
+    @media (max-width: 640px) {
+      .modal {
+        max-width: 90%;
+        max-height: 90vh;
+      }
+      
+      .modal-content {
+        padding: 20px;
+      }
+      
+      .categories-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      
+      .filter-tabs {
+        flex-direction: column;
+      }
+      
+      .filter-tab {
+        width: 100%;
+      }
+    }
   </style>
   
   <!-- Google Analytics -->
@@ -792,9 +1073,193 @@
           }
         });
       });
+      
+      // ===== CATEGORIES MODAL FUNCTIONALITY =====
+      // All categories data with stats and features
+      const allCategories = [
+        { name: 'Office Supplies', products: 1240, discount: '15%', trending: true, bestseller: false },
+        { name: 'Material Handling', products: 893, discount: '12%', trending: false, bestseller: true },
+        { name: 'Agriculture', products: 1567, discount: '18%', trending: true, bestseller: true },
+        { name: 'Cleaning', products: 765, discount: '10%', trending: false, bestseller: false },
+        { name: 'Power Tools', products: 2341, discount: '20%', trending: true, bestseller: true },
+        { name: 'Hand Tools', products: 1834, discount: '16%', trending: false, bestseller: true },
+        { name: 'Testing & Measuring', products: 634, discount: '14%', trending: false, bestseller: false },
+        { name: 'Furniture', products: 456, discount: '12%', trending: false, bestseller: false },
+        { name: 'Safety Equipment', products: 2156, discount: '19%', trending: true, bestseller: true },
+        { name: 'Hydraulics & Pneumatics', products: 987, discount: '17%', trending: false, bestseller: false },
+        { name: 'Electrical', products: 1876, discount: '18%', trending: true, bestseller: false },
+        { name: 'IT Security', products: 543, discount: '13%', trending: false, bestseller: false },
+        { name: 'Fasteners & Hardware', products: 3456, discount: '22%', trending: false, bestseller: true },
+        { name: 'Industrial Chemicals', products: 789, discount: '15%', trending: true, bestseller: false },
+        { name: 'Packaging Materials', products: 1234, discount: '14%', trending: false, bestseller: false }
+      ];
+      
+      // Modal elements
+      const modal = document.getElementById('categoriesModal');
+      const overlay = document.getElementById('categoriesOverlay');
+      const closeBtn = document.getElementById('closeCategoriesModal');
+      const seeAllBtn = document.querySelector('.see-all a');
+      const searchInput = document.getElementById('categorySearch');
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      const categoriesGrid = document.getElementById('categoriesGrid');
+      
+      let currentFilter = 'all';
+      
+      // Function to render categories
+      function renderCategories(filter = 'all', searchTerm = '') {
+        categoriesGrid.innerHTML = '';
+        
+        let filtered = allCategories;
+        
+        // Apply filter tabs (trending, bestsellers, all)
+        if (filter === 'trending') {
+          filtered = filtered.filter(cat => cat.trending);
+        } else if (filter === 'bestsellers') {
+          filtered = filtered.filter(cat => cat.bestseller);
+        }
+        
+        // Apply search filter
+        if (searchTerm) {
+          filtered = filtered.filter(cat => 
+            cat.name.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        }
+        
+        // Render filtered categories
+        filtered.forEach(category => {
+          const card = document.createElement('div');
+          card.className = 'category-card-item' + (category.trending ? ' trending' : '') + (category.bestseller ? ' bestseller' : '');
+          card.innerHTML = `
+            <div class="category-name">${category.name}</div>
+            <div class="category-stats">
+              <div class="stat-item">
+                <i class="fas fa-box"></i>
+                <span>${category.products.toLocaleString()} products</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-percentage"></i>
+                <span>Up to ${category.discount} discount</span>
+              </div>
+            </div>
+            <div class="pricing-tiers">
+              <span class="tier-badge">Qty: 1-10</span>
+              <span class="tier-badge">Qty: 10+</span>
+              <span class="tier-badge">Qty: 100+</span>
+            </div>
+          `;
+          
+          card.addEventListener('click', () => {
+            window.showToast(`Browsing ${category.name}...`);
+            gtag('event', 'view_item_list', {
+              'items': [{'item_name': category.name, 'item_category': 'category'}]
+            });
+            // Navigate to category (you can customize this)
+            setTimeout(() => {
+              // window.location.href = `Products.html?category=${category.name}`;
+            }, 500);
+          });
+          
+          categoriesGrid.appendChild(card);
+        });
+        
+        // Show no results message
+        if (filtered.length === 0) {
+          categoriesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #9ca3af; padding: 40px;">No categories found</p>';
+        }
+      }
+      
+      // Open modal
+      function openModal() {
+        modal.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        renderCategories('all', '');
+        searchInput.focus();
+      }
+      
+      // Close modal
+      function closeModal() {
+        modal.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        searchInput.value = '';
+        currentFilter = 'all';
+        filterTabs.forEach(tab => tab.classList.remove('active'));
+        document.querySelector('[data-filter="all"]').classList.add('active');
+      }
+      
+      // Event listeners
+      if (seeAllBtn) {
+        seeAllBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openModal();
+        });
+      }
+      
+      closeBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', closeModal);
+      
+      // Search functionality
+      searchInput.addEventListener('input', (e) => {
+        renderCategories(currentFilter, e.target.value);
+      });
+      
+      // Filter tabs functionality
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          filterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentFilter = tab.dataset.filter;
+          renderCategories(currentFilter, searchInput.value);
+        });
+      });
+      
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          closeModal();
+        }
+      });
     });
   </script>
   
+  <!-- Categories Modal Popup -->
+  <div class="modal" id="categoriesModal" role="dialog" aria-modal="true" aria-labelledby="categoriesTitle">
+    <div class="modal-content categories-modal">
+      <div class="modal-header">
+        <h2 id="categoriesTitle">All Categories</h2>
+        <button class="modal-close" id="closeCategoriesModal" aria-label="Close categories popup">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <!-- Feature 1: Category Search & Filter -->
+      <div class="search-filter-section">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="categorySearch" placeholder="Search categories..." aria-label="Search categories">
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All Categories</button>
+          <button class="filter-tab" data-filter="trending">Trending</button>
+          <button class="filter-tab" data-filter="bestsellers">Best Sellers</button>
+        </div>
+      </div>
+      
+      <!-- Feature 2: Category Grid with Stats & Bulk Pricing -->
+      <div class="categories-grid" id="categoriesGrid">
+        <!-- Generated dynamically -->
+      </div>
+      
+      <div class="modal-footer">
+        <p class="info-text"><i class="fas fa-info-circle"></i> Select a category to browse products or request a bulk quote</p>
+        <a href="Requestforquotes.html" class="primary-btn">Request Bulk Quote</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-overlay" id="categoriesOverlay" aria-hidden="true"></div>
+
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1" /></noscript>
 </body>
 </html>
