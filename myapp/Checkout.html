@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Sai Scientifics</title>
+  <meta name="description" content="Complete your order securely. Fast checkout with multiple payment options.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="base.css">
+  <style>
+    :root {
+      --brand-orange: #ff6b00;
+      --brand-ink: #111;
+      --brand-muted: #6b7280;
+      --shadow-soft: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      background: #f9fafb;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .checkout-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .checkout-header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .checkout-header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: var(--brand-ink);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .checkout-section {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--brand-ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--brand-ink);
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--brand-orange);
+      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .payment-methods {
+      display: grid;
+      gap: 12px;
+    }
+
+    .payment-method {
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .payment-method:hover {
+      border-color: var(--brand-orange);
+      background: #fff8f4;
+    }
+
+    .payment-method input[type="radio"] {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+
+    .payment-method.selected {
+      border-color: var(--brand-orange);
+      background: #fff8f4;
+    }
+
+    .method-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .method-icon {
+      font-size: 24px;
+    }
+
+    .order-summary {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .summary-row.total {
+      border-top: 2px solid #e5e7eb;
+      padding-top: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--brand-orange);
+    }
+
+    .summary-row strong {
+      color: var(--brand-ink);
+    }
+
+    .checkout-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--brand-orange);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .checkout-btn:hover {
+      background: #e64e00;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(255, 107, 0, 0.3);
+    }
+
+    .checkout-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .loading-spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .success-message {
+      background: #dcfce7;
+      color: #166534;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: #f9fafb;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .item-details {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: 500;
+      color: var(--brand-ink);
+    }
+
+    .item-qty {
+      color: var(--brand-muted);
+      font-size: 12px;
+    }
+
+    .item-price {
+      font-weight: 600;
+      color: var(--brand-orange);
+    }
+
+    @media (max-width: 768px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .checkout-container {
+        padding: 12px;
+      }
+
+      .checkout-section {
+        padding: 16px;
+      }
+    }
+
+    .validation-error {
+      color: #dc2626;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 12px;
+    }
+
+    .step {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--brand-muted);
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .step.active .step-number {
+      background: var(--brand-orange);
+      color: white;
+    }
+
+    .step.completed .step-number {
+      background: #10b981;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="checkout-container">
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step completed">
+        <div class="step-number"><i class="fas fa-check"></i></div>
+        <span>Cart</span>
+      </div>
+      <div class="step active">
+        <div class="step-number">2</div>
+        <span>Checkout</span>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <span>Payment</span>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <span>Confirmation</span>
+      </div>
+    </div>
+
+    <!-- Checkout Header -->
+    <div class="checkout-header">
+      <h1><i class="fas fa-lock"></i> Secure Checkout</h1>
+      <p style="margin: 8px 0 0; color: var(--brand-muted); font-size: 14px;">Complete your order safely with SSL encryption</p>
+    </div>
+
+    <!-- Main Checkout Grid -->
+    <div class="checkout-grid">
+      <!-- Left: Forms Section -->
+      <div>
+        <!-- Delivery Address -->
+        <div class="checkout-section">
+          <div class="section-title">
+            <i class="fas fa-map-marker-alt"></i> Delivery Address
+          </div>
+
+          <div id="addressError" class="error-message" style="display: none;"></div>
+
+          <div class="form-group">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" placeholder="Enter your full name" required>
+            <div class="validation-error" id="fullNameError"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" placeholder="your.email@example.com" required>
+            <div class="validation-error" id="emailError"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" placeholder="Enter 10-digit phone number" pattern="[0-9]{10}" required>
+            <div class="validation-error" id="phoneError"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="addressLine">Address Line *</label>
+            <input type="text" id="addressLine" placeholder="Street address, building number, etc." required>
+            <div class="validation-error" id="addressLineError"></div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">City *</label>
+              <input type="text" id="city" placeholder="City" required>
+              <div class="validation-error" id="cityError"></div>
+            </div>
+            <div class="form-group">
+              <label for="state">State *</label>
+              <select id="state" required>
+                <option value="">Select State</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Rajasthan">Rajasthan</option>
+              </select>
+              <div class="validation-error" id="stateError"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pincode">Pincode *</label>
+            <input type="text" id="pincode" placeholder="6-digit pincode" pattern="[0-9]{6}" maxlength="6" required>
+            <div class="validation-error" id="pincodeError"></div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="checkout-section" style="margin-top: 24px;">
+          <div class="section-title">
+            <i class="fas fa-credit-card"></i> Payment Method
+          </div>
+
+          <div id="paymentError" class="error-message" style="display: none;"></div>
+
+          <div class="payment-methods">
+            <label class="payment-method selected" data-method="razorpay">
+              <input type="radio" name="paymentMethod" value="razorpay" checked>
+              <div class="method-label">
+                <span class="method-icon"><i class="fas fa-wallet"></i></span>
+                <div>
+                  <div>Razorpay</div>
+                  <small style="color: var(--brand-muted);">Card, UPI, Net Banking, Wallet</small>
+                </div>
+              </div>
+            </label>
+
+            <label class="payment-method" data-method="credit">
+              <input type="radio" name="paymentMethod" value="credit">
+              <div class="method-label">
+                <span class="method-icon"><i class="fas fa-hand-holding-heart"></i></span>
+                <div>
+                  <div>Buy on Credit</div>
+                  <small style="color: var(--brand-muted);">0% interest for 30 days</small>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- GST Information -->
+        <div class="checkout-section" style="margin-top: 24px; background: #fef3c7; border-left: 4px solid #f59e0b;">
+          <div class="section-title" style="margin-bottom: 12px;">
+            <i class="fas fa-percentage"></i> GST Benefits
+          </div>
+          <p style="margin: 0; font-size: 14px; color: #92400e;">
+            <strong>Auto-generated GST invoices</strong> available for all business purchases. Save up to 18% with GST benefits.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: Order Summary -->
+      <div>
+        <div class="checkout-section">
+          <div class="section-title">
+            <i class="fas fa-receipt"></i> Order Summary
+          </div>
+
+          <div id="cartItemsContainer">
+            <!-- Cart items will be populated here -->
+          </div>
+
+          <div class="order-summary">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="subtotal">₹0</span>
+            </div>
+            <div class="summary-row">
+              <span>GST (18%)</span>
+              <span id="gst">₹0</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span id="shipping">
+                <span id="shippingAmount">₹0</span>
+                <span id="shippingFree" style="display: none; color: #10b981;"> FREE</span>
+              </span>
+            </div>
+            <div class="summary-row">
+              <span>Discount</span>
+              <span id="discount" style="color: #10b981;">₹0</span>
+            </div>
+            <div class="summary-row total">
+              <span>Total Amount</span>
+              <span id="totalAmount">₹0</span>
+            </div>
+          </div>
+
+          <button type="button" id="proceedBtn" class="checkout-btn" disabled>
+            <span>Proceed to Payment</span>
+          </button>
+
+          <p style="text-align: center; font-size: 12px; color: var(--brand-muted); margin-top: 16px;">
+            <i class="fas fa-lock"></i> Your payment is 100% secure and encrypted
+          </p>
+        </div>
+
+        <!-- Trust Badges -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px;">
+          <div style="text-align: center; padding: 12px; background: white; border-radius: 8px; box-shadow: var(--shadow-soft);">
+            <i class="fas fa-certificate" style="color: var(--brand-orange); font-size: 20px;"></i>
+            <p style="margin: 8px 0 0; font-size: 12px; font-weight: 500;">100% Authentic</p>
+          </div>
+          <div style="text-align: center; padding: 12px; background: white; border-radius: 8px; box-shadow: var(--shadow-soft);">
+            <i class="fas fa-shield-alt" style="color: var(--brand-orange); font-size: 20px;"></i>
+            <p style="margin: 8px 0 0; font-size: 12px; font-weight: 500;">Secure Checkout</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="api.js"></script>
+  <script src="Checkout.js"></script>
+</body>
+</html>
