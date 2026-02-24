@@ -638,87 +638,214 @@
       <section class="deals-section" aria-label="Daily Deals">
         <div class="deals-header">
           <div class="deals-title">
-            <i class="fas fa-bolt"></i>
-            <h2>Deal of the Day</h2>
-            <span class="deal-timer">Ends in: <strong id="dealTimer">23:45:12</strong></span>
+            <div class="deals-icon-wrapper">
+              <i class="fas fa-bolt"></i>
+              <span class="icon-glow"></span>
+            </div>
+            <div class="deals-text">
+              <h2>🔥 Deal of the Day</h2>
+              <p>Limited time offers - grab them before they're gone!</p>
+            </div>
           </div>
-          <a href="#" class="view-all-link">View All Deals <i class="fas fa-arrow-right"></i></a>
+          <div class="deals-timer-wrapper">
+            <div class="timer-label">⏰ Ends in</div>
+            <div class="deal-timer">
+              <div class="timer-unit">
+                <span class="timer-value" id="hoursTimer">23</span>
+                <span class="timer-label-small">Hours</span>
+              </div>
+              <span class="timer-separator">:</span>
+              <div class="timer-unit">
+                <span class="timer-value" id="minutesTimer">45</span>
+                <span class="timer-label-small">Mins</span>
+              </div>
+              <span class="timer-separator">:</span>
+              <div class="timer-unit">
+                <span class="timer-value" id="secondsTimer">12</span>
+                <span class="timer-label-small">Secs</span>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="deals-carousel">
           <button class="carousel-arrow left" aria-label="Previous deals"><i class="fas fa-chevron-left"></i></button>
           <div class="deals-track">
             <article class="deal-card">
-              <span class="deal-badge">45% OFF</span>
-              <img src="https://images.unsplash.com/photo-1572806365626-e0a39b593c2f?w=300&h=300&fit=crop" alt="Industrial Safety Helmet">
+              <div class="deal-badges">
+                <span class="deal-badge primary">45% OFF</span>
+                <span class="deal-badge hot">🔥 HOT</span>
+              </div>
+              <div class="deal-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1572806365626-e0a39b593c2f?w=300&h=300&fit=crop" alt="Industrial Safety Helmet">
+                <div class="quick-view">Quick View</div>
+              </div>
               <div class="deal-info">
+                <div class="deal-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <span class="rating-count">(2.4k)</span>
+                </div>
                 <h3>Industrial Safety Helmet</h3>
                 <div class="deal-pricing">
                   <span class="deal-price">₹549</span>
                   <span class="deal-original">₹999</span>
+                  <span class="deal-save">Save ₹450</span>
+                </div>
+                <div class="deal-urgency">
+                  <div class="urgency-bar">
+                    <div class="urgency-fill" style="width: 65%"></div>
+                  </div>
+                  <span class="urgency-text">Only 15 left - 65% claimed!</span>
                 </div>
                 <div class="deal-footer">
                   <span class="deal-stock"><i class="fas fa-check-circle"></i> In Stock</span>
-                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
                 </div>
               </div>
             </article>
             <article class="deal-card">
-              <span class="deal-badge">35% OFF</span>
-              <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=300&h=300&fit=crop" alt="Power Drill Set">
+              <div class="deal-badges">
+                <span class="deal-badge primary">35% OFF</span>
+                <span class="deal-badge trending">📈 Trending</span>
+              </div>
+              <div class="deal-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=300&h=300&fit=crop" alt="Power Drill Set">
+                <div class="quick-view">Quick View</div>
+              </div>
               <div class="deal-info">
+                <div class="deal-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <span class="rating-count">(1.8k)</span>
+                </div>
                 <h3>18V Cordless Power Drill</h3>
                 <div class="deal-pricing">
                   <span class="deal-price">₹1,949</span>
                   <span class="deal-original">₹2,999</span>
+                  <span class="deal-save">Save ₹1,050</span>
+                </div>
+                <div class="deal-urgency">
+                  <div class="urgency-bar">
+                    <div class="urgency-fill" style="width: 80%"></div>
+                  </div>
+                  <span class="urgency-text">Only 8 left - 80% claimed!</span>
                 </div>
                 <div class="deal-footer">
                   <span class="deal-stock"><i class="fas fa-check-circle"></i> In Stock</span>
-                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
                 </div>
               </div>
             </article>
-            <article class="deal-card">
-              <span class="deal-badge">50% OFF</span>
-              <img src="https://images.unsplash.com/photo-1585435557343-3b092031a831?w=300&h=300&fit=crop" alt="Office Chair">
+            <article class="deal-card best-deal">
+              <div class="deal-badges">
+                <span class="deal-badge primary best">50% OFF</span>
+                <span class="deal-badge bestseller">⭐ Best Seller</span>
+              </div>
+              <div class="deal-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1585435557343-3b092031a831?w=300&h=300&fit=crop" alt="Office Chair">
+                <div class="quick-view">Quick View</div>
+              </div>
               <div class="deal-info">
+                <div class="deal-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <span class="rating-count">(3.2k)</span>
+                </div>
                 <h3>Ergonomic Office Chair</h3>
                 <div class="deal-pricing">
                   <span class="deal-price">₹3,499</span>
                   <span class="deal-original">₹6,999</span>
+                  <span class="deal-save">Save ₹3,500</span>
+                </div>
+                <div class="deal-urgency">
+                  <div class="urgency-bar">
+                    <div class="urgency-fill" style="width: 90%"></div>
+                  </div>
+                  <span class="urgency-text">Only 4 left - 90% claimed!</span>
                 </div>
                 <div class="deal-footer">
                   <span class="deal-stock"><i class="fas fa-check-circle"></i> In Stock</span>
-                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
                 </div>
               </div>
             </article>
             <article class="deal-card">
-              <span class="deal-badge">40% OFF</span>
-              <img src="https://images.unsplash.com/photo-1504198266287-1659872e6590?w=300&h=300&fit=crop" alt="Industrial Gloves">
+              <div class="deal-badges">
+                <span class="deal-badge primary">40% OFF</span>
+              </div>
+              <div class="deal-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1504198266287-1659872e6590?w=300&h=300&fit=crop" alt="Industrial Gloves">
+                <div class="quick-view">Quick View</div>
+              </div>
               <div class="deal-info">
+                <div class="deal-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <span class="rating-count">(956)</span>
+                </div>
                 <h3>Cut Resistant Gloves (12pk)</h3>
                 <div class="deal-pricing">
                   <span class="deal-price">₹899</span>
                   <span class="deal-original">₹1,499</span>
+                  <span class="deal-save">Save ₹600</span>
+                </div>
+                <div class="deal-urgency">
+                  <div class="urgency-bar">
+                    <div class="urgency-fill" style="width: 45%"></div>
+                  </div>
+                  <span class="urgency-text">Only 25 left - 45% claimed!</span>
                 </div>
                 <div class="deal-footer">
                   <span class="deal-stock"><i class="fas fa-check-circle"></i> In Stock</span>
-                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
                 </div>
               </div>
             </article>
             <article class="deal-card">
-              <span class="deal-badge">30% OFF</span>
-              <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=300&h=300&fit=crop" alt="Tool Set">
+              <div class="deal-badges">
+                <span class="deal-badge primary">30% OFF</span>
+                <span class="deal-badge new">✨ New</span>
+              </div>
+              <div class="deal-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=300&h=300&fit=crop" alt="Tool Set">
+                <div class="quick-view">Quick View</div>
+              </div>
               <div class="deal-info">
+                <div class="deal-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <span class="rating-count">(1.5k)</span>
+                </div>
                 <h3>Professional Tool Set (108pc)</h3>
                 <div class="deal-pricing">
                   <span class="deal-price">₹4,899</span>
                   <span class="deal-original">₹6,999</span>
+                  <span class="deal-save">Save ₹2,100</span>
+                </div>
+                <div class="deal-urgency">
+                  <div class="urgency-bar">
+                    <div class="urgency-fill" style="width: 55%"></div>
+                  </div>
+                  <span class="urgency-text">Only 18 left - 55% claimed!</span>
                 </div>
                 <div class="deal-footer">
                   <span class="deal-stock"><i class="fas fa-check-circle"></i> In Stock</span>
-                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                  <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
                 </div>
               </div>
             </article>

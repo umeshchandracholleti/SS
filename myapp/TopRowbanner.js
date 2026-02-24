@@ -187,10 +187,13 @@ if (featuredSection) {
   window.addEventListener('resize', updateFeatured);
   updateFeatured();
 }
-// Deal of the Day Timer
+// Deal of the Day Enhanced Timer
 function startDealTimer() {
-  const dealTimerEl = document.getElementById('dealTimer');
-  if (!dealTimerEl) return;
+  const hoursEl = document.getElementById('hoursTimer');
+  const minutesEl = document.getElementById('minutesTimer');
+  const secondsEl = document.getElementById('secondsTimer');
+  
+  if (!hoursEl || !minutesEl || !secondsEl) return;
 
   function updateTimer() {
     const now = new Date();
@@ -202,7 +205,9 @@ function startDealTimer() {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-    dealTimerEl.textContent = `::`;
+    hoursEl.textContent = String(hours).padStart(2, '0');
+    minutesEl.textContent = String(minutes).padStart(2, '0');
+    secondsEl.textContent = String(seconds).padStart(2, '0');
   }
 
   updateTimer();
@@ -256,25 +261,49 @@ const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
 addToCartButtons.forEach(button => {
   button.addEventListener('click', (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const card = button.closest('.deal-card');
     const productName = card.querySelector('h3').textContent;
     
     // Visual feedback
-    button.innerHTML = '<i class="fas fa-check"></i>';
-    button.style.background = '#22c55e';
+    const originalContent = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-check"></i> Added!';
+    button.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+    button.style.pointerEvents = 'none';
+    
+    // Animate the card
+    card.style.transform = 'translateY(-12px) scale(1.03)';
     
     setTimeout(() => {
-      button.innerHTML = '<i class="fas fa-cart-plus"></i>';
+      button.innerHTML = originalContent;
       button.style.background = '';
-    }, 1500);
+      button.style.pointerEvents = 'auto';
+      card.style.transform = '';
+    }, 2000);
 
     // Update cart count
     const cartCount = document.getElementById('cartCount');
     if (cartCount) {
       const currentCount = parseInt(cartCount.textContent) || 0;
       cartCount.textContent = currentCount + 1;
+      
+      // Animate cart count
+      cartCount.style.animation = 'none';
+      setTimeout(() => {
+        cartCount.style.animation = 'bounce 0.5s ease';
+      }, 10);
     }
 
-    console.log(`Added "" to cart`);
+    console.log(`Added "${productName}" to cart`);
   });
 });
+
+// Add bounce animation for cart count
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
+`;
+document.head.appendChild(style);
