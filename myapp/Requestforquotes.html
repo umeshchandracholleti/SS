@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="Requestforquotes.css">
 </head>
 <body>
-  <nav class="navbar">
+  <nav class="navbar animate-fade-in">
     <a href="TopRowbanner.html" class="nav-link">
       <i class="fas fa-arrow-left"></i> Back to Home
     </a>
@@ -17,8 +17,8 @@
 
   <main class="rfq-page">
     <header class="rfq-hero">
-      <div class="rfq-hero-content">
-        <p class="pill">Bulk Procurement</p>
+      <div class="rfq-hero-content animate-slide-in-left">
+        <p class="pill animate-bounce-in">Bulk Procurement</p>
         <h1>Need multiple products or a rate contract?</h1>
         <p>Upload your list or fill out requirements. Our specialists respond within 48 hours.</p>
         <div class="rfq-stats">
@@ -36,17 +36,17 @@
           </div>
         </div>
       </div>
-      <div class="rfq-hero-card">
+      <div class="rfq-hero-card animate-slide-in-right">
         <h2>How it works</h2>
         <ul>
-          <li><i class="fas fa-list"></i> Share requirements</li>
-          <li><i class="fas fa-clipboard-check"></i> Receive curated quote</li>
-          <li><i class="fas fa-truck"></i> Order anytime in 7 days</li>
+          <li class="animate-fade-in-delay-1"><i class="fas fa-list"></i> Share requirements</li>
+          <li class="animate-fade-in-delay-2"><i class="fas fa-clipboard-check"></i> Receive curated quote</li>
+          <li class="animate-fade-in-delay-3"><i class="fas fa-truck"></i> Order anytime in 7 days</li>
         </ul>
       </div>
     </header>
 
-    <section class="rfq-panel">
+    <section class="rfq-panel animate-fade-in-up">
       <div class="rfq-tabs" role="tablist">
         <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="formPanel" id="formTab">Fill your requirements</button>
         <button class="tab-btn" role="tab" aria-selected="false" aria-controls="uploadPanel" id="uploadTab">Upload your list</button>
@@ -141,7 +141,7 @@
           <p>Share an XLS, CSV, or PDF. We will validate and send a quote within 48 hours.</p>
           <label class="upload-box" for="rfqFile">
             <input type="file" id="rfqFile" accept=".xls,.xlsx,.csv,.pdf" hidden>
-            <span class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></span>
+            <span class="upload-icon animate-pulse"><i class="fas fa-cloud-upload-alt"></i></span>
             <span>Click to upload or drag and drop</span>
             <small>Max 10MB per file</small>
           </label>
@@ -163,7 +163,52 @@
     <span>Response within 48 hours</span>
   </footer>
 
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
   <script src="api.js" defer></script>
   <script src="javascript.js" defer></script>
+  <script>
+    // Scroll to top functionality
+    const scrollBtn = document.getElementById('scrollToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollBtn.classList.add('visible');
+      } else {
+        scrollBtn.classList.remove('visible');
+      }
+    });
+    
+    scrollBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Tab animation
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabPanels.forEach(panel => {
+          panel.classList.remove('active');
+          panel.classList.remove('animate-fade-in-up');
+        });
+        
+        const targetId = btn.getAttribute('aria-controls');
+        const targetPanel = document.getElementById(targetId);
+        
+        setTimeout(() => {
+          targetPanel.classList.add('active');
+          targetPanel.classList.add('animate-fade-in-up');
+        }, 50);
+      });
+    });
+  </script>
 </body>
 </html>
