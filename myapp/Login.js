@@ -1,10 +1,31 @@
 const loginForm = document.getElementById('loginForm');
 const loginStatus = document.getElementById('loginStatus');
 const submitBtn = loginForm.querySelector('button[type="submit"]');
+const loginBtnText = document.getElementById('loginBtnText');
+const loginBtnSpinner = document.getElementById('loginBtnSpinner');
+const togglePasswordBtn = document.getElementById('toggleLoginPassword');
+const passwordInput = document.getElementById('loginPassword');
 
 function setStatus(message, isError) {
   loginStatus.textContent = message;
   loginStatus.style.color = isError ? '#b42318' : '#2d8f5b';
+  if (!isError) {
+    loginStatus.style.background = 'rgba(45, 143, 91, 0.1)';
+    loginStatus.style.padding = '12px';
+  } else {
+    loginStatus.style.background = 'rgba(180, 35, 24, 0.1)';
+    loginStatus.style.padding = '12px';
+  }
+}
+
+// Password visibility toggle
+if (togglePasswordBtn) {
+  togglePasswordBtn.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    const icon = togglePasswordBtn.querySelector('i');
+    icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+  });
 }
 
 // Check if already logged in
@@ -25,7 +46,8 @@ loginForm.addEventListener('submit', async (event) => {
   }
 
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Signing in...';
+  loginBtnText.style.display = 'none';
+  loginBtnSpinner.style.display = 'inline';
 
   try {
     const response = await window.apiFetch('/auth/login', {
@@ -52,6 +74,7 @@ loginForm.addEventListener('submit', async (event) => {
   } catch (error) {
     setStatus(error.message || 'Invalid email or password.', true);
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Sign in';
+    loginBtnText.style.display = 'inline';
+    loginBtnSpinner.style.display = 'none';
   }
 });

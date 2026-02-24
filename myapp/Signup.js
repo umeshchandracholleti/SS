@@ -1,10 +1,31 @@
 const signupForm = document.getElementById('signupForm');
 const signupStatus = document.getElementById('signupStatus');
 const submitBtn = signupForm.querySelector('button[type="submit"]');
+const signupBtnText = document.getElementById('signupBtnText');
+const signupBtnSpinner = document.getElementById('signupBtnSpinner');
+const togglePasswordBtn = document.getElementById('toggleSignupPassword');
+const passwordInput = document.getElementById('signupPassword');
 
 function setStatus(message, isError) {
   signupStatus.textContent = message;
   signupStatus.style.color = isError ? '#b42318' : '#2d8f5b';
+  if (!isError) {
+    signupStatus.style.background = 'rgba(45, 143, 91, 0.1)';
+    signupStatus.style.padding = '12px';
+  } else {
+    signupStatus.style.background = 'rgba(180, 35, 24, 0.1)';
+    signupStatus.style.padding = '12px';
+  }
+}
+
+// Password visibility toggle
+if (togglePasswordBtn) {
+  togglePasswordBtn.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    const icon = togglePasswordBtn.querySelector('i');
+    icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+  });
 }
 
 function validatePhone(phone) {
@@ -63,7 +84,8 @@ signupForm.addEventListener('submit', async (event) => {
   }
 
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Creating account...';
+  signupBtnText.style.display = 'none';
+  signupBtnSpinner.style.display = 'inline';
 
   try {
     const response = await window.apiFetch('/auth/register', {
@@ -92,6 +114,7 @@ signupForm.addEventListener('submit', async (event) => {
   } catch (error) {
     setStatus(error.message || 'Failed to create account. Please try again.', true);
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Create account';
+    signupBtnText.style.display = 'inline';
+    signupBtnSpinner.style.display = 'none';
   }
 });
