@@ -19,6 +19,28 @@ Start the React app:
 npm run dev
 ```
 
+## Database (Docker Compose)
+
+Quick local database + migrations:
+
+```bash
+cd Database
+docker compose up -d postgres
+docker compose run --rm flyway
+```
+
+Flyway defaults are in `Database/flyway.conf`.
+
+## Backend API (Node + Express)
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+API defaults to http://localhost:4000.
+
 ## Scripts
 
 - `npm run dev`: Start Vite dev server

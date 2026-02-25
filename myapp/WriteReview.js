@@ -16,7 +16,7 @@ document.querySelectorAll('input[name="rating"]').forEach((input) => {
   });
 });
 
-reviewForm.addEventListener('submit', (event) => {
+reviewForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   reviewStatus.textContent = '';
 
@@ -33,9 +33,39 @@ reviewForm.addEventListener('submit', (event) => {
     return;
   }
 
-  reviewStatus.textContent = 'Thank you! Your review has been submitted.';
-  reviewStatus.style.color = '#2d8f5b';
-  reviewForm.reset();
-  ratingLabel.textContent = 'Select a rating';
+  try {
+    const formData = new FormData();
+    formData.append('rating', rating.value);
+    formData.append('title', reviewForm.elements.title.value.trim());
+    formData.append('details', reviewForm.elements.details.value.trim());
+    formData.append('pros', reviewForm.elements.pros.value.trim());
+    formData.append('cons', reviewForm.elements.cons.value.trim());
+    formData.append('recommend', reviewForm.elements.recommend.checked);
+
+    const photoInput = document.getElementById('reviewPhotos');
+    if (photoInput && photoInput.files) {
+      Array.from(photoInput.files).forEach((file) => {
+        formData.append('photos', file);
+      });
+    }
+
+    const response = await fetch(`${window.API_BASE || 'http://localhost:4000/api'}/reviews`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      const payload = await response.json().catch(() => ({}));
+      throw new Error(payload.error || 'Failed to submit review');
+    }
+
+    reviewStatus.textContent = 'Thank you! Your review has been submitted.';
+    reviewStatus.style.color = '#2d8f5b';
+    reviewForm.reset();
+    ratingLabel.textContent = 'Select a rating';
+  } catch (error) {
+    reviewStatus.textContent = error.message;
+    reviewStatus.style.color = '#b42318';
+  }
 });
 

@@ -1,9 +1,4 @@
-// Sample cart items (in real app, these would come from backend)
-let cartItems = [
-  { id: 1, name: 'Office Chair', price: 4500, quantity: 1, emoji: '🪑' },
-  { id: 2, name: 'LED Desk Lamp', price: 1200, quantity: 2, emoji: '💡' },
-  { id: 3, name: 'Wireless Keyboard', price: 2800, quantity: 1, emoji: '⌨️' }
-];
+let cartItems = [];
 
 const TAX_RATE = 0.18; // 18% tax
 const SHIPPING_COST = 100;
@@ -48,10 +43,55 @@ function setModalState(modal, isOpen) {
   }
 }
 
+function isAuthenticated() {
+  const token = localStorage.getItem('customerToken');
+  return !!token;
+}
+
+async function loadCart() {
+  if (!isAuthenticated()) {
+    cartItems = [];
+    return;
+  }
+
+  try {
+    const cart = await fetch(`${window.API_BASE}/cart`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('customerToken')}`
+      }
+    }).then(res => res.json());
+
+    cartItems = cart.map((item) => ({
+      id: item.id,
+      productId: item.product_id,
+      name: item.name,
+      image: item.image_url,
+      price: Number(item.price),
+      quantity: Number(item.quantity)
+    }));
+  } catch (error) {
+    console.error('Failed to load cart:', error);
+    cartItems = [];
+  }
+}
+
 // Initialize cart
-function initCart() {
-  renderCart();
-  updateSummary();
+async function initCart() {
+  try {
+    if (!isAuthenticated()) {
+      emptyCart.innerHTML = '<p style="text-align: center; padding: 40px;">Please <a href="Login.html">log in</a> to view your cart</p>';
+      emptyCart.classList.add('show');
+      cartItemsContainer.style.display = 'none';
+      checkoutBtn.disabled = true;
+      return;
+    }
+
+    await loadCart();
+    renderCart();
+    updateSummary();
+  } catch (error) {
+    notify(error.message, 'error');
+  }
 }
 
 // Render cart items
@@ -71,7 +111,7 @@ function renderCart() {
     const cartItem = document.createElement('div');
     cartItem.className = 'cart-item';
     cartItem.innerHTML = `
-      <div class="item-image">${item.emoji}</div>
+      <div class="item-image">${item.image ? `<img src="${item.image}" alt="${item.name}">` : '📦'}</div>
       <div class="item-details">
         <h3>${item.name}</h3>
         <div class="item-price">₹${(item.price * item.quantity).toLocaleString()}</div>
@@ -92,14 +132,33 @@ function renderCart() {
   updateItemCount();
 }
 
+async function updateQuantity(itemId, nextQty) {
+  try {
+    await fetch(`${window.API_BASE}/cart/${itemId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('customerToken')}`
+      },
+      body: JSON.stringify({ quantity: nextQty })
+    }).then(res => {
+      if (!res.ok) throw new Error('Failed to update quantity');
+      return res.json();
+    });
+    await loadCart();
+    renderCart();
+    updateSummary();
+  } catch (error) {
+    notify(error.message, 'error');
+  }
+}
+
 // Increase quantity
 // eslint-disable-next-line no-unused-vars
 function increaseQuantity(itemId) {
   const item = cartItems.find(i => i.id === itemId);
   if (item) {
-    item.quantity++;
-    renderCart();
-    updateSummary();
+    updateQuantity(itemId, item.quantity + 1).catch((error) => notify(error.message, 'error'));
   }
 }
 
@@ -108,23 +167,24 @@ function increaseQuantity(itemId) {
 function decreaseQuantity(itemId) {
   const item = cartItems.find(i => i.id === itemId);
   if (item && item.quantity > 1) {
-    item.quantity--;
-    renderCart();
-    updateSummary();
+    updateQuantity(itemId, item.quantity - 1).catch((error) => notify(error.message, 'error'));
   }
 }
 
 // Remove item
 // eslint-disable-next-line no-unused-vars
 function removeItem(itemId) {
-  cartItems = cartItems.filter(i => i.id !== itemId);
-  renderCart();
-  updateSummary();
-  
-  // Disable checkout if cart is empty
-  if (cartItems.length === 0) {
-    checkoutBtn.disabled = true;
-  }
+  fetch(`${window.API_BASE}/cart/${itemId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('customerToken')}`
+    }
+  }).then(async (res) => {
+    if (!res.ok) throw new Error('Failed to remove item');
+    await loadCart();
+    renderCart();
+    updateSummary();
+  }).catch((error) => notify(error.message, 'error'));
 }
 
 // Update item count
@@ -221,8 +281,13 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Checkout form submission
-checkoutForm.addEventListener('submit', (e) => {
+checkoutForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  if (!isAuthenticated()) {
+    notify('Please log in to place an order', 'error');
+    return;
+  }
 
   const formData = new FormData(checkoutForm);
   const data = Object.fromEntries(formData);
@@ -233,7 +298,34 @@ checkoutForm.addEventListener('submit', (e) => {
   }
 
   // Create order
-  placeOrder(data);
+  try {
+    const response = await fetch(`${window.API_BASE}/orders/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('customerToken')}`
+      },
+      body: JSON.stringify({
+        addressLine: data.address,
+        city: data.city,
+        state: data.state,
+        pincode: data.pincode,
+        paymentMethod: data.paymentMethod
+      })
+    }).then(res => {
+      if (!res.ok) throw new Error('Failed to create order');
+      return res.json();
+    });
+
+    notify('Order created! Redirecting to payment...', 'success');
+    
+    // Redirect to payment page
+    setTimeout(() => {
+      window.location.href = `Payment.html?orderId=${response.orderId}`;
+    }, 1500);
+  } catch (error) {
+    notify(error.message, 'error');
+  }
 });
 
 // Validate checkout form
@@ -260,33 +352,7 @@ function validateCheckoutForm(data) {
   return true;
 }
 
-// Place order
-function placeOrder(data) {
-  const orderId = generateOrderId();
-  
-  notify('Order placed successfully. Check your email for confirmation.', 'success');
-
-  // Show success modal
-  document.getElementById('orderId').textContent = orderId;
-  setModalState(checkoutModal, false);
-  setModalState(successModal, true);
-
-  // Clear cart
-  cartItems = [];
-  discountAmount = 0;
-  renderCart();
-  updateSummary();
-  checkoutForm.reset();
-  applyPromoBtn.disabled = false;
-  applyPromoBtn.textContent = 'Apply';
-}
-
-// Generate order ID
-function generateOrderId() {
-  const timestamp = Date.now().toString().slice(-8);
-  const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-  return `ORD-${timestamp}-${random}`;
-}
+// Order IDs are generated by the backend.
 
 // Phone input formatting
 const phoneInput = document.getElementById('phone');
