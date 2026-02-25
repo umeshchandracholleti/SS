@@ -205,6 +205,12 @@ body {
   max-width: 170px;
 }
 
+.link-disabled {
+  color: var(--brand-muted);
+  pointer-events: none;
+  text-decoration: none;
+}
+
 @media (max-width: 980px) {
   .track-hero {
     grid-template-columns: 1fr;

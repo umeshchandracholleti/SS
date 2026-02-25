@@ -15,6 +15,12 @@ const summaryLink = document.getElementById('summaryLink');
 const steps = Array.from(document.querySelectorAll('.status-step'));
 
 const courierList = ['Blue Dart', 'Delhivery', 'DTDC', 'Ecom Express'];
+const courierLinks = {
+	'Blue Dart': 'https://www.bluedart.com/',
+	Delhivery: 'https://www.delhivery.com/',
+	DTDC: 'https://www.dtdc.in/',
+	'Ecom Express': 'https://ecomexpress.in/'
+};
 const addressList = [
 	'Plot 17, Jubilee Hills, Hyderabad',
 	'12B, Indiranagar, Bengaluru',
@@ -48,6 +54,23 @@ function updateTimeline(stageIndex, timestamps) {
 	statusPill.textContent = statusLabels[stageIndex] || 'Awaiting update';
 }
 
+function setTrackingLink(courier) {
+	const url = courierLinks[courier];
+
+	if (url) {
+		summaryLink.href = url;
+		summaryLink.classList.remove('link-disabled');
+		summaryLink.setAttribute('aria-disabled', 'false');
+		summaryLink.removeAttribute('tabindex');
+		return;
+	}
+
+	summaryLink.removeAttribute('href');
+	summaryLink.classList.add('link-disabled');
+	summaryLink.setAttribute('aria-disabled', 'true');
+	summaryLink.setAttribute('tabindex', '-1');
+}
+
 trackForm.addEventListener('submit', (event) => {
 	event.preventDefault();
 
@@ -75,7 +98,7 @@ trackForm.addEventListener('submit', (event) => {
 	summaryEta.textContent = formatDate(new Date(now.getTime() + (3 - stageIndex) * 24 * 60 * 60 * 1000));
 	summaryAddress.textContent = addressList[hash % addressList.length];
 	summaryCourier.textContent = courierList[hash % courierList.length];
-	summaryLink.href = '#';
+	setTrackingLink(summaryCourier.textContent);
 
 	trackResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
