@@ -6,6 +6,7 @@
 			"type": "shell",
 			"command": "C:\\Program Files (x86)\\Microsoft Visual Studio\\18\\BuildTools\\MSBuild\\Current\\Bin\\MSBuild.exe",
 			"args": [
+				"build.proj",
 				"/property:GenerateFullPaths=true",
 				"/t:build",
 				"/consoleloggerparameters:NoSummary"
