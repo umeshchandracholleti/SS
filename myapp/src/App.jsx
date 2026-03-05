@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import LoginPage from './pages/Login'
 import RegisterPage from './pages/Register'
+import CartPage from './pages/Cart'
 
 function App() {
   return (
@@ -23,6 +24,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <CartPage />
               </ProtectedRoute>
             }
           />

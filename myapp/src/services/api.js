@@ -73,9 +73,9 @@ export const api = {
   
   // Cart
   getCart: () => apiClient.get('/cart'),
-  addToCart: (productId, quantity) => apiClient.post('/cart/items', { productId, quantity }),
-  updateCartItem: (itemId, quantity) => apiClient.put(`/cart/items/${itemId}`, { quantity }),
-  removeFromCart: (itemId) => apiClient.delete(`/cart/items/${itemId}`),
+  addToCart: (productId, quantity) => apiClient.post('/cart/add', { productId, quantity }),
+  updateCartItem: (itemId, quantity) => apiClient.put(`/cart/${itemId}`, { quantity }),
+  removeFromCart: (itemId) => apiClient.delete(`/cart/${itemId}`),
   clearCart: () => apiClient.delete('/cart'),
   
   // Orders
