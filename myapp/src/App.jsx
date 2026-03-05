@@ -8,6 +8,7 @@ import LoginPage from './pages/Login'
 import RegisterPage from './pages/Register'
 import CartPage from './pages/Cart'
 import RequestQuotePage from './pages/RequestQuote'
+import OrdersPage from './pages/Orders'
 
 function App() {
   return (
@@ -43,6 +44,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <RequestQuotePage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                <OrdersPage />
               </ProtectedRoute>
             }
           />
