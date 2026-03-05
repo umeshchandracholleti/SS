@@ -42,6 +42,12 @@ export const Navbar = () => {
                 >
                   Cart
                 </Link>
+                <Link
+                  to="/rfq"
+                  className="text-gray-700 hover:text-blue-600 transition-colors"
+                >
+                  Request Quote
+                </Link>
                 <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -111,6 +117,12 @@ export const Navbar = () => {
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   Cart
+                </Link>
+                <Link
+                  to="/rfq"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  Request Quote
                 </Link>
                 <button
                   onClick={handleLogout}
