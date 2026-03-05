@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 
 export default function Home() {
+  const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,7 +37,7 @@ export default function Home() {
             {loading ? 'Loading...' : 'Load Products'}
           </Button>
           <Button variant="outline">Browse Categories</Button>
-          <Button variant="secondary">Request Quote</Button>
+          <Button variant="secondary" onClick={() => navigate('/rfq')}>Request Quote</Button>
         </div>
 
         {isAuthenticated && (

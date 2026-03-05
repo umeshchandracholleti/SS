@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import LoginPage from './pages/Login'
 import RegisterPage from './pages/Register'
 import CartPage from './pages/Cart'
+import RequestQuotePage from './pages/RequestQuote'
 
 function App() {
   return (
@@ -33,6 +34,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <CartPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/rfq"
+            element={
+              <ProtectedRoute>
+                <RequestQuotePage />
               </ProtectedRoute>
             }
           />
