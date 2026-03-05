@@ -95,10 +95,10 @@ export const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
+    <form onSubmit={handleSubmit} className="w-full max-w-xl mx-auto space-y-1">
       {/* Server Error Alert */}
       {serverError && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex gap-2">
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex gap-2">
           <AlertCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-red-700">{serverError}</p>
         </div>
@@ -106,24 +106,38 @@ export const RegisterForm = () => {
 
       {/* Success Alert */}
       {successMessage && (
-        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex gap-2">
+        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl flex gap-2">
           <CheckCircle size={20} className="text-green-600 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-green-700">{successMessage}</p>
         </div>
       )}
 
-      {/* Full Name Input */}
-      <FormInput
-        label="Full Name"
-        name="fullName"
-        type="text"
-        value={formData.fullName}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.fullName ? errors.fullName : ''}
-        placeholder="John Doe"
-        required
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
+        {/* Full Name Input */}
+        <FormInput
+          label="Full Name"
+          name="fullName"
+          type="text"
+          value={formData.fullName}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.fullName ? errors.fullName : ''}
+          placeholder="John Doe"
+          required
+        />
+
+        {/* Phone Input (Optional) */}
+        <FormInput
+          label="Phone Number"
+          name="phone"
+          type="tel"
+          value={formData.phone}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.phone ? errors.phone : ''}
+          placeholder="9876543210"
+        />
+      </div>
 
       {/* Email Input */}
       <FormInput
@@ -136,18 +150,6 @@ export const RegisterForm = () => {
         error={touched.email ? errors.email : ''}
         placeholder="you@example.com"
         required
-      />
-
-      {/* Phone Input (Optional) */}
-      <FormInput
-        label="Phone Number"
-        name="phone"
-        type="tel"
-        value={formData.phone}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.phone ? errors.phone : ''}
-        placeholder="9876543210"
       />
 
       {/* Password Input */}
@@ -177,8 +179,8 @@ export const RegisterForm = () => {
       />
 
       {/* Password Requirements Info */}
-      <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-        <p className="text-xs font-medium text-blue-900 mb-2">Password Requirements:</p>
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+        <p className="text-xs font-semibold text-blue-900 mb-2 uppercase tracking-wide">Password Requirements</p>
         <ul className="text-xs text-blue-700 space-y-1">
           <li>✓ Minimum 8 characters</li>
           <li>✓ At least one uppercase letter (A-Z)</li>
@@ -191,10 +193,10 @@ export const RegisterForm = () => {
       <button
         type="submit"
         disabled={loading}
-        className={`w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all ${
+        className={`w-full py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
           loading
-            ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-green-600 hover:bg-green-700 text-white'
+            ? 'bg-gray-400 cursor-not-allowed text-white'
+            : 'bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow'
         }`}
       >
         {loading ? (
@@ -210,7 +212,7 @@ export const RegisterForm = () => {
       {/* Login Link */}
       <p className="mt-6 text-center text-sm text-gray-600">
         Already have an account?{' '}
-        <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+        <Link to="/login" className="text-blue-600 hover:text-blue-700 font-semibold underline-offset-2 hover:underline">
           Login here
         </Link>
       </p>
