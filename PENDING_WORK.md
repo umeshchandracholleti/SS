@@ -2,16 +2,18 @@
 
 Last updated: 2026-03-05
 
-## High Priority
+## ✅ Completed
 
 ### 1) Orders Navigation Gap
-- **Current state:** Navbar contains links to `/orders` in desktop and mobile.
-- **Gap:** No matching React page and route are currently registered.
-- **Impact:** Clicking Orders redirects through catch-all route instead of opening an Orders screen.
-- **Required work:**
-  - Create `myapp/src/pages/Orders.jsx`
-  - Register protected route `/orders` in `myapp/src/App.jsx`
-  - Connect with backend orders API (`getOrders`, `getOrder`)
+- **Status:** ✅ COMPLETED
+- **Implementation:** Created Orders.jsx and OrderDetail.jsx pages
+- **Routes:** Registered `/orders` and `/orders/:orderId` in App.jsx
+- **Features:** Order history list, order detail view with status tracking
+- **Commits:** 30b231c (route registration), d5491a5 (OrderDetail page)
+
+---
+
+## High Priority
 
 ### 2) Render Blueprint File Validation
 - **Current state:** `myapp/server/render.yaml` has schema diagnostics.
