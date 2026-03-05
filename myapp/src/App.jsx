@@ -9,6 +9,7 @@ import RegisterPage from './pages/Register'
 import CartPage from './pages/Cart'
 import RequestQuotePage from './pages/RequestQuote'
 import OrdersPage from './pages/Orders'
+import OrderDetailPage from './pages/OrderDetail'
 
 function App() {
   return (
@@ -53,6 +54,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <OrdersPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/orders/:orderId"
+            element={
+              <ProtectedRoute>
+                <OrderDetailPage />
               </ProtectedRoute>
             }
           />
