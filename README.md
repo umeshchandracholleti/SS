@@ -4,6 +4,48 @@ Modern e-commerce platform for scientific equipment and supplies, built with Rea
 
 ---
 
+## 🎯 Deployment Options
+
+### Option 1: Hostinger Deployment (Recommended for Beginners) 🆕
+**All-in-one hosting solution** - Frontend, Backend, and optional Database on single platform
+
+**Quick Start:**
+1. **[HOSTINGER_CHECKLIST.md](HOSTINGER_CHECKLIST.md)** - 45-minute deployment checklist ⭐ **START HERE**
+2. **[HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md)** - Comprehensive guide
+3. **[DATABASE_SETUP.md](DATABASE_SETUP.md)** - Database configuration
+
+**Automated Scripts:**
+- `deploy-frontend.ps1` - Build and package frontend for upload
+- `deploy-backend.ps1` - Prepare backend files
+- `deploy-hostinger.sh` - Direct SSH deployment on server
+
+**Features:**
+- ✅ Single hosting account for everything
+- ✅ Built-in SSL certificates
+- ✅ Node.js hosting included
+- ✅ PostgreSQL database option
+- ✅ 24/7 support chat
+- ✅ Easier for beginners
+
+---
+
+### Option 2: Render + Netlify Deployment (Original Setup)
+**Multi-platform managed services** - Separate hosting for Frontend, Backend, Database
+
+**Quick Start:**
+1. **[DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md)** - Quick reference checklist
+2. **[COMPLETE_DEPLOYMENT_GUIDE.md](COMPLETE_DEPLOYMENT_GUIDE.md)** - Comprehensive step-by-step guide
+3. **[PHASE4_BACKEND_DEPLOYMENT.md](PHASE4_BACKEND_DEPLOYMENT.md)** - Backend (Render) detailed guide
+4. **[PHASE5_FRONTEND_DEPLOYMENT.md](PHASE5_FRONTEND_DEPLOYMENT.md)** - Frontend (Netlify) detailed guide
+
+**Features:**
+- ✅ Free tiers available
+- ✅ Automatic Git deployments
+- ✅ Global CDN (Netlify)
+- ✅ Auto-scaling capabilities
+
+---
+
 ## 🚀 Quick Start
 
 ### For Development
@@ -36,13 +78,17 @@ SS/
 ├── myapp/                          # Frontend (React + Vite)
 │   ├── src/
 │   │   ├── components/ui/         # Reusable UI components (ShadCN)
-│   │   ├── pages/                 # Page components
+│   │   ├── pages/                 # Page components (Login, Register, Cart, Orders, RFQ)
 │   │   ├── services/              # API layer (Axios)
 │   │   ├── context/               # React Context (Auth)
 │   │   └── lib/                   # Utilities
+│   ├── scripts/
+│   │   └── post-build.js         # Automated post-build tasks
 │   ├── public/                    # Static assets
+│   ├── .htaccess                 # Apache config for Hostinger
+│   ├── .env.template             # Environment variables template
 │   ├── netlify.toml              # Netlify configuration
-│   ├── package.json              # Frontend dependencies
+│   ├── package.json              # Frontend dependencies + Hostinger scripts
 │   └── vite.config.js            # Vite configuration
 │
 ├── myapp/server/                  # Backend (Node.js + Express)
@@ -53,15 +99,31 @@ SS/
 │   │   └── index.js             # Server entry point
 │   ├── scripts/
 │   │   └── migrate.js           # Database migration
+│   ├── .env.template             # Backend environment template
+│   ├── test-db-connection.js    # Database connection tester
 │   ├── render.yaml              # Render configuration
-│   ├── package.json             # Backend dependencies
+│   ├── package.json             # Backend dependencies + Hostinger scripts
 │   ├── API_DOCUMENTATION.md     # API reference (20+ endpoints)
 │   └── README.md                # Backend setup guide
 │
-├── DEPLOYMENT_CHECKLIST.md        # Quick deployment steps ⭐
-├── COMPLETE_DEPLOYMENT_GUIDE.md   # Full deployment guide
-├── PHASE4_BACKEND_DEPLOYMENT.md   # Render (backend) guide
-└── PHASE5_FRONTEND_DEPLOYMENT.md  # Netlify (frontend) guide
+├── Hostinger Deployment Files (New) 🆕
+│   ├── HOSTINGER_DEPLOYMENT.md   # Complete Hostinger deployment guide
+│   ├── HOSTINGER_CHECKLIST.md    # Quick deployment checklist
+│   ├── DATABASE_SETUP.md         # Database migration and setup
+│   ├── deploy-frontend.ps1       # Windows PowerShell frontend deployment
+│   ├── deploy-backend.ps1        # Windows PowerShell backend deployment
+│   └── deploy-hostinger.sh       # Linux/SSH direct deployment script
+│
+├── Render/Netlify Deployment Files (Original)
+│   ├── DEPLOYMENT_CHECKLIST.md   # Quick deployment steps
+│   ├── COMPLETE_DEPLOYMENT_GUIDE.md  # Full deployment guide
+│   ├── PHASE4_BACKEND_DEPLOYMENT.md  # Render (backend) guide
+│   └── PHASE5_FRONTEND_DEPLOYMENT.md # Netlify (frontend) guide
+│
+└── Documentation
+    ├── ERRORS.md                 # Current errors and fixes
+    ├── PENDING_WORK.md           # Backlog and improvements
+    └── README.md                 # This file
 ```
 
 ---
