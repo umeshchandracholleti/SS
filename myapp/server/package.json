@@ -9,9 +9,11 @@
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
+    "start:production": "NODE_ENV=production node src/index.js",
     "db:init": "node scripts/init-db.js",
     "db:migrate": "node scripts/migrate.js",
     "db:seed": "node scripts/seed.js",
+    "db:test": "node test-db-connection.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "test:e2e": "node scripts/test-phase4-5.js",
@@ -19,7 +21,9 @@
     "build": "echo 'Build complete'",
     "migrate": "echo 'Migration skipped in production'",
     "analyze-queries": "node scripts/analyze-queries.js",
-    "add-indexes": "node scripts/add-indexes.js"
+    "add-indexes": "node scripts/add-indexes.js",
+    "hostinger:install": "npm install --production",
+    "hostinger:start": "NODE_ENV=production PORT=4000 node src/index.js"
   },
   "jest": {
     "testEnvironment": "node",
