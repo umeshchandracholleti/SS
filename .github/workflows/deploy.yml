@@ -68,7 +68,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     name: Build Docker Image
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production') && secrets.DOCKER_USERNAME != '' && secrets.DOCKER_PASSWORD != ''
 
     steps:
       - name: Checkout code
@@ -127,7 +127,7 @@ jobs:
     needs: [test, build, security]
     runs-on: ubuntu-latest
     name: Deploy to Render
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.RENDER_SERVICE_ID != '' && secrets.RENDER_API_KEY != ''
 
     steps:
       - name: Deploy to Render
@@ -140,7 +140,7 @@ jobs:
     needs: [test, build, security]
     runs-on: ubuntu-latest
     name: Deploy to Railway
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.RAILWAY_TOKEN != '' && secrets.RAILWAY_PROJECT_ID != ''
 
     steps:
       - name: Checkout code
@@ -194,7 +194,7 @@ jobs:
             })
 
       - name: Send Slack Notification
-        if: always()
+        if: always() && secrets.SLACK_WEBHOOK != ''
         uses: slackapi/slack-github-action@v1.24.0
         with:
           payload: |
