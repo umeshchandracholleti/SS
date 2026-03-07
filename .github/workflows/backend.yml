@@ -53,7 +53,22 @@ jobs:
     
     steps:
       - uses: actions/checkout@v3
+
+      - name: Check Render secrets
+        id: render_guard
+        env:
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          if [ -n "$RENDER_SERVICE_ID" ] && [ -n "$RENDER_API_KEY" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "Render secrets found."
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Render secrets missing. Skipping Render deployment."
+          fi
       
       - name: Deploy to Render
+        if: steps.render_guard.outputs.should_run == 'true'
         run: |
           curl -X POST https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
