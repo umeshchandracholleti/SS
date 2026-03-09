@@ -225,5 +225,5 @@ Write-Host "     (Stripe, Razorpay, PayPal, etc.)" -ForegroundColor White
 Write-Host ""
 Write-Host "Need help? Check DEPLOYMENT_GUIDE.md" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "Happy coding! 🚀" -ForegroundColor Green
+Write-Host "Happy coding!" -ForegroundColor Green
 Write-Host ""
