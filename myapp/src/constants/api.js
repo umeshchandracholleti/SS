@@ -4,7 +4,8 @@
  */
 
 const API_CONFIG = {
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000',
+  // Use same-origin API path in production by default (e.g., Hostinger domain + /api)
+  baseURL: import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:4000' : '/api'),
   timeout: 10000,
   retryAttempts: 3,
   retryDelay: 1000

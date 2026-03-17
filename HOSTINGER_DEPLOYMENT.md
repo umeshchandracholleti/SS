@@ -35,7 +35,7 @@ SS/
 ├── myapp/server/            # Backend (Node.js + Express)
 │   ├── src/
 │   ├── package.json
-│   └── server.js
+│   └── src/index.js
 └── HOSTINGER_DEPLOYMENT.md  # This file
 ```
 
@@ -116,7 +116,7 @@ npm install --production
    - **Application Mode:** Production
    - **Application Root:** `/home/username/domains/yourdomain.com/api`
    - **Application URL:** `https://yourdomain.com/api` or subdomain `api.yourdomain.com`
-   - **Application Startup File:** `server.js`
+   - **Application Startup File:** `src/index.js`
 
 #### Step 3: Upload Backend Files
 **Via File Manager:**

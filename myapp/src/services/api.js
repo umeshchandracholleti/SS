@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-// API Base URL - defaults to localhost for development
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+// API Base URL
+// - Dev default: localhost backend
+// - Prod default: same-origin /api (works for Hostinger single-domain setups)
+const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:4000' : '/api');
 
 // Create axios instance with default config
 const apiClient = axios.create({
