@@ -157,9 +157,9 @@ SS/
 
 ### Production URLs
 ```
-Frontend: https://saiscientifics.netlify.app (after Phase 5)
-Backend:  https://saiscientifics-backend.onrender.com (after Phase 4)
-Database: Supabase PostgreSQL (AWS us-west-1)
+Frontend: https://saiscientificas.com
+Backend:  https://saiscientificas.com/api  (same-origin via Hostinger reverse proxy)
+Database: Hostinger PostgreSQL
 ```
 
 ### API Endpoints
@@ -172,32 +172,37 @@ Full documentation: [myapp/server/API_DOCUMENTATION.md](myapp/server/API_DOCUMEN
 - `POST /api/auth/login` - User login
 - `GET /api/products` - List products
 - `POST /api/cart` - Manage shopping cart
-- `POST /api/orders` - Create orders
-- `POST /api/payment/create` - Payment processing
+- `POST /api/orders/create` - Create orders
+- `POST /api/payment/create-order` - Create Razorpay order
+- `POST /api/payment/verify` - Verify payment signature
+- `POST /api/payment/webhook` - Razorpay webhook (set in Razorpay dashboard)
 
 ---
 
 ## 📦 Features
 
 ### Implemented
-- ✅ Modern React 19 frontend with Tailwind CSS v4
-- ✅ RESTful API with Express
+- ✅ Modern React 18 frontend with Tailwind CSS + ShadCN UI
+- ✅ RESTful API with Express (20+ endpoints)
 - ✅ PostgreSQL database (12 tables)
-- ✅ JWT authentication
-- ✅ API service layer with Axios
-- ✅ Authentication context
-- ✅ Production-ready deployment configuration
-- ✅ Health monitoring endpoints
-- ✅ CORS security
-- ✅ Environment-based configuration
+- ✅ JWT authentication with protected routes
+- ✅ User registration and login UI
+- ✅ Product catalog and search
+- ✅ Shopping cart (add/update/remove/clear)
+- ✅ Checkout page with address form
+- ✅ Order management (create, history, detail)
+- ✅ Razorpay payment integration (modal + webhook)
+- ✅ Email notifications (order confirmation, shipping)
+- ✅ PDF invoice generation
+- ✅ API service layer with Axios (all endpoints aligned)
+- ✅ CORS security + Helmet headers
+- ✅ Production-ready Hostinger deployment artifacts
 
-### Planned
-- 🔜 User registration and login UI
-- 🔜 Product catalog and search
-- 🔜 Shopping cart functionality
-- 🔜 Order management
-- 🔜 Payment integration (Razorpay)
-- 🔜 Email notifications
+### Planned / Post-Launch
+- 🔜 Admin dashboard (product/order management)
+- 🔜 SMS notifications via Twilio
+- 🔜 Product reviews and ratings
+- 🔜 Wishlist feature
 - 🔜 SMS tracking (Twilio)
 - 🔜 Request for Quote system
 - 🔜 Support ticket system
