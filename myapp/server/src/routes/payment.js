@@ -338,20 +338,25 @@ router.post('/payment/webhook', asyncHandler(async (req, res) => {
       const paymentId = payload.payment.entity.id;
       const razorpayOrderId = payload.payment.entity.order_id;
       const error = payload.payment.entity.error_description;
+      // Razorpay stores the orderId we passed in notes when creating the order
+      const notes = payload.payment.entity.notes || {};
+      const orderId = notes.orderId ? parseInt(notes.orderId, 10) : null;
 
-      logger.error('Payment failed via webhook', { paymentId, razorpayOrderId, error });
+      logger.error('Payment failed via webhook', { paymentId, razorpayOrderId, orderId, error });
 
-      // Find and update order
-      const orderResult = await db.query(
-        'SELECT id FROM orders WHERE id = (SELECT COUNT(*) FROM orders WHERE id > 0) LIMIT 1'
-      );
+      if (orderId) {
+        // Mark the order back to pending so the customer can retry
+        await db.query(
+          `UPDATE orders SET status = 'pending', updated_at = NOW() WHERE id = $1`,
+          [orderId]
+        );
 
-      if (orderResult.rows.length > 0) {
+        // Log the failed payment attempt
         await db.query(
           `INSERT INTO payment_logs (order_id, transaction_id, razorpay_order_id, amount, status, metadata)
            VALUES ($1, $2, $3, $4, $5, $6)`,
           [
-            orderResult.rows[0].id,
+            orderId,
             paymentId,
             razorpayOrderId,
             0,
