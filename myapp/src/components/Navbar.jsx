@@ -43,6 +43,12 @@ export const Navbar = () => {
                   Cart
                 </Link>
                 <Link
+                  to="/checkout"
+                  className="text-gray-700 hover:text-blue-600 transition-colors"
+                >
+                  Checkout
+                </Link>
+                <Link
                   to="/rfq"
                   className="text-gray-700 hover:text-blue-600 transition-colors"
                 >
@@ -117,6 +123,12 @@ export const Navbar = () => {
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   Cart
+                </Link>
+                <Link
+                  to="/checkout"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  Checkout
                 </Link>
                 <Link
                   to="/rfq"

@@ -154,7 +154,7 @@ const OrderDetailPage = () => {
                     className="flex items-center justify-between rounded-xl border border-gray-100 p-4 hover:bg-gray-50"
                   >
                     <div className="flex-1">
-                      <h3 className="font-medium text-gray-900">{item.product_name || 'Product'}</h3>
+                      <h3 className="font-medium text-gray-900">{item.product_name || item.name || 'Product'}</h3>
                       <p className="text-sm text-gray-600 mt-1">Quantity: {item.quantity}</p>
                     </div>
                     <div className="text-right">

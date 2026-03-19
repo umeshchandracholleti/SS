@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Minus, Plus, ShoppingCart, Trash2, RefreshCcw } from 'lucide-react';
 import { api } from '../services/api';
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -238,6 +239,7 @@ const CartPage = () => {
 
               <button
                 type="button"
+                onClick={() => navigate('/checkout')}
                 className="mt-6 w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
               >
                 Proceed to Checkout

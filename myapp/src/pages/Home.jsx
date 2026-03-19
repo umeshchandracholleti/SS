@@ -154,7 +154,7 @@ export default function Home() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-xl font-bold text-gray-900">
-                    ₹{Number(product.base_price || 0).toFixed(2)}
+                    ₹{Number(product.price ?? product.base_price ?? 0).toFixed(2)}
                   </span>
                   <Button 
                     size="sm" 

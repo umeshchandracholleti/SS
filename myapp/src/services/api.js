@@ -67,6 +67,8 @@ export const api = {
   login: (credentials) => apiClient.post('/auth/login', credentials),
   register: (userData) => apiClient.post('/auth/register', userData),
   logout: () => apiClient.post('/auth/logout'),
+  getProfile: () => apiClient.get('/auth/me'),
+  updateProfile: (userData) => apiClient.put('/auth/profile', userData),
   
   // Products
   getProducts: (params) => apiClient.get('/products', { params }),
@@ -75,20 +77,29 @@ export const api = {
   
   // Cart
   getCart: () => apiClient.get('/cart'),
-  addToCart: (productId, quantity) => apiClient.post('/cart/add', { productId, quantity }),
+  addToCart: (productOrPayload, quantity) => {
+    if (typeof productOrPayload === 'object' && productOrPayload !== null) {
+      return apiClient.post('/cart/add', {
+        productId: productOrPayload.productId ?? productOrPayload.product_id,
+        quantity: productOrPayload.quantity ?? 1,
+      });
+    }
+
+    return apiClient.post('/cart/add', { productId: productOrPayload, quantity });
+  },
   updateCartItem: (itemId, quantity) => apiClient.put(`/cart/${itemId}`, { quantity }),
   removeFromCart: (itemId) => apiClient.delete(`/cart/${itemId}`),
   clearCart: () => apiClient.delete('/cart'),
   
   // Orders
-  getOrders: () => apiClient.get('/orders'),
+  getOrders: () => apiClient.get('/orders/history'),
   getOrder: (id) => apiClient.get(`/orders/${id}`),
-  createOrder: (orderData) => apiClient.post('/orders', orderData),
+  createOrder: (orderData) => apiClient.post('/orders/create', orderData),
   trackOrder: (orderId) => apiClient.get(`/orders/${orderId}/track`),
   
   // Payments
-  createPayment: (paymentData) => apiClient.post('/payments', paymentData),
-  verifyPayment: (paymentId, signature) => apiClient.post('/payments/verify', { paymentId, signature }),
+  createPayment: (paymentData) => apiClient.post('/payment/create-order', paymentData),
+  verifyPayment: (paymentData) => apiClient.post('/payment/verify', paymentData),
   
   // RFQ (Request for Quote)
   submitRFQ: (rfqData) => apiClient.post('/rfq', rfqData),
@@ -114,8 +125,6 @@ export const api = {
   getGrievance: (id) => apiClient.get(`/grievances/${id}`),
   
   // User
-  getProfile: () => apiClient.get('/user/profile'),
-  updateProfile: (userData) => apiClient.put('/user/profile', userData),
   getAddresses: () => apiClient.get('/user/addresses'),
   addAddress: (addressData) => apiClient.post('/user/addresses', addressData),
   updateAddress: (id, addressData) => apiClient.put(`/user/addresses/${id}`, addressData),

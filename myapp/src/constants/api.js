@@ -14,9 +14,9 @@ const API_CONFIG = {
 export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: '/api/auth/login',
-    SIGNUP: '/api/auth/signup',
+    SIGNUP: '/api/auth/register',
     LOGOUT: '/api/auth/logout',
-    REFRESH: '/api/auth/refresh'
+    PROFILE: '/api/auth/me'
   },
   
   PRODUCTS: {
@@ -34,15 +34,15 @@ export const API_ENDPOINTS = {
   },
   
   ORDERS: {
-    CREATE: '/api/orders',
-    LIST: '/api/orders',
+    CREATE: '/api/orders/create',
+    LIST: '/api/orders/history',
     GET: (id) => `/api/orders/${id}`,
     TRACK: (id) => `/api/orders/${id}/track`
   },
   
   PAYMENTS: {
-    CREATE: '/api/payments/create',
-    VERIFY: '/api/payments/verify'
+    CREATE: '/api/payment/create-order',
+    VERIFY: '/api/payment/verify'
   },
   
   HEALTH: {
