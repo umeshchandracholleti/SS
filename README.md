@@ -6,26 +6,28 @@ Modern e-commerce platform for scientific equipment and supplies, built with Rea
 
 ## 🎯 Deployment Options
 
-### Option 1: Hostinger Deployment (Recommended for Beginners) 🆕
-**All-in-one hosting solution** - Frontend, Backend, and optional Database on single platform
+### Option 1: Hostinger Deployment (Recommended) 🆕
+**All-in-one hosting solution** - Frontend, Backend, and Database on single account (saiscientificas.com)
 
-**Quick Start:**
-1. **[HOSTINGER_CHECKLIST.md](HOSTINGER_CHECKLIST.md)** - 45-minute deployment checklist ⭐ **START HERE**
-2. **[HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md)** - Comprehensive guide
-3. **[DATABASE_SETUP.md](DATABASE_SETUP.md)** - Database configuration
+**📋 Recommended Reading Order:**
+1. ⭐ **[HOSTINGER_DEPLOYMENT_STEPS.md](HOSTINGER_DEPLOYMENT_STEPS.md)** - Complete 10-step walkthrough (START HERE)
+2. **[HOSTINGER_ENV_VARIABLES.md](HOSTINGER_ENV_VARIABLES.md)** - Copy-paste environment variables for Step 5
+3. **[HOSTINGER_TERMINAL_COMMANDS.md](HOSTINGER_TERMINAL_COMMANDS.md)** - Quick reference for npm commands in Step 7
 
-**Automated Scripts:**
-- `deploy-frontend.ps1` - Build and package frontend for upload
-- `deploy-backend.ps1` - Prepare backend files
-- `deploy-hostinger.sh` - Direct SSH deployment on server
+**Status:** ✅ Ready to deploy
+- Frontend build: `npm run build:hostinger` ✓
+- Backend package: `hostinger-deploy-backend/` (52 files) ✓
+- Database migrations: `npm run db:migrate` ✓
+- All API endpoints aligned ✓
 
 **Features:**
-- ✅ Single hosting account for everything
-- ✅ Built-in SSL certificates
-- ✅ Node.js hosting included
-- ✅ PostgreSQL database option
-- ✅ 24/7 support chat
-- ✅ Easier for beginners
+- ✅ Single Premium plan covers everything
+- ✅ Built-in SSL certificates (free)
+- ✅ Node.js + Express backend hosting
+- ✅ PostgreSQL database included
+- ✅ Razorpay payment integration ready
+- ✅ Email notifications configured
+- ✅ 45-minute deployment time
 
 ---
 
