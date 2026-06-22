@@ -2,20 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="Write a product review for orders from Sai Scientifics. Share ratings, photos, and feedback to help other buyers.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Write a Review - Sai Scientifics</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="WriteReview.css">
 </head>
 <body>
   <nav class="navbar">
-    <a href="TopRowbanner.html" class="nav-link">
-      <i class="fas fa-arrow-left"></i> Back to Home
-    </a>
-  </nav>
-
-<nav class="navbar">
     <a href="TopRowbanner.html" class="nav-link">
       <i class="fas fa-arrow-left"></i> Back to Home
     </a>
@@ -29,10 +24,11 @@
         <p>Your review helps other buyers make confident decisions.</p>
       </div>
       <div class="review-product">
-        <img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?q=80&w=600&auto=format&fit=crop" alt="Office chair">
+        <img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?q=80&w=600&auto=format&fit=crop" alt="Ergonomic office chair" loading="lazy">
         <div>
           <h3>ErgoComfort Office Chair</h3>
           <p>Order ID: ORD-12345678-0001</p>
+          <input type="hidden" name="orderId" value="ORD-12345678-0001">
           <span>Delivered on Feb 4, 2026</span>
         </div>
       </div>
@@ -42,7 +38,7 @@
       <form id="reviewForm">
         <div class="rating-block">
           <h2>Overall rating</h2>
-          <div class="rating-stars" role="radiogroup" aria-label="Rate this product">
+          <div class="rating-stars" role="radiogroup" aria-label="Rate this product" aria-describedby="ratingLabel">
             <label>
               <input type="radio" name="rating" value="1">
               <span>1</span>
@@ -70,45 +66,51 @@
         <div class="form-grid">
           <label>
             Review title *
-            <input type="text" name="title" required placeholder="Summarize your experience">
+            <input id="title" type="text" name="title" required aria-required="true" maxlength="100" placeholder="Summarize your experience">
           </label>
           <label>
             Review details *
-            <textarea name="details" rows="5" required placeholder="What did you like or dislike?"></textarea>
+            <textarea id="details" name="details" rows="5" required aria-required="true" maxlength="2000" placeholder="What did you like or dislike?"></textarea>
           </label>
           <label>
             Pros (optional)
-            <input type="text" name="pros" placeholder="Comfortable, easy to assemble">
+            <input type="text" name="pros" placeholder="Comfortable, easy to assemble" maxlength="250">
           </label>
           <label>
             Cons (optional)
-            <input type="text" name="cons" placeholder="Packaging could be better">
+            <input type="text" name="cons" placeholder="Packaging could be better" maxlength="250">
           </label>
         </div>
 
         <div class="upload-grid">
           <label class="upload-box" for="reviewPhotos">
-            <input type="file" id="reviewPhotos" accept=".jpg,.jpeg,.png" multiple hidden>
+            <input name="photos" type="file" id="reviewPhotos" accept="image/png,image/jpeg" multiple hidden aria-label="Add review photos">
             <span class="upload-icon"><i class="fas fa-camera"></i></span>
             <span>Add photos (optional)</span>
             <small>PNG, JPG up to 5MB each</small>
           </label>
           <div class="recommend">
             <h4>Would you recommend this product?</h4>
-            <label>
-              <input type="checkbox" name="recommend">
-              Yes, I would recommend this product.
-            </label>
+            <fieldset>
+              <legend class="sr-only">Recommend product</legend>
+              <label><input type="radio" name="recommend" value="yes"> Yes</label>
+              <label><input type="radio" name="recommend" value="no"> No</label>
+            </fieldset>
           </div>
         </div>
 
         <div class="form-footer">
           <p class="form-status" id="reviewStatus" role="status"></p>
           <button type="submit" class="primary-btn">Submit review</button>
+          <button type="reset" class="secondary-btn">Cancel</button>
         </div>
       </form>
     </section>
   </main>
+
+  <noscript>
+    <p class="no-js-warning">JavaScript is required to submit reviews. Please enable JavaScript and reload the page.</p>
+  </noscript>
 
   <script src="api.js" defer></script>
   <script src="WriteReview.js" defer></script>
